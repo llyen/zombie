@@ -8,7 +8,9 @@
 return array(
 	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
 	'name'=>'Zombie Academy Gamification Platform',
-
+    
+    'theme'=>'zombie', //default theme set
+    
 	// preloading 'log' component
 	'preload'=>array('log','bootstrap'),
 
@@ -31,6 +33,7 @@ return array(
 	// application components
 	'components'=>array(
 		'user'=>array(
+            'class'=>'WebUser',
 			// enable cookie-based authentication
 			'allowAutoLogin'=>true,
 		),
