@@ -12,6 +12,10 @@ class UserController extends Controller
 	public function accessRules()
 	{
 		return array(
+			array('allow',
+				'actions'=>array('login', 'register', 'retrievePassword'),
+				'users'=>array('*'),
+			),
             array('allow',
                 'actions'=>array('index', 'logout'),
                 'users'=>array('@'),
@@ -38,12 +42,31 @@ class UserController extends Controller
 
 	public function actionLogin()
 	{
-		$this->render('login');
+		$model=new LoginForm;
+
+		// if it is ajax validation request
+		if(isset($_POST['ajax']) && $_POST['ajax']==='login-form')
+		{
+			echo CActiveForm::validate($model);
+			Yii::app()->end();
+		}
+
+		// collect user input data
+		if(isset($_POST['LoginForm']))
+		{
+			$model->attributes=$_POST['LoginForm'];
+			// validate user input and redirect to the previous page if valid
+			if($model->validate() && $model->login())
+				$this->redirect(Yii::app()->user->returnUrl);
+		}
+		// display the login form
+		$this->render('login',array('model'=>$model));
 	}
 
 	public function actionLogout()
 	{
-		$this->render('logout');
+		Yii::app()->user->logout();
+		$this->redirect(Yii::app()->homeUrl);
 	}
 
 	public function actionRegister()

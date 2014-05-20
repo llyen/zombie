@@ -17,7 +17,7 @@
  *
  * The followings are the available model relations:
  * @property Players[] $players
- * @property Groups $group
+ * @property Group $group
  */
 class User extends CActiveRecord
 {
@@ -118,11 +118,15 @@ class User extends CActiveRecord
 	
 	public function verifyPassword($password)
 	{
+		if(Yii::app()->params['hashMethod'] == 'md5')
+			return md5($password) == $this->password;
 		return CPasswordHelper::verifyPassword($password, $this->password);
 	}
 	
 	public function hashPassword($password)
 	{
+		if(Yii::app()->params['hashMethod'] == 'md5')
+			return md5($password);
 		return CPasswordHelper::hashPassword($password);
 	}
 }
