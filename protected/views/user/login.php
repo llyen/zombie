@@ -1,9 +1,12 @@
 <?php
 /* @var $this UserController */
 
-$this->breadcrumbs=array(
-	'Strona główna',
-	'Logowanie',
+$this->widget(
+	'bootstrap.widgets.TbBreadcrumbs',
+	array(
+		'homeLink'=>CHtml::link('Strona główna', Yii::app()->baseUrl),
+		'links' => array('Logowanie'),
+	)
 );
 ?>
 
@@ -26,7 +29,9 @@ $this->breadcrumbs=array(
 
 		<?php echo $form->passwordFieldRow($model,'password', array('class'=>'span3')); ?>
 		<?php echo $form->error($model,'password'); ?>
-
+		
+		<p class="hint">Nie pamiętasz hasła?</p>
+		
 		<div class="form-actions">
 		<?php $this->widget(
 			'bootstrap.widgets.TbButton',
