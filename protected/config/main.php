@@ -36,6 +36,7 @@ return array(
             'class'=>'WebUser',
 			// enable cookie-based authentication
 			'allowAutoLogin'=>true,
+            'loginUrl'=>array('user/login'),
 		),
 		// uncomment the following to enable URLs in path-format
 		'urlManager'=>array(

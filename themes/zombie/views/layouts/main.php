@@ -31,11 +31,6 @@
 		</script>
 	</head>
 	<body class="cbp-spmenu-push">
-		<nav class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-left" id="cbp-user">
-			<h3>Użytkownicy</h3>
-			<?php echo CHtml::link('Zarządzanie', array('/user/admin')); ?>
-			<?php echo CHtml::link('Pola profilu', array('/user/profileField/admin')); ?>
-		</nav>
         <nav class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-left" id="cbp-epic">
 			<h3>Epickie wyzwanie</h3>
 			<?php echo CHtml::link('Kreator mapy', array('/game/map')); ?>
@@ -56,7 +51,7 @@
 			    {
 					if(Yii::app()->user->isAdmin())
 					{	
-						echo CHtml::link('', '#', array('class'=>'bp-icon icon-user', 'data-info'=>'Użytkownicy', 'id'=>'showLeftUser'));
+						echo CHtml::link('', array('/user/list'), array('class'=>'bp-icon icon-user', 'data-info'=>'Użytkownicy'));
 						//echo CHtml::link('', '#', array('class'=>'bp-icon icon-preferences', 'data-info'=>'Wyzwania', 'id'=>'showLeftPreferences'));
 						echo CHtml::link('', array('/group'), array('class'=>'bp-icon icon-group', 'data-info'=>'Grupy'));
 						echo CHtml::link('', array('/communication/send'), array('class'=>'bp-icon icon-communication', 'data-info'=>'Komunikacja'));	
@@ -93,31 +88,13 @@
             </div>
 		</div>
 		<script>
-			var menuLeftUser = document.getElementById( 'cbp-user' );
-			var	showLeftUser = document.getElementById( 'showLeftUser' );
 			var	menuLeftEpic = document.getElementById( 'cbp-epic' );
 			var	showLeftEpic = document.getElementById( 'showLeftEpic' );
 			var	body = document.body;
 
-			if(showLeftUser != null) {
-				showLeftUser.onclick = function() {
-					if ($('#cbp-epic').hasClass('cbp-spmenu-open')){
-						classie.toggle( this, 'active' );
-						classie.toggle( body, 'cbp-spmenu-push-toright' );
-						classie.toggle( menuLeftEpic, 'cbp-spmenu-open' );
-					};
-					classie.toggle( this, 'active' );
-					classie.toggle( body, 'cbp-spmenu-push-toright' );
-					classie.toggle( menuLeftUser, 'cbp-spmenu-open' );
-				};
-			}
+
 			if(showLeftEpic != null) {
 				showLeftEpic.onclick = function() {
-					if ($('#cbp-user').hasClass('cbp-spmenu-open')){
-						classie.toggle( this, 'active' );
-						classie.toggle( body, 'cbp-spmenu-push-toright' );
-						classie.toggle( menuLeftUser, 'cbp-spmenu-open' );
-					};
 					classie.toggle( this, 'active' );
 					classie.toggle( body, 'cbp-spmenu-push-toright' );
 					classie.toggle( menuLeftEpic, 'cbp-spmenu-open' );
