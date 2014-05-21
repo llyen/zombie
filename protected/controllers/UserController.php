@@ -37,7 +37,14 @@ class UserController extends Controller
 
 	public function actionList()
 	{
-		$this->render('list');
+		$model=new User('search');
+		$model->unsetAttributes();  // clear any default values
+		if(isset($_GET['User']))
+			$model->attributes=$_GET['User'];
+
+		$this->render('list', array(
+			'model'=>$model,
+		));
 	}
 
 	public function actionLogin()

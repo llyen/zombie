@@ -12,7 +12,7 @@
 }
 
 
-body, html { font-size: 100%; 	padding: 0; margin: 0; background: #000000;}
+body, html { /*font-size: 100%;*/ 	padding: 0; margin: 0; background: #000000;}
 
 /* Reset */
 *,
@@ -232,7 +232,7 @@ section.article {
 div#content {
 	/*background: url('../images/div_bg.png') repeat;*/
 	/*padding: 5px;*/
-	margin: 10px 40px;
+	margin: 10px 15px;
 }
 
 div#content input {
@@ -257,6 +257,59 @@ div#content .form-actions {
 
 .breadcrumb > li.active {
 	color: #D8BC9C;
+}
+
+/* grid view */
+.grid-view table.items {
+    border: 1px solid #AC1D23;
+    color: #000000;
+	background: #ffffff;
+}
+
+.grid-view table.items td a, .grid-view table.items td a:hover {
+    color: #000000;
+}
+
+.grid-view table.items th {
+    background: none repeat scroll 0 0 #AC1D23;
+	padding: 5px;
+	text-align: center;
+}
+
+.grid-view table.items th a, .grid-view th.button-column {
+	font-weight: normal;
+	color: #ffffff;
+}
+
+.grid-view table.items th, .grid-view table.items td {
+    border: medium none;
+	padding: 5px;
+	text-align: center;
+}
+
+.grid-view table.items tr.filters {
+    background-color: #EFEFEF;
+	text-align: center;
+}
+
+/*.grid-view table.items tr.odd {
+    background-color: #EFEFEF;
+}*/
+
+/*.grid-view table.items tr.even:hover {
+    background: none repeat scroll 0 0 #DCDCDC;
+}*/
+
+.grid-view .table-striped tbody > tr:nth-child(2n+1) > td {
+	background: none repeat scroll 0 0 #F8F8F8;
+	padding: 10px;
+	text-align: center;
+}
+
+.grid-view .table-striped tbody > tr:nth-child(2n) > td {
+	background: none repeat scroll 0 0 #EEEEEE;
+	padding: 10px;
+	text-align: center;
 }
 
 #footer {
