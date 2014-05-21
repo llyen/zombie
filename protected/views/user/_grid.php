@@ -13,13 +13,13 @@
         array(
             'header'=>'Operacje',
             'class'=>'bootstrap.widgets.TbButtonColumn',
-            'template'=>'{_view}{_reward}',
+            'template'=>'{view}{_reward}',
             'buttons'=>array(
-                '_view' => array(
-                    'label'=>'podgląd',
-                    'url'=>'Yii::app()->createUrl(\'user/view\', array(\'id\'=>$data->id))',
-                    'imageUrl'=>Yii::app()->request->baseUrl.'/images/view.png',
-                ),
+                //'_view' => array(
+                //    'label'=>'podgląd',
+                //    'url'=>'Yii::app()->createUrl(\'user/view\', array(\'id\'=>$data->id))',
+                //    'imageUrl'=>Yii::app()->request->baseUrl.'/images/view.png',
+                //),
                 '_reward' => array(
                     'label'=>'nagradzanie',
                     'url'=>'Yii::app()->createUrl(\'user/reward\', array(\'id\'=>$data->id))',
@@ -32,6 +32,10 @@
             //        'imageUrl'=>Yii::app()->request->baseUrl.'/images/table.png',
             //    ),
             ),
+            'viewButtonIcon'=>false,
+            'viewButtonLabel'=>'podgląd',
+            'viewButtonUrl'=>'Yii::app()->createUrl(\'user/view\', array(\'id\'=>$data->id))',
+            'viewButtonImageUrl'=>Yii::app()->baseUrl.'/images/view.png',
         ),
     ),
     'summaryText'=>'',
