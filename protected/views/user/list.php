@@ -11,4 +11,14 @@ $this->widget(
 ?>
 
 <h2>Zarządzanie użytkownikami</h2>
+<?php
+	$this->widget(
+		'bootstrap.widgets.TbButton',
+		array(
+			'label' => 'Rejestracja seryjna',
+			'type' => 'danger',
+			'url' => array('user/bulkRegister'),
+		)
+	);
+?>
 <?php $this->renderPartial('_grid', array('model'=>$model)); ?>

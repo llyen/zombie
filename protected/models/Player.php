@@ -68,11 +68,11 @@ class Player extends CActiveRecord
 		return array(
 			'id' => 'ID',
 			'user_id' => 'User',
-			'health' => 'Health',
-			'damage' => 'Damage',
-			'first_currency' => 'First Currency',
-			'second_currency' => 'Second Currency',
-			'active_weapon_id' => 'Active Weapon',
+			'health' => 'Zdrowie',
+			'damage' => 'Obrażenia',
+			'first_currency' => 'Kapsle',
+			'second_currency' => 'Przeciwciała',
+			'active_weapon_id' => 'Aktywna broń',
 		);
 	}
 

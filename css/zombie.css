@@ -292,6 +292,25 @@ div#content .form-actions {
 	text-align: center;
 }
 
+.detail-view {
+	width: 75%;
+	color: #000000;
+}
+
+.detail-view tbody > tr:nth-child(2n+1) > th, .detail-view tbody > tr:nth-child(2n+1) > td {
+	background: none repeat scroll 0 0 #EDEDED;
+	padding: 10px;
+}
+
+.detail-view tbody > tr:nth-child(2n) > th, .detail-view tbody > tr:nth-child(2n) > td {
+	background: none repeat scroll 0 0 #F8F8F8;
+	padding: 10px;
+}
+
+.detail-view tbody > tr:nth-child(2n+1) > th, .detail-view tbody > tr:nth-child(2n) > th {
+	color: #AC1D23;
+}
+
 /*.grid-view table.items tr.odd {
     background-color: #EFEFEF;
 }*/
