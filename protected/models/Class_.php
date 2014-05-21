@@ -15,7 +15,7 @@
  * @property Presence[] $presences
  */
 class Class_ extends CActiveRecord
-{
+{	
 	/**
 	 * @return string the associated database table name
 	 */
@@ -61,10 +61,10 @@ class Class_ extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'group_id' => 'Group',
-			'term' => 'Term',
-			'is_checked' => 'Is Checked',
-			'is_last' => 'Is Last',
+			'group_id' => 'Grupa',
+			'term' => 'Termin',
+			'is_checked' => 'Czy sprawdzono obecność?',
+			'is_last' => 'Czy ostatnie zajęcia?',
 		);
 	}
 
@@ -96,7 +96,17 @@ class Class_ extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
-
+	
+	public function earliest($group_id)
+	{
+		$this->getDbCriteria()->mergeWith(array(
+		    'order'=>'term asc',
+			'limit'=>1,
+			'condition'=>'is_checked=0 and group_id='.$group_id,
+		));
+		return $this;
+	}
+	
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!

@@ -14,6 +14,8 @@
  */
 class Group extends CActiveRecord
 {
+	public $class_earliest;
+	
 	/**
 	 * @return string the associated database table name
 	 */
@@ -34,7 +36,7 @@ class Group extends CActiveRecord
 			array('name', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, name', 'safe', 'on'=>'search'),
+			array('id, name, class_earliest', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -60,6 +62,7 @@ class Group extends CActiveRecord
 		return array(
 			'id' => 'ID',
 			'name' => 'Nazwa grupy',
+			'class_earliest' => 'Najbliższe zajęcia',
 		);
 	}
 
@@ -80,12 +83,23 @@ class Group extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
+		$criteria->with = array('classes');
 
 		$criteria->compare('id',$this->id,true);
 		$criteria->compare('name',$this->name,true);
+		//$criteria->compare('classes.term',$this->class_earliest,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+			//'sort'=>array(
+			//	'attributes'=>array(
+			//		'class_earliest'=>array(
+			//			'asc'=>'id',
+			//			'desc'=>'id desc',
+			//		),
+			//		'*',
+			//	),
+			//),
 		));
 	}
 

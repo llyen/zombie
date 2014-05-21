@@ -274,6 +274,8 @@ div#content .form-actions {
     background: none repeat scroll 0 0 #AC1D23;
 	padding: 5px;
 	text-align: center;
+	color: #FFFFFF;
+	font-weight: normal;
 }
 
 .grid-view table.items th a, .grid-view th.button-column {
