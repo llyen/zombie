@@ -1,13 +1,70 @@
 <?php
 /* @var $this UserController */
 
-$this->breadcrumbs=array(
-	'User',
+$this->widget(
+	'bootstrap.widgets.TbBreadcrumbs',
+	array(
+		'homeLink'=>CHtml::link('Strona główna', Yii::app()->baseUrl),
+		'links' => array('Karta postaci'),
+	)
 );
 ?>
-<h1><?php echo $this->id . '/' . $this->action->id; ?></h1>
 
-<p>
-	You may change the content of this page by modifying
-	the file <tt><?php echo __FILE__; ?></tt>.
-</p>
+<h2>
+	<?php echo $model->username; ?>
+	<?php
+		$this->widget(
+			'bootstrap.widgets.TbButton',
+			array(
+				'label' => 'Aktualizacja',
+				'type' => 'danger',
+				//'size' => 'small',
+				'url' => array('user/update', 'id'=>Yii::app()->user->id),
+			)
+		);
+	?>
+</h2>
+
+<?php
+    $this->widget(
+		'bootstrap.widgets.TbLabel',
+		array(
+			'type' => 'important',
+		    'label' => 'Gracz',
+			'htmlOptions' => array(
+				'style' => 'margin-bottom: 10px; width: 75%; text-align:center; font-weight: normal; padding: 8px 0px; font-size: 16px;',	
+			),
+		)
+	);
+?>
+
+<?php $this->widget('bootstrap.widgets.TbDetailView', array(
+	'data'=>$model,
+	'attributes'=>array(
+        'group.name',
+		'first_name',
+		'last_name',
+        'email',
+        'created_at',
+        'last_visit_at',
+		'player.health',
+		'player.damage',
+		'player.first_currency',
+		'player.second_currency',
+		'player.active_weapon_id',
+	),
+    'nullDisplay'=>'Nie ustawiono',
+)); ?>
+
+<?php
+    $this->widget(
+		'bootstrap.widgets.TbLabel',
+		array(
+			'type' => 'important',
+		    'label' => 'Zasoby',
+			'htmlOptions' => array(
+				'style' => 'margin-bottom: 10px; width: 75%; text-align:center; font-weight: normal; padding: 8px 0px; font-size: 16px;',	
+			),
+		)
+	);
+?>

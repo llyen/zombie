@@ -58,10 +58,9 @@
 					}
 					else
 					{
-						echo CHtml::link('', array('/user/profile'), array('class'=>'bp-icon icon-user', 'data-info'=>'Profil'));
+						echo CHtml::link('', array('/user/index'), array('class'=>'bp-icon icon-inventory', 'data-info'=>'Karta postaci'));
 						echo CHtml::link('', array('/classes/display'), array('class'=>'bp-icon icon-classes', 'data-info'=>'Zajęcia'));
 						echo CHtml::link('', array('/game/shop'), array('class'=>'bp-icon icon-shop', 'data-info'=>'Sklep'));
-						echo CHtml::link('', array('/game/inventory'), array('class'=>'bp-icon icon-inventory', 'data-info'=>'Karta postaci'));
 						echo CHtml::link('', array('/game/abilities'), array('class'=>'bp-icon icon-abilities', 'data-info'=>'Umiejętności'));
 						echo CHtml::link('', '#', array('class'=>'bp-icon icon-epic-battle', 'data-info'=>'Epickie wyzwanie', 'id'=>'showLeftEpic'));
 					}

@@ -21,7 +21,7 @@ class UserController extends Controller
                 'users'=>array('@'),
             ),
             array('allow',
-                'actions'=>array('list', 'view'),
+                'actions'=>array('list', 'view', 'bulkRegister'),
                 'expression'=>'$user->isAdmin() === true',
             ),
 			array('deny',
@@ -32,7 +32,9 @@ class UserController extends Controller
 	
 	public function actionIndex()
 	{
-		$this->render('index');
+		$this->render('index', array(
+			'model'=>$this->loadModel(Yii::app()->user->id),	
+		));
 	}
 
 	public function actionList()
@@ -87,7 +89,12 @@ class UserController extends Controller
 	{
 		$this->render('register');
 	}
-
+	
+	public function actionBulkRegister()
+	{
+		$this->render('bulkRegister');
+	}
+	
 	public function actionRetrievePassword()
 	{
 		$this->render('retrievePassword');
