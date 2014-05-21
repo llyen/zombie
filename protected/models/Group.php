@@ -32,7 +32,7 @@ class Group extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name', 'required'),
+			array('name', 'required', 'message'=>'Proszę podaj wartość dla pola {attribute}.'),
 			array('name', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.

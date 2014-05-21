@@ -36,7 +36,22 @@ class GroupController extends Controller
     
     public function actionCreate()
     {
-        
+        $model=new Group;
+
+		// Uncomment the following line if AJAX validation is needed
+		// $this->performAjaxValidation($model);
+
+		if(isset($_POST['Group']))
+		{
+			$model->attributes=$_POST['Group'];
+			if($model->save())
+				$this->redirect(array('group/list'));
+				//$this->redirect(array('view','id'=>$model->id));
+		}
+
+		$this->render('create',array(
+			'model'=>$model,
+		));
     }
 	
 	public function actionMembers($id)
@@ -46,7 +61,21 @@ class GroupController extends Controller
     
     public function actionUpdate($id)
     {
-        
+        $model=$this->loadModel($id);
+
+		// Uncomment the following line if AJAX validation is needed
+		// $this->performAjaxValidation($model);
+
+		if(isset($_POST['Group']))
+		{
+			$model->attributes=$_POST['Group'];
+			if($model->save())
+				$this->redirect(array('group/list'));
+		}
+
+		$this->render('update',array(
+			'model'=>$model,
+		));
     }
     
     public function actionDelete($id)

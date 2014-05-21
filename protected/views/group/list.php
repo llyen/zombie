@@ -1,5 +1,4 @@
 <?php
-/* @var $this UserController */
 
 $this->widget(
 	'bootstrap.widgets.TbBreadcrumbs',
