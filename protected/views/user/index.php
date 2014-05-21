@@ -32,7 +32,7 @@ $this->widget(
 			'type' => 'important',
 		    'label' => 'Gracz',
 			'htmlOptions' => array(
-				'style' => 'margin-bottom: 10px; width: 75%; text-align:center; font-weight: normal; padding: 8px 0px; font-size: 16px;',	
+				'style' => 'margin: 10px 0px; width: 75%; text-align:center; font-weight: normal; padding: 8px 0px; font-size: 16px;',	
 			),
 		)
 	);
@@ -56,6 +56,8 @@ $this->widget(
     'nullDisplay'=>'Nie ustawiono',
 )); ?>
 
+<?php if(!empty($model->player->resources)): ?>
+
 <?php
     $this->widget(
 		'bootstrap.widgets.TbLabel',
@@ -68,3 +70,5 @@ $this->widget(
 		)
 	);
 ?>
+
+<?php endif; ?>

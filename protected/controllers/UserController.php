@@ -21,7 +21,7 @@ class UserController extends Controller
                 'users'=>array('@'),
             ),
             array('allow',
-                'actions'=>array('list', 'view', 'bulkRegister'),
+                'actions'=>array('list', 'view', 'reward', 'bulkRegister'),
                 'expression'=>'$user->isAdmin() === true',
             ),
 			array('deny',
@@ -56,6 +56,11 @@ class UserController extends Controller
 		));
 	}
 
+	public function actionReward($id)
+	{
+		
+	}
+	
 	public function actionLogin()
 	{
 		$model=new LoginForm;

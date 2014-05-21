@@ -13,12 +13,18 @@
         array(
             'header'=>'Operacje',
             'class'=>'bootstrap.widgets.TbButtonColumn',
-            'template'=>'{_view}',
+            'template'=>'{_view}{_reward}',
             'buttons'=>array(
                 '_view' => array(
                     'label'=>'podgląd',
                     'url'=>'Yii::app()->createUrl(\'user/view\', array(\'id\'=>$data->id))',
                     'imageUrl'=>Yii::app()->request->baseUrl.'/images/view.png',
+                ),
+                '_reward' => array(
+                    'label'=>'nagradzanie',
+                    'url'=>'Yii::app()->createUrl(\'user/reward\', array(\'id\'=>$data->id))',
+                    'imageUrl'=>Yii::app()->request->baseUrl.'/images/reward.png',
+                    'visible'=>'!(bool)$data->is_admin',
                 ),
             //    'adminIndex' => array(
             //        'label'=>'pozycje na fakturze',
