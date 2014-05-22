@@ -14,7 +14,7 @@ class GroupController extends Controller
 	{
 		return array(
             array('allow',
-                'actions'=>array('list', 'create', 'update', 'delete', 'members'),
+                'actions'=>array('list', 'create', 'update', 'delete'),
                 'expression'=>'$user->isAdmin() === true',
             ),
 			array('deny',
@@ -54,11 +54,6 @@ class GroupController extends Controller
 			'model'=>$model,
 		));
     }
-	
-	public function actionMembers($id)
-	{		
-		
-	}
     
     public function actionUpdate($id)
     {

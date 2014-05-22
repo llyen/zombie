@@ -5,7 +5,7 @@ $this->widget(
 	'bootstrap.widgets.TbBreadcrumbs',
 	array(
 		'homeLink'=>CHtml::link('Strona główna', Yii::app()->baseUrl),
-		'links' => array('Zarządzanie użytkownikami' => array('user/list'), 'Podgląd'),
+		'links' => array('Zarządzanie grupami'=>array('group/list'), 'Członkowie grupy'=>array('user/members', 'id'=>$id), 'Podgląd'),
 	)
 );
 ?>

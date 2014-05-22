@@ -23,7 +23,7 @@
             'buttons'=>array(
                 '_members' => array(
                     'label'=>'członkowie grupy',
-                    'url'=>'Yii::app()->createUrl(\'group/members\', array(\'id\'=>$data->id))',
+                    'url'=>'Yii::app()->createUrl(\'user/members\', array(\'id\'=>$data->id))',
                     'imageUrl'=>Yii::app()->request->baseUrl.'/images/members.png',
                 ),
                 '_classes' => array(

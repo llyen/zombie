@@ -116,6 +116,15 @@ class User extends CActiveRecord
 		));
 	}
 	
+	public function byGroup($group_id)
+	{
+		$this->getDbCriteria()->mergeWith(array(
+			'condition'=>'group_id='.$group_id,
+			'order'=>'username asc, created_at asc',
+		));
+		return $this;
+	}
+	
 	public function verifyPassword($password)
 	{
 		if(Yii::app()->params['hashMethod'] == 'md5')

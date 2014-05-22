@@ -21,7 +21,7 @@ class UserController extends Controller
                 'users'=>array('@'),
             ),
             array('allow',
-                'actions'=>array('list', 'view', 'reward', 'bulkRegister'),
+                'actions'=>array('list', 'view', 'viewMember', 'reward', 'bulkRegister', 'members'),
                 'expression'=>'$user->isAdmin() === true',
             ),
 			array('deny',
@@ -53,6 +53,14 @@ class UserController extends Controller
 	{		
 		$this->render('view', array(
 			'model'=>$this->loadModel($id),
+		));
+	}
+	
+	public function actionViewMember($id, $group_id)
+	{		
+		$this->render('viewMember', array(
+			'model'=>$this->loadModel($id),
+			'id'=>$group_id,
 		));
 	}
 
@@ -103,6 +111,19 @@ class UserController extends Controller
 	public function actionRetrievePassword()
 	{
 		$this->render('retrievePassword');
+	}
+	
+	public function actionMembers($id)
+	{		
+		$model = new User('search');
+		$model->byGroup($id);
+		$model->unsetAttributes();  // clear any default values
+		if(isset($_GET['User']))
+			$model->attributes=$_GET['User'];
+
+		$this->render('members', array(
+			'model'=>$model,
+		));
 	}
 	
 	/**
