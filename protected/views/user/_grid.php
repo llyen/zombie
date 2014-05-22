@@ -13,7 +13,7 @@
         array(
             'header'=>'Operacje',
             'class'=>'bootstrap.widgets.TbButtonColumn',
-            'template'=>'{view}{_reward}',
+            'template'=>'{view} {_reward}',
             'buttons'=>array(
                 //'_view' => array(
                 //    'label'=>'podgląd',

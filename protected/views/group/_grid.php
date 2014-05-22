@@ -16,7 +16,7 @@
         array(
             'header'=>'Operacje',
             'class'=>'bootstrap.widgets.TbButtonColumn',
-            'template'=>'{_members}{_classes}{update}{delete}',
+            'template'=>'{_members} {_classes} {update} {delete}',
             'htmlOptions'=>array(
                 'style'=>'width: 100px;',
             ),
@@ -28,7 +28,7 @@
                 ),
                 '_classes' => array(
                     'label'=>'zajęcia',
-                    'url'=>'Yii::app()->createUrl(\'classes/list\', array(\'id\'=>$data->id))',
+                    'url'=>'Yii::app()->createUrl(\'class_/list\', array(\'id\'=>$data->id))',
                     'imageUrl'=>Yii::app()->request->baseUrl.'/images/classes.png',
                 ),
                 //'_update' => array(

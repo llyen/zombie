@@ -107,6 +107,15 @@ class Class_ extends CActiveRecord
 		return $this;
 	}
 	
+	public function byGroup($group_id)
+	{
+		$this->getDbCriteria()->mergeWith(array(
+			'condition'=>'group_id='.$group_id,
+			'order'=>'is_checked asc, term asc',
+		));
+		return $this;
+	}
+	
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
