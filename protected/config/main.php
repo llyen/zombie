@@ -8,7 +8,7 @@
 return array(
 	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
 	'name'=>'Zombie Academy Gamification Platform',
-    
+    'language'=>'pl',
     'theme'=>'zombie', //default theme set
     
 	// preloading 'log' component
@@ -44,6 +44,7 @@ return array(
             'showScriptName'=>false, //remove index.php from URLs
 			'rules'=>array(
 				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
+                '<controller:\w+>/<action:\w+>/<group_id:\d+>/<id:\d+>'=>'<controller>/<action>',
 				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
 				'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
 			),
@@ -70,11 +71,11 @@ return array(
 					'levels'=>'error, warning',
 				),
 				// uncomment the following to show log messages on web pages
-				/*
-				array(
-					'class'=>'CWebLogRoute',
-				),
-				*/
+				//
+				//array(
+				//	'class'=>'CWebLogRoute',
+				//),
+				//
 			),
 		),
         'bootstrap'=>array(

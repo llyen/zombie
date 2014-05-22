@@ -14,7 +14,7 @@ class Class_Controller extends Controller
 	{
 		return array(
             array('allow',
-                'actions'=>array('list', 'create', 'update', 'delete'),
+                'actions'=>array('list', 'create', 'bulkCreate', 'update', 'delete'),
                 'expression'=>'$user->isAdmin() === true',
             ),
 			array('deny',
@@ -33,55 +33,63 @@ class Class_Controller extends Controller
 
 		$this->render('list', array(
 			'model'=>$model,
+			'id'=>$id,
 		));
 	}
     
-    public function actionCreate()
+    public function actionCreate($id)
     {
-        $model=new Group;
+        $model=new Class_;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Group']))
+		if(isset($_POST['Class']))
 		{
-			$model->attributes=$_POST['Group'];
+			$model->attributes=$_POST['Class'];
 			if($model->save())
-				$this->redirect(array('group/list'));
+				$this->redirect(array('class_/list', 'id'=>$id));
 				//$this->redirect(array('view','id'=>$model->id));
 		}
 
 		$this->render('create',array(
 			'model'=>$model,
+			'id'=>$id,
 		));
     }
     
-    public function actionUpdate($id)
+	public function actionBulkCreate($id)
+	{
+		
+	}
+	
+    public function actionUpdate($group_id, $id)
     {
         $model=$this->loadModel($id);
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Group']))
+		if(isset($_POST['Class']))
 		{
-			$model->attributes=$_POST['Group'];
+			$model->attributes=$_POST['Class'];
 			if($model->save())
-				$this->redirect(array('group/list'));
+				$this->redirect(array('class_/list', 'id'=>$group_id));
 		}
 
 		$this->render('update',array(
 			'model'=>$model,
+			'id'=>$group_id,
 		));
     }
     
-    public function actionDelete($id)
+    public function actionDelete($group_id, $id)
     {
-        //$this->loadModel($id)->delete();
+        $this->loadModel($id)->delete();
 	
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-		//if(!isset($_GET['ajax']))
-			//$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('group/list'));
+		if(!isset($_GET['ajax']))
+			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('class_/list', 'id'=>$group_id));
     }
 	
 	/**
@@ -91,7 +99,7 @@ class Class_Controller extends Controller
 	 */
 	public function loadModel($id)
 	{
-		$model=Group::model()->findByPk($id);
+		$model=Class_::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;

@@ -14,7 +14,7 @@ $this->widget(
 	$this->widget(
 		'bootstrap.widgets.TbButton',
 		array(
-			'label' => 'Dodawanie grupy',
+			'label' => 'Nowa grupa',
 			'type' => 'danger',
 			'url' => array('group/create'),
 		)
