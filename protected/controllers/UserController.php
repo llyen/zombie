@@ -21,7 +21,7 @@ class UserController extends Controller
                 'users'=>array('@'),
             ),
             array('allow',
-                'actions'=>array('list', 'view', 'viewMember', 'reward', 'bulkRegister', 'members'),
+                'actions'=>array('list', 'view', 'viewMember', 'reward', 'rewardMember', 'bulkRegister', 'members'),
                 'expression'=>'$user->isAdmin() === true',
             ),
 			array('deny',
@@ -66,7 +66,28 @@ class UserController extends Controller
 
 	public function actionReward($id)
 	{
-		
+		$user = $this->loadModel($id);
+		$model=new RewardForm;
+		if(isset($_POST['RewardForm']))
+		{
+			$model->attributes=$_POST['RewardForm'];
+			if($model->save())
+				$this->redirect(array('user/list')); //notification!!!
+		}
+		$this->render('reward',array('model'=>$model, 'user'=>$user));
+	}
+	
+	public function actionRewardMember($id, $group_id)
+	{
+		$user = $this->loadModel($id);
+		$model=new RewardForm;
+		if(isset($_POST['RewardForm']))
+		{
+			$model->attributes=$_POST['RewardForm'];
+			if($model->save())
+				$this->redirect(array('user/members', 'id'=>$group_id)); //notification!!!
+		}
+		$this->render('rewardMember',array('model'=>$model, 'user'=>$user, 'id'=>$group_id));
 	}
 	
 	public function actionLogin()

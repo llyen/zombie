@@ -90,5 +90,7 @@ return array(
 		// this is used in contact page
 		'adminEmail'=>'webmaster@example.com',
         'hashMethod'=>'', // {empty : crypt, md5 : md5}
+        'firstCurrencyDefaultReward'=>200,
+        'secondCurrencyDefaultReward'=>50,
 	),
 );

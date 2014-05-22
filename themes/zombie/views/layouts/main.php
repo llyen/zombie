@@ -50,24 +50,27 @@
 			    if(!Yii::app()->user->isGuest)
 			    {
 					if(Yii::app()->user->isAdmin())
-					{	
+					{
+						echo CHtml::link('', '#', array('class'=>'bp-icon icon-inventory', 'data-info'=>'Dashboard'));
 						echo CHtml::link('', array('/user/list'), array('class'=>'bp-icon icon-user', 'data-info'=>'Użytkownicy'));
 						//echo CHtml::link('', '#', array('class'=>'bp-icon icon-preferences', 'data-info'=>'Wyzwania', 'id'=>'showLeftPreferences'));
 						echo CHtml::link('', array('/group/list'), array('class'=>'bp-icon icon-group', 'data-info'=>'Grupy'));
-						echo CHtml::link('', array('/communication/send'), array('class'=>'bp-icon icon-communication', 'data-info'=>'Komunikacja'));	
+						echo CHtml::link('', '#', array('class'=>'bp-icon icon-communication', 'data-info'=>'Komunikacja'));	
 					}
 					else
 					{
-						echo CHtml::link('', array('/user/index'), array('class'=>'bp-icon icon-inventory', 'data-info'=>'Karta postaci'));
-						echo CHtml::link('', array('/classes/display'), array('class'=>'bp-icon icon-classes', 'data-info'=>'Zajęcia'));
-						echo CHtml::link('', array('/game/shop'), array('class'=>'bp-icon icon-shop', 'data-info'=>'Sklep'));
-						echo CHtml::link('', array('/game/abilities'), array('class'=>'bp-icon icon-abilities', 'data-info'=>'Umiejętności'));
-						echo CHtml::link('', '#', array('class'=>'bp-icon icon-epic-battle', 'data-info'=>'Epickie wyzwanie', 'id'=>'showLeftEpic'));
+						echo CHtml::link('', '#', array('class'=>'bp-icon icon-inventory', 'data-info'=>'Dashboard'));
+						echo CHtml::link('', array('/user/index'), array('class'=>'bp-icon icon-user', 'data-info'=>'Karta postaci'));
+						echo CHtml::link('', '#', array('class'=>'bp-icon icon-classes', 'data-info'=>'Zajęcia'));
+						echo CHtml::link('', '#', array('class'=>'bp-icon icon-shop', 'data-info'=>'Sklep'));
+						echo CHtml::link('', '#', array('class'=>'bp-icon icon-abilities', 'data-info'=>'Umiejętności'));
+						echo CHtml::link('', '#', array('class'=>'bp-icon icon-epic-battle', 'data-info'=>'Epickie wyzwanie'));
 					}
 					echo CHtml::link('', array('/user/logout'), array('class'=>'bp-icon icon-logout', 'data-info'=>'Wyloguj się'));
 			    }
 			    else
 			    {
+					echo CHtml::link('', array('/user/login'), array('class'=>'bp-icon icon-preferences', 'data-info'=>'Rejestracja'));
 					echo CHtml::link('', array('/user/login'), array('class'=>'bp-icon icon-login', 'data-info'=>'Panel logowania'));
 					//echo CHtml::link('', array('/site/about'), array('class'=>'bp-icon icon-about', 'data-info'=>'O projekcie'));
 			    }

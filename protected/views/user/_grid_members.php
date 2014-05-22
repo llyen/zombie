@@ -17,7 +17,7 @@
             'buttons'=>array(
                 '_reward' => array(
                     'label'=>'nagradzanie',
-                    'url'=>'Yii::app()->createUrl(\'user/reward\', array(\'id\'=>$data->id))',
+                    'url'=>'Yii::app()->createUrl(\'user/rewardMember\', array(\'id\'=>$data->id, \'group_id\'=>$data->group_id))',
                     'imageUrl'=>Yii::app()->request->baseUrl.'/images/reward.png',
                 ),
             ),
