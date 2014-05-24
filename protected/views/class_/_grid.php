@@ -40,7 +40,7 @@
                     'visible'=>'!$data->is_checked',
                 ),
                 '_viewPresences' => array(
-                    'label'=>'sprawdzanie obecności',
+                    'label'=>'lista obecności',
                     'url'=>'Yii::app()->createUrl(\'presence/view\', array(\'id\'=>$data->id, \'group_id\'=>$data->group_id))',
                     'imageUrl'=>Yii::app()->request->baseUrl.'/images/presences.png',
                     'visible'=>'$data->is_checked',

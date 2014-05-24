@@ -235,7 +235,7 @@ div#content {
 	margin: 10px 15px;
 }
 
-div#content input {
+div#content input, .toggle-button span {
 	box-sizing: content-box;
 }
 
