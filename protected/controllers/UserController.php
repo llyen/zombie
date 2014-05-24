@@ -107,7 +107,12 @@ class UserController extends Controller
 			$model->attributes=$_POST['LoginForm'];
 			// validate user input and redirect to the previous page if valid
 			if($model->validate() && $model->login())
+			{
+				$model = $this->loadModel(Yii::app()->user->id);
+				$model->last_visit_at = date('Y-m-d H:i:s');
+				$model->save();
 				$this->redirect(Yii::app()->user->returnUrl);
+			}
 		}
 		// display the login form
 		$this->render('login',array('model'=>$model));

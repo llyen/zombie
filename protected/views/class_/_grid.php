@@ -22,15 +22,28 @@
         array(
             'header'=>'Operacje',
             'class'=>'bootstrap.widgets.TbButtonColumn',
-            'template'=>'{_presences} {update} {delete}',
+            'template'=>'{_viewPresences} {_presences} {update} {delete}',
             'htmlOptions'=>array(
                 'style'=>'width: 100px;',
             ),
             'buttons'=>array(
+                'update'=> array(
+                    'visible'=>'!$data->is_checked',
+                ),
+                'delete' => array(
+                    'visible'=>'!$data->is_checked',
+                ),
                 '_presences' => array(
                     'label'=>'sprawdzanie obecności',
-                    'url'=>'Yii::app()->createUrl(\'presence/check\', array(\'id\'=>$data->id))',
+                    'url'=>'Yii::app()->createUrl(\'presence/check\', array(\'id\'=>$data->id, \'group_id\'=>$data->group_id))',
                     'imageUrl'=>Yii::app()->request->baseUrl.'/images/presences.png',
+                    'visible'=>'!$data->is_checked',
+                ),
+                '_viewPresences' => array(
+                    'label'=>'sprawdzanie obecności',
+                    'url'=>'Yii::app()->createUrl(\'presence/view\', array(\'id\'=>$data->id, \'group_id\'=>$data->group_id))',
+                    'imageUrl'=>Yii::app()->request->baseUrl.'/images/presences.png',
+                    'visible'=>'$data->is_checked',
                 ),
             ),
             'updateButtonIcon'=>false,

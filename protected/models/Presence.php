@@ -94,6 +94,14 @@ class Presence extends CActiveRecord
 		));
 	}
 
+	public function byClassAndPlayer($class_id, $player_id)
+	{
+		$this->getDbCriteria()->mergeWith(array(
+			'condition'=>'class_id='.$class_id.' and player_id='.$player_id,
+		));
+		return $this;
+	}
+	
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
