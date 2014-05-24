@@ -82,13 +82,20 @@ return array(
             'class'=>'ext.yiibooster.components.Bootstrap',
             'responsiveCss'=>true,
         ),
+        'swiftMailer'=>array(
+            'class'=>'ext.swiftMailer.SwiftMailer',
+        ),
 	),
 
 	// application-level parameters that can be accessed
 	// using Yii::app()->params['paramName']
 	'params'=>array(
 		// this is used in contact page
-		'adminEmail'=>'webmaster@example.com',
+		'adminEmail'=>'zombienotify@gmail.com',
+        'adminEmailPassword'=>'Zomb!e2014',
+        'adminEmailHost'=>'smtp.gmail.com',
+        'adminEmailPort'=>465,
+        'adminEmailProtocol'=>'tls',//'tls' for gmail
         'hashMethod'=>'', // {empty : crypt, md5 : md5}
         'firstCurrencyDefaultReward'=>200,
         'secondCurrencyDefaultReward'=>50,
