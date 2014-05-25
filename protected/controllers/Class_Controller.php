@@ -13,6 +13,10 @@ class Class_Controller extends Controller
 	public function accessRules()
 	{
 		return array(
+			array('allow',
+				'actions'=>array('index'),
+				'users'=>array('@'),
+			),
             array('allow',
                 'actions'=>array('list', 'create', 'bulkCreate', 'update', 'delete'),
                 'expression'=>'$user->isAdmin() === true',
@@ -23,6 +27,20 @@ class Class_Controller extends Controller
         );
 	}
 
+	public function actionIndex()
+	{
+		$user = User::model()->findByPk(Yii::app()->user->id);
+		$model=new Class_('search');
+		$model->byGroup($user->group_id);
+		$model->unsetAttributes();  // clear any default values
+		if(isset($_GET['Class_']))
+			$model->attributes=$_GET['Class_'];
+
+		$this->render('index', array(
+			'model'=>$model,
+		));
+	}
+	
 	public function actionList($id)
 	{
 		$model=new Class_('search');
