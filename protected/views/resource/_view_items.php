@@ -1,3 +1,8 @@
+<?php if(Yii::app()->user->hasFlash('resourceError')): ?>
+<div class="flash-error">
+	<?php echo Yii::app()->user->getFlash('resourceError'); ?>
+</div>
+<?php endif; ?>
 <?php
 
 $this->widget('bootstrap.widgets.TbLabel', array(
@@ -168,6 +173,7 @@ $this->widget('bootstrap.widgets.TbLabel', array(
     </table>
 </div>
 <?php endif; ?>
+<?php if(!is_null($items['weapons']) && !empty($player->resources)): ?>
 <?php
     $this->widget(
 		'bootstrap.widgets.TbLabel',
@@ -180,7 +186,6 @@ $this->widget('bootstrap.widgets.TbLabel', array(
 		)
 	);
 ?>
-<?php if(!is_null($items['weapons'])): ?>
 <div class="grid-view">
     <table class="items table table-striped table-condensed">
         <thead>

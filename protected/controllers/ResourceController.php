@@ -13,7 +13,7 @@ class ResourceController extends Controller
 	{
 		return array(
             array('allow',
-                'actions'=>array('items', 'abilities'),
+                'actions'=>array('items', 'abilities', 'buy', 'sell'),
                 'users'=>array('@'),
             ),
 			array('deny',
@@ -25,16 +25,156 @@ class ResourceController extends Controller
     public function actionItems()
     {
         $items = array();
+        $weapons = $this->loadWeapons();
+        $towers = $this->loadTowers();
+        $player = User::model()->findByPk(Yii::app()->user->id)->player;
+        
+        $items = array('weapons' => $weapons, 'towers' => $towers);
+        
+        $this->render('items', array(
+            'player'=>$player,
+            'items'=>$items,
+        ));
+    }
+    
+    public function actionBuy($id)
+    {
+        $player = User::model()->findByPk(Yii::app()->user->id)->player;
+        if($id >= 1000 && $id < 2000)
+        {
+            foreach($player->resources as $resource)
+            {
+                if($resource->resource_id == $id)
+                {
+                    Yii::app()->user->setFlash('resourceError','Błąd! Nie można kupić już posiadanej broni.');
+                    $this->redirect(array('resource/items'));
+                }
+            }
+            
+            $weapons = $this->loadWeapons();
+            foreach($weapons as $weapon)
+            {
+                if($weapon['params']['id'] == $id)
+                {
+                    if($weapon['params']['price'] > $player->first_currency)
+                    {
+                        Yii::app()->user->setFlash('resourceError', 'Błąd! Brak wystarczających środków do zakupu wskazanej broni.');
+                        $this->redirect(array('resource/items'));
+                    }
+                    else
+                    {
+                        $model = new Resource;
+                        $model->player_id = $player->id;
+                        $model->resource_id = $id;
+                        $player->first_currency -= $weapon['params']['price'];
+                        if($model->save() && $player->save())
+                            $this->redirect(array('resource/items'));
+                    }
+                }
+            }
+        }
+        elseif($id >= 2000 && $id < 3000)
+        {
+            $towers = $this->loadTowers();
+            foreach($towers as $tower)
+            {
+                if($tower['params']['id'] == $id)
+                {
+                    if($tower['params']['price'] > $player->first_currency)
+                    {
+                        Yii::app()->user->setFlash('resourceError', 'Błąd! Brak wystarczających środków do zakupu.');
+                        $this->redirect(array('resource/items'));
+                    }
+                    else
+                    {
+                        $model = new Resource;
+                        $model->player_id = $player->id;
+                        $model->resource_id = $id;
+                        $player->first_currency -= $tower['params']['price'];
+                        if($model->save() && $player->save())
+                            $this->redirect(array('resource/items'));
+                    }
+                }
+            }
+        }
+        elseif($id >= 3000)
+        {
+            //abilities
+        }
+    }
+    
+    public function actionSell($id)
+    {
+        $player = User::model()->findByPk(Yii::app()->user->id)->player;
+        $resource = Resource::model()->find('player_id = :player_id and resource_id = :resource_id', array(':player_id'=>$player->id, ':resource_id'=>$id));
+        if(!is_null($resource))
+        {
+            if($id >= 1000 && $id < 2000)
+            {
+                $weapons = $this->loadWeapons();
+                foreach($weapons as $weapon)
+                {
+                    if($weapon['params']['id'] == $id)
+                    {
+                        if($weapon['params']['abilityToSell'] == 'nie')
+                        {
+                            Yii::app()->user->setFlash('resourceError','Błąd! Nie można sprzedać podanego zasobu.');
+                            $this->redirect(array('resource/items'));
+                        }
+                        
+                        $resource->delete();
+                        $player->first_currency += $weapon['params']['price'];
+                        if($player->save())
+                            $this->redirect(array('resource/items'));
+                    }
+                }
+            }
+            else
+            {
+                Yii::app()->user->setFlash('resourceError','Błąd! Nie można sprzedać podanego zasobu.');
+                $this->redirect(array('resource/items'));
+            }
+            //elseif($id >= 2000 && $id < 3000)
+            //{
+            //    $towers = $this->loadTowers();
+            //    foreach($towers as $tower)
+            //    {
+            //        if($tower['params']['id'] == $id)
+            //        {
+            //            if(count($resource) > 1)
+            //            {
+            //                $resource[0]->delete();
+            //            }
+            //            else
+            //            {
+            //                $resource->delete();
+            //            }
+            //            
+            //            $player->first_currency += $tower['params']['price'];
+            //            if($player->save())
+            //                $this->redirect(array('resource/items'));
+            //        }
+            //    }
+            //}
+            //elseif($id >= 3000)
+            //{
+            //    
+            //}
+        }
+        else
+        {
+            Yii::app()->user->setFlash('resourceError','Błąd! Nie można sprzedać nieposiadanego zasobu.');
+            $this->redirect(array('resource/items'));
+        }
+    }
+    
+    protected function loadWeapons()
+    {
         $weapons = array();
-        $towers = array();
         $player = User::model()->findByPk(Yii::app()->user->id)->player;
         $resources = $this->loadModels($player->id);
         $weaponsFile = file(Yii::app()->basePath.'/../settings/weapons.csv', FILE_IGNORE_NEW_LINES);
-        $towersFile = file(Yii::app()->basePath.'/../settings/towers.csv', FILE_IGNORE_NEW_LINES);
-        $dmgPatternsFile = file(Yii::app()->basePath.'/../settings/dmg_patterns.csv', FILE_IGNORE_NEW_LINES);
         $weaponsFileCount = count($weaponsFile);
-        $towersFileCount = count($towersFile);
-        $dmgPatternsFileCount = count($dmgPatternsFile);
         
         for($i = 1; $i < $weaponsFileCount; $i++)
         {
@@ -59,6 +199,19 @@ class ResourceController extends Controller
                 ),
             );
         }
+        
+        return $weapons;
+    }
+    
+    protected function loadTowers()
+    {
+        $towers = array();
+        $player = User::model()->findByPk(Yii::app()->user->id)->player;
+        $resources = $this->loadModels($player->id);
+        $towersFile = file(Yii::app()->basePath.'/../settings/towers.csv', FILE_IGNORE_NEW_LINES);
+        $dmgPatternsFile = file(Yii::app()->basePath.'/../settings/dmg_patterns.csv', FILE_IGNORE_NEW_LINES);
+        $towersFileCount = count($towersFile);
+        $dmgPatternsFileCount = count($dmgPatternsFile);
         
         for($i = 1; $i < $towersFileCount; $i++)
         {
@@ -126,12 +279,7 @@ class ResourceController extends Controller
             );
         }
         
-        $items = array('weapons' => $weapons, 'towers' => $towers);
-        
-        $this->render('items', array(
-            'player'=>$player,
-            'items'=>$items,
-        ));
+        return $towers;
     }
     
     public function loadModels($id)
