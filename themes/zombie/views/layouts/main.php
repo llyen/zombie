@@ -61,9 +61,9 @@
 					{
 						echo CHtml::link('', '#', array('class'=>'bp-icon icon-inventory', 'data-info'=>'Dashboard'));
 						echo CHtml::link('', array('/user/index'), array('class'=>'bp-icon icon-user', 'data-info'=>'Karta postaci'));
-						echo CHtml::link('', '#', array('class'=>'bp-icon icon-classes', 'data-info'=>'Zajęcia'));
+						echo CHtml::link('', array('/class_/index'), array('class'=>'bp-icon icon-classes', 'data-info'=>'Zajęcia'));
 						echo CHtml::link('', array('/resource/items'), array('class'=>'bp-icon icon-shop', 'data-info'=>'Dostępne zasoby'));
-						echo CHtml::link('', '#', array('class'=>'bp-icon icon-abilities', 'data-info'=>'Umiejętności'));
+						echo CHtml::link('', array('/resource/abilities'), array('class'=>'bp-icon icon-abilities', 'data-info'=>'Umiejętności'));
 						echo CHtml::link('', '#', array('class'=>'bp-icon icon-epic-battle', 'data-info'=>'Epickie wyzwanie'));
 					}
 					echo CHtml::link('', array('/user/logout'), array('class'=>'bp-icon icon-logout', 'data-info'=>'Wyloguj się'));

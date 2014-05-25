@@ -37,6 +37,17 @@ class ResourceController extends Controller
         ));
     }
     
+    public function actionAbilities()
+    {
+        $abilities = $this->loadAbilities();
+        $player = User::model()->findByPk(Yii::app()->user->id)->player;
+        
+        $this->render('abilities', array(
+            'player'=>$player,
+            'abilities'=>$abilities,
+        ));
+    }
+    
     public function actionBuy($id)
     {
         $player = User::model()->findByPk(Yii::app()->user->id)->player;
@@ -99,7 +110,36 @@ class ResourceController extends Controller
         }
         elseif($id >= 3000)
         {
-            //abilities
+            foreach($player->resources as $resource)
+            {
+                if($resource->resource_id == $id)
+                {
+                    Yii::app()->user->setFlash('resourceError','Błąd! Nie można kupić już posiadanej umiejętności.');
+                    $this->redirect(array('resource/abilities'));
+                }
+            }
+            
+            $abilities = $this->loadAbilities();
+            foreach($abilities as $ability)
+            {
+                if($ability['params']['id'] == $id)
+                {
+                    if($ability['params']['price'] > $player->second_currency)
+                    {
+                        Yii::app()->user->setFlash('resourceError', 'Błąd! Brak wystarczających środków do zakupu.');
+                        $this->redirect(array('resource/abilities'));
+                    }
+                    else
+                    {
+                        $model = new Resource;
+                        $model->player_id = $player->id;
+                        $model->resource_id = $id;
+                        $player->second_currency -= $ability['params']['price'];
+                        if($model->save() && $player->save())
+                            $this->redirect(array('resource/abilities'));
+                    }
+                }
+            }
         }
     }
     
@@ -129,10 +169,15 @@ class ResourceController extends Controller
                     }
                 }
             }
-            else
+            elseif($id >= 2000 && $id < 3000)
             {
                 Yii::app()->user->setFlash('resourceError','Błąd! Nie można sprzedać podanego zasobu.');
                 $this->redirect(array('resource/items'));
+            }
+            elseif($id >= 3000)
+            {
+                Yii::app()->user->setFlash('resourceError','Błąd! Nie można sprzedać podanego zasobu.');
+                $this->redirect(array('resource/abilities'));
             }
             //elseif($id >= 2000 && $id < 3000)
             //{
@@ -280,6 +325,40 @@ class ResourceController extends Controller
         }
         
         return $towers;
+    }
+    
+    protected function loadAbilities()
+    {
+        $abilities = array();
+        $player = User::model()->findByPk(Yii::app()->user->id)->player;
+        $resources = $this->loadModels($player->id);
+        $abilitiesFile = file(Yii::app()->basePath.'/../settings/abilities.csv', FILE_IGNORE_NEW_LINES);
+        $abilitiesFileCount = count($abilitiesFile);
+        
+        for($i = 1; $i < $abilitiesFileCount; $i++)
+        {
+            list($id, $name, $type, $function, $price, $img, $desc) = explode(';', $abilitiesFile[$i]);
+            $available = true;
+            
+            foreach($resources as $resource)
+                if($resource->resource_id == (int) $id)
+                    $available = false;
+            
+            $abilities[] = array(
+                'available'=>$available,
+                'params' => array(
+                    'id'=>(int) $id,
+                    'name'=>$name,
+                    'type'=>$type,
+                    'function'=>$function,
+                    'price'=>$price,
+                    'img'=>$img,
+                    'desc'=>$desc,
+                ),
+            );
+        }
+        
+        return $abilities;
     }
     
     public function loadModels($id)
