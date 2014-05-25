@@ -1,0 +1,15 @@
+﻿;;;;;;;;;;
+2000;L.A.Z.O.R v. 0.12 RC;wieża;120;wzor1;spalanie;2000;dzialo;Jak sama nazwa wskazuje, laser atakujacy pola naprzeciwko siebie, z odległościa maleją obrażenia;W1;1
+2001;Rozbijacz cząsteczek;wieża;220;wzor2;AOE;1400;dzialo2;Jrobotyczne ramię z wielkim młotkiem, atak obszarowy, jedno pole SMASHING TIME!;W2;1
+2002;Zestaw małego chemika;wieża;80;wzor3;spowolnienie;1200;dzialo3;rozpyskarka kwasu, obrażenia obszarowe + spowolnienie, jedno pole ataku;W3;1
+2003;Miotacz nagwintowanych słupów powietrza;wieża;140;wzor1;spalanie;2300;dzialo4;co to może być? :D Zmodyfikowana wersja automatów do napojów, tym razem ty będziesz sprite a oni... mokrą plamą. Zasieg 3;W4;1
+2004;L.A.Z.O.R v. 0.12 RC;wieża;120;wzor1;spalanie;2000;dzialo5;Jak sama nazwa wskazuje, laser atakujacy pola naprzeciwko siebie, z odległościa maleją obrażenia;W5;1
+2005;Rozbijacz cząsteczek;wieża;220;wzor2;AOE;1400;dzialo6;robotyczne ramię z wielkim młotkiem, atak obszarowy, jedno pole SMASHING TIME!;W6;1
+2006;Zestaw małego chemika;wieża;80;wzor3;spowolnienie;1200;dzialo7;rozpyskarka kwasu, obrażenia obszarowe + spowolnienie, jedno pole ataku;W7;1
+2007;Miotacz nagwintowanych słupów powietrza;wieża;140;wzor1;spalanie;2300;dzialo8;co to może być? :D Zmodyfikowana wersja automatów do napojów, tym razem ty będziesz sprite a oni... mokrą plamą. Zasieg 3;W8;1
+2008;L.A.Z.O.R v. 0.12 RC;wieża;120;wzor1;spalanie;2000;dzialo9;Jak sama nazwa wskazuje, laser atakujacy pola naprzeciwko siebie, z odległościa maleją obrażenia;W9;1
+2009;Sekcja Krytyczna;pułapka;2320;wzor3;cos;3000;wieza;działy znajdujące się na tym polu tracą 10% swojej liczebności (zaokrąglane w dół);P1;0
+2010;Kable bez izolacji;pułapka;110;wzor2;rozprysk;3000;wieza_informacyjna;Zamawiał ktoś pieczonego zombiaka? rozprysk;P2;0
+2011;Inteligentne drzwi;pułapka;110;wzor3;odpychanie;3000;wieza_z_woda;czy teraz się otworzą?, czy przywitają petenta szczerym uderzeniem?, odpychanie;P3;0
+2012;Wilcze doły;pułapka;0;wzor1;cos;3000;wieza2;stare dobre sposoby są najlepsze na pozbycie się niechcianych gości (szczególnie jak się jest na 3 piętrze), zabija po jednej jednostce z każdego oddziału;P4;0
+2009;Sekcja Krytyczna;pułapka;2320;wzor3;cos;3000;wieza3;działy znajdujące się na tym polu tracą 10% swojej liczebności (zaokrąglane w dół);P5;0
