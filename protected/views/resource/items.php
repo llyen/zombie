@@ -1,5 +1,4 @@
 <?php
-
 $this->widget(
 	'bootstrap.widgets.TbBreadcrumbs',
 	array(
@@ -10,5 +9,4 @@ $this->widget(
 ?>
 
 <h2>Dostępne zasoby</h2>
-<?php var_dump($items['towers']); ?>
-<?php $this->renderPartial('_view_items', array('player'=>$player)); ?>
+<?php $this->renderPartial('_view_items', array('player'=>$player, 'items'=>$items)); ?>

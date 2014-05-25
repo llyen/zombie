@@ -53,6 +53,7 @@ class ResourceController extends Controller
                     'dmg'=>$dmg,
                     'hpBonus'=>$hpBonus,
                     'price'=>$price,
+                    'abilityToSell'=>$abilityToSell,
                     'img'=>$img,
                     'desc'=>$desc,
                 ),
