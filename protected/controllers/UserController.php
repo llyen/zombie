@@ -17,7 +17,7 @@ class UserController extends Controller
 				'users'=>array('*'),
 			),
             array('allow',
-                'actions'=>array('index', 'logout'),
+                'actions'=>array('index', 'update', 'logout'),
                 'users'=>array('@'),
             ),
             array('allow',
@@ -32,8 +32,15 @@ class UserController extends Controller
 	
 	public function actionIndex()
 	{
+		$items = array();
+        $weapons = Settings::loadWeapons(Yii::app()->user->id);
+        $towers = Settings::loadTowers(Yii::app()->user->id);
+        
+        $items = array('weapons' => $weapons, 'towers' => $towers);
+		
 		$this->render('index', array(
-			'model'=>$this->loadModel(Yii::app()->user->id),	
+			'model'=>$this->loadModel(Yii::app()->user->id),
+			'items'=>$items,
 		));
 	}
 

@@ -44,7 +44,7 @@ $this->widget('bootstrap.widgets.TbLabel', array(
 			'type' => 'important',
 		    'label' => 'Broń',
 			'htmlOptions' => array(
-				'style' => 'margin: 10px 0px; width: 100%; text-align:center; font-weight: normal; padding: 8px 0px; font-size: 16px;',	
+				'style' => 'width: 100%; text-align:center; font-weight: normal; padding: 8px 0px; font-size: 16px;',	
 			),
 		)
 	);
@@ -110,7 +110,7 @@ $this->widget('bootstrap.widgets.TbLabel', array(
 			'type' => 'important',
 		    'label' => 'Wieże i pułapki',
 			'htmlOptions' => array(
-				'style' => 'margin: 10px 0px; width: 100%; text-align:center; font-weight: normal; padding: 8px 0px; font-size: 16px;',	
+				'style' => 'width: 100%; text-align:center; font-weight: normal; padding: 8px 0px; font-size: 16px;',	
 			),
 		)
 	);
@@ -179,9 +179,9 @@ $this->widget('bootstrap.widgets.TbLabel', array(
 		'bootstrap.widgets.TbLabel',
 		array(
 			'type' => 'important',
-		    'label' => 'Broń dostępna do sprzedania',
+		    'label' => 'Posiadana broń',
 			'htmlOptions' => array(
-				'style' => 'margin: 10px 0px; width: 100%; text-align:center; font-weight: normal; padding: 8px 0px; font-size: 16px;',	
+				'style' => 'width: 100%; text-align:center; font-weight: normal; padding: 8px 0px; font-size: 16px;',	
 			),
 		)
 	);

@@ -13,7 +13,7 @@ class ResourceController extends Controller
 	{
 		return array(
             array('allow',
-                'actions'=>array('items', 'abilities', 'buy', 'sell'),
+                'actions'=>array('items', 'abilities', 'buy', 'sell', 'takeOn', 'takeOff'),
                 'users'=>array('@'),
             ),
 			array('deny',
@@ -25,8 +25,8 @@ class ResourceController extends Controller
     public function actionItems()
     {
         $items = array();
-        $weapons = $this->loadWeapons();
-        $towers = $this->loadTowers();
+        $weapons = Settings::loadWeapons(Yii::app()->user->id);
+        $towers = Settings::loadTowers(Yii::app()->user->id);
         $player = User::model()->findByPk(Yii::app()->user->id)->player;
         
         $items = array('weapons' => $weapons, 'towers' => $towers);
@@ -39,7 +39,7 @@ class ResourceController extends Controller
     
     public function actionAbilities()
     {
-        $abilities = $this->loadAbilities();
+        $abilities = Settings::loadAbilities(Yii::app()->user->id);
         $player = User::model()->findByPk(Yii::app()->user->id)->player;
         
         $this->render('abilities', array(
@@ -62,7 +62,7 @@ class ResourceController extends Controller
                 }
             }
             
-            $weapons = $this->loadWeapons();
+            $weapons = Settings::loadWeapons(Yii::app()->user->id);
             foreach($weapons as $weapon)
             {
                 if($weapon['params']['id'] == $id)
@@ -86,7 +86,7 @@ class ResourceController extends Controller
         }
         elseif($id >= 2000 && $id < 3000)
         {
-            $towers = $this->loadTowers();
+            $towers = Settings::loadTowers(Yii::app()->user->id);
             foreach($towers as $tower)
             {
                 if($tower['params']['id'] == $id)
@@ -119,7 +119,7 @@ class ResourceController extends Controller
                 }
             }
             
-            $abilities = $this->loadAbilities();
+            $abilities = Settings::loadAbilities(Yii::app()->user->id);
             foreach($abilities as $ability)
             {
                 if($ability['params']['id'] == $id)
@@ -151,7 +151,7 @@ class ResourceController extends Controller
         {
             if($id >= 1000 && $id < 2000)
             {
-                $weapons = $this->loadWeapons();
+                $weapons = Settings::loadWeapons(Yii::app()->user->id);
                 foreach($weapons as $weapon)
                 {
                     if($weapon['params']['id'] == $id)
@@ -212,160 +212,76 @@ class ResourceController extends Controller
             $this->redirect(array('resource/items'));
         }
     }
-    
-    protected function loadWeapons()
-    {
-        $weapons = array();
-        $player = User::model()->findByPk(Yii::app()->user->id)->player;
-        $resources = $this->loadModels($player->id);
-        $weaponsFile = file(Yii::app()->basePath.'/../settings/weapons.csv', FILE_IGNORE_NEW_LINES);
-        $weaponsFileCount = count($weaponsFile);
-        
-        for($i = 1; $i < $weaponsFileCount; $i++)
-        {
-            list($id, $name, $dmg, $hpBonus, $price, $abilityToSell, $img, $desc) = explode(';', $weaponsFile[$i]);
-            $available = true;
-            
-            foreach($resources as $resource)
-                if($resource->resource_id == (int) $id)
-                    $available = false;
-            
-            $weapons[] = array(
-                'available'=>$available,
-                'params' => array(
-                    'id'=>(int) $id,
-                    'name'=>$name,
-                    'dmg'=>$dmg,
-                    'hpBonus'=>$hpBonus,
-                    'price'=>$price,
-                    'abilityToSell'=>$abilityToSell,
-                    'img'=>$img,
-                    'desc'=>$desc,
-                ),
-            );
-        }
-        
-        return $weapons;
-    }
-    
-    protected function loadTowers()
-    {
-        $towers = array();
-        $player = User::model()->findByPk(Yii::app()->user->id)->player;
-        $resources = $this->loadModels($player->id);
-        $towersFile = file(Yii::app()->basePath.'/../settings/towers.csv', FILE_IGNORE_NEW_LINES);
-        $dmgPatternsFile = file(Yii::app()->basePath.'/../settings/dmg_patterns.csv', FILE_IGNORE_NEW_LINES);
-        $towersFileCount = count($towersFile);
-        $dmgPatternsFileCount = count($dmgPatternsFile);
-        
-        for($i = 1; $i < $towersFileCount; $i++)
-        {
-            list($id, $name, $type, $dmg, $dmgPattern, $effect, $price, $img, $desc) = explode(';', $towersFile[$i]);
-            $available = true;
-            
-            $count = 0;
-            foreach($resources as $resource)
-                if($resource->resource_id == (int) $id)
-                    $count++;
-            
-            $pattern = array();
-            for($j = 0; $j < $dmgPatternsFileCount; $j++)
-            {
-                if($dmgPatternsFile[$j] == $dmgPattern)
-                {
-                    for($k = $j+1; $k < $j+6; $k++)
-                    {
-                        $line = explode(',', $dmgPatternsFile[$k]);
-                        for($l = 0; $l < 5; $l++)
-                        {
-                            switch((int) $line[$l])
-                            {
-                                case 0:
-                                    $pattern[$k][$l] = 0;
-                                    break;
-                                
-                                case 1:
-                                    $pattern[$k][$l] = 25;
-                                    break;
-                                
-                                case 2:
-                                    $pattern[$k][$l] = 50;
-                                    break;
-                                
-                                case 3:
-                                    $pattern[$k][$l] = 75;
-                                    break;
-                                
-                                case 4:
-                                    $pattern[$k][$l] = 100;
-                                    break;
-                                
-                                default:
-                                    $pattern[$k][$l] = 0;
-                            }
-                        }
-                    }
-                }
-            }
-                        
-            $towers[] = array(
-                'count'=>$count,
-                'params' => array(
-                    'id'=>(int) $id,
-                    'name'=>$name,
-                    'type'=>$type,
-                    'dmg'=>$dmg,
-                    'dmgPattern'=>$pattern,
-                    'effect'=>$effect,
-                    'price'=>$price,
-                    'img'=>$img,
-                    'desc'=>$desc,
-                ),
-            );
-        }
-        
-        return $towers;
-    }
-    
-    protected function loadAbilities()
-    {
-        $abilities = array();
-        $player = User::model()->findByPk(Yii::app()->user->id)->player;
-        $resources = $this->loadModels($player->id);
-        $abilitiesFile = file(Yii::app()->basePath.'/../settings/abilities.csv', FILE_IGNORE_NEW_LINES);
-        $abilitiesFileCount = count($abilitiesFile);
-        
-        for($i = 1; $i < $abilitiesFileCount; $i++)
-        {
-            list($id, $name, $type, $function, $price, $img, $desc) = explode(';', $abilitiesFile[$i]);
-            $available = true;
-            
-            foreach($resources as $resource)
-                if($resource->resource_id == (int) $id)
-                    $available = false;
-            
-            $abilities[] = array(
-                'available'=>$available,
-                'params' => array(
-                    'id'=>(int) $id,
-                    'name'=>$name,
-                    'type'=>$type,
-                    'function'=>$function,
-                    'price'=>$price,
-                    'img'=>$img,
-                    'desc'=>$desc,
-                ),
-            );
-        }
-        
-        return $abilities;
-    }
-    
-    public function loadModels($id)
+	
+	public function actionTakeOn($id)
 	{
-		$models=Resource::model()->findAll('player_id = :player_id', array(':player_id' => $id));
-		if($models===null)
-			throw new CHttpException(404,'The requested page does not exist.');
-		return $models;
+		if($id >= 1000 and $id < 2000)
+		{
+			$player = User::model()->findByPk(Yii::app()->user->id)->player;
+			if($player->active_weapon_id == $id)
+			{
+				Yii::app()->user->setFlash('resourceError','Błąd! Broń o podanym identyfikatorze jest obecnie aktywna.');
+				$this->redirect(array('user/index'));
+			}
+			else
+			{
+				$weapons = Settings::loadWeapons(Yii::app()->user->id);
+				if(!is_null($player->active_weapon_id))
+				{
+					foreach($weapons as $weapon)
+					{
+						if($weapon['params']['id'] == $player->active_weapon_id)
+						{
+							$player->active_weapon_id = null;
+							$player->health -= ($weapon['params']['hpBonus']) ? $weapon['params']['hpBonus'] : 0;
+							$player->damage -= ($weapon['params']['dmg']) ? $weapon['params']['dmg'] : 0;
+							$player->save();
+						}
+					}
+				}
+				
+				foreach($weapons as $weapon)
+				{	
+					if($weapon['params']['id'] == $id)
+					{
+						$player->active_weapon_id = $id;
+						$player->health += ($weapon['params']['hpBonus']) ? $weapon['params']['hpBonus'] : 0;
+						$player->damage += ($weapon['params']['dmg']) ? $weapon['params']['dmg'] : 0;
+						if($player->save())
+							$this->redirect(array('user/index'));
+					}
+				}
+			}
+		}
+		else
+		{
+			Yii::app()->user->setFlash('resourceError','Błąd! Niedozwolona akcja.');
+			$this->redirect(array('user/index'));
+		}
+	}
+	
+	public function actionTakeOff()
+	{
+		$player = User::model()->findByPk(Yii::app()->user->id)->player;
+		if(!is_null($player->active_weapon_id))
+		{
+			$weapons = Settings::loadWeapons(Yii::app()->user->id);
+			foreach($weapons as $weapon)
+			{
+				if($weapon['params']['id'] == $player->active_weapon_id)
+				{
+					$player->active_weapon_id = null;
+					$player->health -= ($weapon['params']['hpBonus']) ? $weapon['params']['hpBonus'] : 0;
+					$player->damage -= ($weapon['params']['dmg']) ? $weapon['params']['dmg'] : 0;
+					if($player->save())
+						$this->redirect(array('user/index'));
+				}
+			}
+		}
+		else
+		{
+			Yii::app()->user->setFlash('resourceError','Błąd! Gracz nie posiada aktywnej broni.');
+			$this->redirect(array('user/index'));
+		}
 	}
 }
