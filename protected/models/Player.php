@@ -117,4 +117,17 @@ class Player extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+	
+	protected function beforeValidate()
+	{
+		if($this->isNewRecord)
+		{
+			$this->health = (int) Yii::app()->params['defaultHealth'];
+			$this->damage = (int) Yii::app()->params['defaultDamage'];
+			$this->first_currency = (int) Yii::app()->params['defaultFirstCurrency'];
+			$this->second_currency = (int) Yii::app()->params['defaultSecondCurrency'];
+		}
+		
+		return parent::beforeValidate();
+	}
 }

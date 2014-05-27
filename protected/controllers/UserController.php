@@ -133,7 +133,29 @@ class UserController extends Controller
 
 	public function actionRegister()
 	{
-		$this->render('register');
+		$groupsModel = Group::model()->findAll();
+        $groups = array();
+        
+        foreach($groupsModel as $group)
+        {
+            $groups[$group->id] = $group->name;
+        }
+		
+		$model = new RegisterForm;
+		
+		$this->performAjaxValidation($model);
+		
+		if(isset($_POST['RegisterForm']))
+		{
+			$model->attributes = $_POST['RegisterForm'];
+			if($model->save())
+				$this->render('registerSuccess');
+		}
+		
+		$this->render('register', array(
+			'model'=>$model,
+			'groups'=>$groups,
+		));
 	}
 	
 	public function actionBulkRegister()
@@ -171,4 +193,13 @@ class UserController extends Controller
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
 	}
+	
+	protected function performAjaxValidation($model)
+    {
+        if(isset($_POST['ajax']) && $_POST['ajax']==='register-form')
+        {
+            echo CActiveForm::validate($model);
+            Yii::app()->end();
+        }
+    }
 }

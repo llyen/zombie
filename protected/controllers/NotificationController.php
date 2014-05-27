@@ -22,6 +22,11 @@ class NotificationController extends Controller
         );
 	}
 
+	public static function notify($user_id, $subject, $body)
+	{
+		// if notify allowed then .. 
+	}
+	
 	public function actionSend()
 	{
         $groupsModel = Group::model()->findAll();

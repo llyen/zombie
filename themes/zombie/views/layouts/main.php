@@ -70,7 +70,7 @@
 			    }
 			    else
 			    {
-					echo CHtml::link('', array('/user/login'), array('class'=>'bp-icon icon-preferences', 'data-info'=>'Rejestracja'));
+					echo CHtml::link('', array('/user/register'), array('class'=>'bp-icon icon-preferences', 'data-info'=>'Rejestracja'));
 					echo CHtml::link('', array('/user/login'), array('class'=>'bp-icon icon-login', 'data-info'=>'Panel logowania'));
 					//echo CHtml::link('', array('/site/about'), array('class'=>'bp-icon icon-about', 'data-info'=>'O projekcie'));
 			    }

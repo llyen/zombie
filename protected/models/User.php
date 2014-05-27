@@ -138,4 +138,24 @@ class User extends CActiveRecord
 			return md5($password);
 		return CPasswordHelper::hashPassword($password);
 	}
+	
+	protected function beforeValidate()
+	{
+		if($this->isNewRecord)
+		{
+			$this->created_at = date('Y-m-d H:i:s');
+			$this->last_visit_at = date('Y-m-d H:i:s');
+		}
+		
+		return parent::beforeValidate();
+	}
+	
+	protected function beforeSave()
+	{
+		if($this->isNewRecord)
+		{
+			$this->password = $this->hashPassword($this->password);
+		}
+		return parent::beforeSave();
+	}
 }

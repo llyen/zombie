@@ -16,7 +16,7 @@
         array(
             'header'=>'Obecność',
             'type'=>'raw',
-            'value'=>'(Presence::model()->find(\'class_id = :class_id and player_id = :player_id\', array(\':class_id\'=>$data->id, \':player_id\'=>User::model()->findByPk(Yii::app()->user->id)->player->id))->is_present) ? \'<img src="'.Yii::app()->request->baseUrl.'/images/tick.png" />\' : \'<img src="'.Yii::app()->request->baseUrl.'/images/cross.png" />\'',
+            'value'=>'(count(Presence::model()->find(\'class_id = :class_id and player_id = :player_id\', array(\':class_id\'=>$data->id, \':player_id\'=>User::model()->findByPk(Yii::app()->user->id)->player->id))) > 0) ? ((Presence::model()->find(\'class_id = :class_id and player_id = :player_id\', array(\':class_id\'=>$data->id, \':player_id\'=>User::model()->findByPk(Yii::app()->user->id)->player->id))->is_present) ? \'<img src="'.Yii::app()->request->baseUrl.'/images/tick.png" />\' : \'<img src="'.Yii::app()->request->baseUrl.'/images/cross.png" />\') : \'<img src="'.Yii::app()->request->baseUrl.'/images/cross.png" />\'',
         ),
     ),
     'summaryText'=>'',
@@ -28,3 +28,5 @@
     ),
     'pagerCssClass'=>'pagination pagination-centered',
     ));
+    
+    

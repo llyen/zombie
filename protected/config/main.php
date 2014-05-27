@@ -97,6 +97,10 @@ return array(
         'adminEmailPort'=>465,
         'adminEmailProtocol'=>'tls',//'tls' for gmail
         'hashMethod'=>'', // {empty : crypt, md5 : md5}
+        'defaultHealth'=>100,
+        'defaultDamage'=>15,
+        'defaultFirstCurrency'=>0,
+        'defaultSecondCurrency'=>0,
         'firstCurrencyDefaultReward'=>200,
         'secondCurrencyDefaultReward'=>50,
 	),
