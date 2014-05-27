@@ -179,7 +179,7 @@ class UserController extends Controller
 				$user->verify_code = $this->_generateVerifyCode();
 				if($user->save())
 				{
-					$message = '<h3>Odzyskiwanie hasła</h3><p>W celu zmiany hasła proszę przejść do http://zombieacadamey.pl/'.CHtml::link('formularza', array('user/resetPassword', 'verify_code'=>$user->verify_code)).'</p>';
+					$message = '<h3>Odzyskiwanie hasła</h3><p>W celu zmiany hasła proszę przejść do <a href="http://zombieacademy.pl/user/resetPassword?verify_code='.$user->verify_code.'">formularza</a></p>';
 					
 					if(Notify::send($user, Yii::app()->name.' :: odzyskiwanie hasła', $message))
 						$this->render('retrievePasswordInfo');
