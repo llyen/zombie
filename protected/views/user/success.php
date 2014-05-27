@@ -8,6 +8,8 @@ $this->widget(
 );
 ?>
 <h2>Sukces</h2>
+<?php if(Yii::app()->user->hasFlash('userSuccess')): ?>
 <div class="flash-success">
-    Rejestracja przebiegła pomyślnie!
+	<?php echo Yii::app()->user->getFlash('userSuccess'); ?>
 </div>
+<?php endif; ?>

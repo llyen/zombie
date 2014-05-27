@@ -13,7 +13,7 @@ class UserController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('login', 'register', 'retrievePassword'),
+				'actions'=>array('login', 'register', 'retrievePassword', 'resetPassword'),
 				'users'=>array('*'),
 			),
             array('allow',
@@ -149,7 +149,10 @@ class UserController extends Controller
 		{
 			$model->attributes = $_POST['RegisterForm'];
 			if($model->save())
-				$this->render('registerSuccess');
+			{
+				Yii::app()->user->setFlash('userError','Rejestracja przebiegła pomyślnie.');
+				$this->render('success');
+			}
 		}
 		
 		$this->render('register', array(
@@ -165,7 +168,70 @@ class UserController extends Controller
 	
 	public function actionRetrievePassword()
 	{
-		$this->render('retrievePassword');
+		$model = new RetrievePasswordForm;
+		
+		if(isset($_POST['RetrievePasswordForm']))
+		{
+			$model->attributes = $_POST['RetrievePasswordForm'];
+			$user = User::model()->find('email = :email', array(':email'=>$model->email));
+			if(!empty($user))
+			{
+				$user->verify_code = $this->_generateVerifyCode();
+				if($user->save())
+				{
+					$message = '<h3>Odzyskiwanie hasła</h3><p>W celu zmiany hasła proszę przejść do http://zombieacadamey.pl/'.CHtml::link('formularza', array('user/resetPassword', 'verify_code'=>$user->verify_code)).'</p>';
+					
+					if(Notify::send($user, Yii::app()->name.' :: odzyskiwanie hasła', $message))
+						$this->render('retrievePasswordInfo');
+				}
+			}
+			else
+			{
+				Yii::app()->user->setFlash('userError','Brak podanego adresu e-mail w bazie użytkowników.');
+				$this->redirect(array('user/retrievePassword'));
+			}
+		}
+		
+		$this->render('retrievePassword', array(
+			'model'=>$model,
+		));
+	}
+	
+	public function actionResetPassword($verify_code)
+	{
+		if($verify_code != '')
+		{
+			$user = User::model()->find('verify_code = :verify_code', array(':verify_code'=>$verify_code));
+			
+			if(!is_null($user))
+			{
+				$model = new ResetPasswordForm;
+				
+				if(isset($_POST['ResetPasswordForm']))
+				{
+					$model->attributes = $_POST['ResetPasswordForm'];
+					$user->password = $user->hashPassword($model->password);
+					$user->verify_code = null;
+					if($user->save())
+					{
+						Yii::app()->user->setFlash('userSuccess','Zmiana hasła przebiegła pomyślnie.');
+						$this->render('success');
+					}
+				}
+				
+				$this->render('resetPassword', array(
+					'model'=>$model,
+				));
+			}
+			else
+			{
+				throw new CHttpException(404,'Żądana strona nie istnieje');
+			}
+		}
+		else
+		{
+			throw new CHttpException(404,'Żądana strona nie istnieje');
+		}
 	}
 	
 	public function actionMembers($id)
@@ -202,4 +268,19 @@ class UserController extends Controller
             Yii::app()->end();
         }
     }
+	
+	private function _generateVerifyCode()
+	{
+		$availableCharacters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#%';
+		$countAvailableCharacters = strlen($availableCharacters);
+		
+		$code = '';
+		for($i = 0; $i < 25 - 1; $i++)
+		{
+			$index = mt_rand(0, $countAvailableCharacters - 1);
+			$code .= $availableCharacters[$index];
+		}
+		
+		return $code;
+	}
 }

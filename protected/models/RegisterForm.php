@@ -1,10 +1,5 @@
 <?php
 
-/**
- * RegisterForm class.
- * RegisterForm is the data structure for keeping
- * contact form data. It is used by the 'contact' action of 'SiteController'.
- */
 class RegisterForm extends CFormModel
 {
 	public $username;

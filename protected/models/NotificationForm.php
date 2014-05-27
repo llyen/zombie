@@ -1,10 +1,5 @@
 <?php
 
-/**
- * NotificationForm class.
- * NotificationForm is the data structure for keeping
- * contact form data. It is used by the 'contact' action of 'SiteController'.
- */
 class NotificationForm extends CFormModel
 {
 	public $group_id;

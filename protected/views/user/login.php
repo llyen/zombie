@@ -12,7 +12,6 @@ $this->widget(
 
 <h2>Logowanie</h2>
 
-<div class="form">
 <?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 	'id'=>'login-form',
 	'enableAjaxValidation'=>true,
@@ -30,7 +29,7 @@ $this->widget(
 		<?php echo $form->passwordFieldRow($model,'password', array('class'=>'span3')); ?>
 		<?php echo $form->error($model,'password'); ?>
 		
-		<p class="hint">Nie pamiętasz hasła?</p>
+		<p class="hint"><?php echo CHtml::link('Nie pamiętasz hasła?', array('user/retrievePassword')); ?></p>
 		
 		<div class="form-actions">
 		<?php $this->widget(
@@ -44,4 +43,3 @@ $this->widget(
 		</div>
 
 <?php $this->endWidget(); ?>
-</div><!-- form -->
