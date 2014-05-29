@@ -94,6 +94,9 @@ class Class_ extends CActiveRecord
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+			'sort'=>array(
+				'defaultOrder'=>'term asc',
+			),
 		));
 	}
 	

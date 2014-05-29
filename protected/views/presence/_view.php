@@ -13,7 +13,7 @@
         array(
             'header' => 'Obecność',
             'type' => 'raw',
-            'value' => '(Presence::model()->byClassAndPlayer(\''.$class_id.'\', $data->player->id)->find()->is_present) ? \'<img src="'.Yii::app()->request->baseUrl.'/images/tick.png" />\' : \'<img src="'.Yii::app()->request->baseUrl.'/images/cross.png" />\'',
+            'value' => '(count(Presence::model()->byClassAndPlayer(\''.$class_id.'\', $data->player->id)->find()) > 0) ? ((Presence::model()->byClassAndPlayer(\''.$class_id.'\', $data->player->id)->find()->is_present) ? \'<img src="'.Yii::app()->request->baseUrl.'/images/tick.png" />\' : \'<img src="'.Yii::app()->request->baseUrl.'/images/cross.png" />\') : \'<img src="'.Yii::app()->request->baseUrl.'/images/cross.png" />\'',
         ),
     ),
     'summaryText'=>'',

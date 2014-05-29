@@ -78,7 +78,26 @@ class Class_Controller extends Controller
     
 	public function actionBulkCreate($id)
 	{
+		$model = new BulkCreateForm;
 		
+		if(isset($_POST['BulkCreateForm']))
+		{
+			$model->attributes = $_POST['BulkCreateForm'];
+			if($model->save())
+			{
+				Yii::app()->user->setFlash('success', 'Import terminów zajęć na podstawie pliku przebiegł pomyślnie.');
+			}
+			else
+			{
+				Yii::app()->user->setFlash('error', 'Operacja nie powiodła się.');
+			}
+			$this->redirect(array('class_/bulkCreate', 'id'=>$id));
+		}
+		
+		$this->render('bulkCreate', array(
+			'id'=>$id,
+			'model'=>$model,
+		));
 	}
 	
     public function actionUpdate($group_id, $id)
