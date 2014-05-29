@@ -13,12 +13,20 @@ class GameController extends Controller
 	{
 		return array(
             array('allow',
-                'actions'=>array(''),
+                'actions'=>array('map', 'deploy', 'battle'), //??
                 'users'=>array('@'),
             ),
 			array('deny',
 				'users'=>array('*'),
 			),
         );
+	}
+	
+	public function actionMap()
+	{
+		$player = User::model()->findByPk(Yii::app()->user->id)->player;
+		$this->render('map', array(
+			'test'=>$player,
+		));
 	}
 }

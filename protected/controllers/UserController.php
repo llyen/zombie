@@ -44,6 +44,11 @@ class UserController extends Controller
 		));
 	}
 
+	public function actionUpdate()
+	{
+		
+	}
+	
 	public function actionList()
 	{
 		$model=new User('search');
@@ -163,7 +168,18 @@ class UserController extends Controller
 	
 	public function actionBulkRegister()
 	{
-		$this->render('bulkRegister');
+		$model = new BulkRegisterForm;
+		
+		if(isset($_POST['BulkRegisterForm']))
+		{
+			$model->attributes = $_POST['BulkRegisterForm'];
+			if($model->save())
+				$this->render('bulkRegisterCompleted', array('users'=>$model->created));
+		}
+		
+		$this->render('bulkRegister', array(
+			'model'=>$model,
+		));
 	}
 	
 	public function actionRetrievePassword()
@@ -275,7 +291,7 @@ class UserController extends Controller
 		$countAvailableCharacters = strlen($availableCharacters);
 		
 		$code = '';
-		for($i = 0; $i < 25 - 1; $i++)
+		for($i = 0; $i < 24; $i++)
 		{
 			$index = mt_rand(0, $countAvailableCharacters - 1);
 			$code .= $availableCharacters[$index];
