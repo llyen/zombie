@@ -21,6 +21,8 @@
  */
 class User extends CActiveRecord
 {
+	public $passwordRepeat;
+	
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -48,6 +50,8 @@ class User extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('username, password, created_at, last_visit_at', 'required'),
+			array('passwordRepeat', 'required', 'on'=>'update'),
+			array('passwordRepeat', 'compare', 'compareAttribute'=>'password', 'message'=>'Wartości wprowadzone w obu polach różnią się od siebie!', 'on'=>'update'),
 			array('is_admin', 'numerical', 'integerOnly'=>true),
 			array('group_id', 'length', 'max'=>10),
 			array('username, password, email, first_name, last_name', 'length', 'max'=>255),
@@ -80,6 +84,7 @@ class User extends CActiveRecord
 			'group_id' => 'Grupa',
 			'username' => 'Nazwa użytkownika',
 			'password' => 'Hasło',
+			'passwordRepeat' => 'Powtórz hasło',
 			'email' => 'E-mail',
 			'first_name' => 'Imię',
 			'last_name' => 'Nazwisko',
@@ -152,10 +157,11 @@ class User extends CActiveRecord
 	
 	protected function beforeSave()
 	{
-		if($this->isNewRecord)
+		if($this->isNewRecord || $this->scenario == 'update')
 		{
 			$this->password = $this->hashPassword($this->password);
 		}
+		
 		return parent::beforeSave();
 	}
 }
