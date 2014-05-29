@@ -35,7 +35,6 @@ class BulkRegisterForm extends CFormModel
 			$fp = fopen($file->tempName, 'r');
 			if($fp)
 			{
-                $i = 1;
 				while(($line = fgetcsv($fp, 1000, ';')) != false)
 				{
 					$user = new User;
@@ -43,7 +42,7 @@ class BulkRegisterForm extends CFormModel
 					$user->email = $line[1];
 					$user->first_name = $line[2];
 					$user->last_name = $line[3];
-					$user->username = $this->generateUsername($i); // sequence
+					$user->username = $this->generateUsername($user->group_id);
 					$user->password = $this->generatePassword();
                     $this->created[] = array('username' => $user->username, 'password' => $user->password, 'first_name'=>$user->first_name, 'last_name'=>$user->last_name, 'email'=>$user->email);
                     $user->password = $user->hashPassword($user->password);
@@ -56,7 +55,6 @@ class BulkRegisterForm extends CFormModel
                         	$map = new Map;
                         	$map->player_id = $player->id;
                         	$map->save();
-                            $i++;
                         }
                     }
 				}
@@ -66,14 +64,13 @@ class BulkRegisterForm extends CFormModel
         return false;
     }
     
-    public function generateUsername($i)
+    public function generateUsername($group_id)
     {
         $model = new User;
-        $username = 'player_';
         $status = Yii::app()->db->createCommand('show table status where name = \''.$model->tableName().'\'')->queryRow();
-        $id = (!is_null($status)) ? (int) $status['Auto_increment']+$i : rand(1, 1000); // auto increment!
+        $id = (!is_null($status)) ? (int) $status['Auto_increment'] : rand(1, 1000); // auto increment!
         unset($model);
-        return $username.$id;
+        return 'player_'.$id.'_g_'.$group_id;
     }
     
     public function generatePassword()

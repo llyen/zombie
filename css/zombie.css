@@ -388,6 +388,35 @@ div.flash-success a
 	color:#264409;
 }
 
+ul.yiiPager
+{
+	display: inline-block;
+}
+
+ul.yiiPager a:link, ul.yiiPager a:visited
+{
+	border: 1px solid #D8BC9C;
+	color: #AC1D23;
+	background: #F8F8F8;
+}
+
+.pagination ul > li > a:hover, .pagination ul > li > a:focus, .pagination ul > .active > a, .pagination ul > .active > span
+{
+	background: #AC1D23;
+	color: #FFFFFF;
+}
+
+ul.yiiPager a:hover
+{
+	background: #AC1D23;	
+}
+
+ul.yiiPager .selected a
+{
+	background: #AC1D23;
+	color: #FFFFFF;
+}
+
 #footer {
 	width: 100%;
 	padding: 40px 0px;
