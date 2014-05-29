@@ -7,5 +7,17 @@ $this->widget(
 	)
 );
 ?>
-<h2>Projektowanie mapy</h2>
-<?php $this->renderPartial('_map_design', array('test'=>$test)); ?>
+<h2>
+    Projektowanie mapy
+<?php
+	$this->widget(
+		'bootstrap.widgets.TbButton',
+		array(
+			'label' => 'Przejdź do walki',
+			'type' => 'danger',
+			'url' => array('game/battle'),
+		)
+	);
+?>
+</h2>
+<?php $this->renderPartial('_map_design', array('mapFields'=>$mapFields,'map'=>$map)); ?>

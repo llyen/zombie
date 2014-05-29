@@ -53,7 +53,7 @@ class Player extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'maps' => array(self::HAS_MANY, 'Map', 'player_id'),
+			'map' => array(self::HAS_ONE, 'Map', 'player_id'), //HAS_MANY
 			'user' => array(self::BELONGS_TO, 'User', 'user_id'),
 			'presences' => array(self::HAS_MANY, 'Presence', 'player_id'),
 			'resources' => array(self::HAS_MANY, 'Resource', 'player_id'),

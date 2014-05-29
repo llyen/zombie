@@ -6,6 +6,7 @@ class GameController extends Controller
 	{
 		return array(
 			'accessControl',
+			'ajaxOnly + saveMap',
 		);
 	}
 	
@@ -13,7 +14,7 @@ class GameController extends Controller
 	{
 		return array(
             array('allow',
-                'actions'=>array('map', 'deploy', 'battle'), //??
+                'actions'=>array('map', 'saveMap', 'battle'), //??
                 'users'=>array('@'),
             ),
 			array('deny',
@@ -25,8 +26,22 @@ class GameController extends Controller
 	public function actionMap()
 	{
 		$player = User::model()->findByPk(Yii::app()->user->id)->player;
+		$map = explode('x', $player->map->map);
 		$this->render('map', array(
-			'test'=>$player,
+			'mapFields'=>Settings::loadMapFields(),
+			'map'=>$map,
 		));
+	}
+	
+	public function actionSaveMap()
+	{
+		$player = User::model()->findByPk(Yii::app()->user->id)->player;
+		if(isset($_POST))
+		{
+			$player->map->map = $_POST['map'];
+			if($player->map->save())
+				return true;
+		}
+		return false;
 	}
 }

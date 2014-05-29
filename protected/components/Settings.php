@@ -150,6 +150,28 @@ class Settings
         return $abilities;
     }
     
+    public static function loadMapFields()
+    {
+        $mapFields = array();
+        $mapFieldsFile = file(Yii::app()->basePath.'/../settings/map_fields.csv', FILE_IGNORE_NEW_LINES);
+        $mapFieldsFileCount = count($mapFieldsFile);
+        
+        for($i = 1; $i < $mapFieldsFileCount; $i++)
+        {
+            list($id, $name, $image, $solid, $speed, $effect) = explode(';', $mapFieldsFile[$i]);
+            $mapFields[] = array(
+                'id' => $id,
+                'name' => $name,
+                'image' => $image,
+                'solid' => $solid,
+                'speed' => $speed,
+                'effect' => $effect,
+            );
+        }
+        
+        return $mapFields;
+    }
+    
     public static function resourceName($resources, $resource_id)
     {
         foreach($resources as $resource)
