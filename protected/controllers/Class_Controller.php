@@ -62,9 +62,9 @@ class Class_Controller extends Controller
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Class']))
+		if(isset($_POST['Class_']))
 		{
-			$model->attributes=$_POST['Class'];
+			$model->attributes=$_POST['Class_'];
 			if($model->save())
 				$this->redirect(array('class_/list', 'id'=>$id));
 				//$this->redirect(array('view','id'=>$model->id));
@@ -88,9 +88,9 @@ class Class_Controller extends Controller
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Class']))
+		if(isset($_POST['Class_']))
 		{
-			$model->attributes=$_POST['Class'];
+			$model->attributes=$_POST['Class_'];
 			if($model->save())
 				$this->redirect(array('class_/list', 'id'=>$group_id));
 		}
