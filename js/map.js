@@ -23,12 +23,18 @@ function mapField(id, name, image, solid, speed, effect)
     this.effect = effect;
 }
 
-function player(x, y, health, damage)
+function champion(x, y, health, damage)
 {
     this.x = x;
     this.y = y;
     this.health = health;
     this.damage = damage;
+}
+
+function enemySpawn(x, y)
+{
+    this.x = x;
+    this.y = y;
 }
 
 function zombie()
@@ -52,6 +58,13 @@ function battleResource(id, name, image, type, damage, damagePattern, effect, co
 function init(type)
 {
     type = type || 'design';
+    
+    if(type == 'deploy')
+    {
+        var player = new champion();
+        player.health = playerInfo['health'];
+        player.damage = playerInfo['damage'];
+    }
     
     var menu = new Array();
     var mapFieldsParams = new Array();
@@ -84,12 +97,22 @@ function init(type)
     var resources = new Array();
     var resourcesCounter = new Array();
     var resourcesLayer = new Array();
+    var enemySpawns = Array();
 	var step_x = 0;
 	var step_y = 0;
 	var count_x = 0; //liczx
 					
 	for(i = 0; i < mapSize; i++)
 	{
+        if(type == 'deploy' && map[i] == 8)
+        {
+            player.x = step_x;
+            player.y = step_y;
+        }
+        
+        if(map[i] == 7)
+            enemySpawns.push(new enemySpawn(step_x, step_y));
+            
 		pieces[i] = new mapObject(step_x, step_y, map[i], mapFieldsParams[map[i]]['image'], mapFieldsParams[map[i]]['solid']);
         count_x++;
         if(count_x == 20)
@@ -601,6 +624,8 @@ function init(type)
             {
                 if(pieces[i].x == target.x && pieces[i].y == target.y)
                 {
+                    //if pieces[i].id == ? clear path to player!
+                    
                     if(resourcesCounter[currentField.id] == undefined)
                             resourcesCounter[currentField.id] = 1;
                     

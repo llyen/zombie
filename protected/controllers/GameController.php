@@ -49,9 +49,25 @@ class GameController extends Controller
 	{
 		$player = User::model()->findByPk(Yii::app()->user->id)->player;
 		$map = explode('x', $player->map->map);
+		$weapons = Settings::loadWeapons(Yii::app()->user->id);
+		$playerInfo = array();
+		$playerInfo['health'] = $player->health;
+		$playerInfo['damage'] = $player->damage;
+		foreach($weapons as $weapon)
+		{
+			if($weapon['params']['id'] == $player->active_weapon_id)
+			{
+				$playerInfo['health'] += $weapon['params']['hpBonus'];
+				$playerInfo['damage'] += $weapon['params']['dmg'];
+			}
+		}
+		
+		// other bonuses / abilities ??
+		
 		$this->render('battle', array(
 			'mapFields'=>Settings::loadMapFields(),
 			'battleResources'=>Settings::loadTowers(Yii::app()->user->id),
+			'playerInfo'=>$playerInfo,
 			'map'=>$map,
 		));
 	}

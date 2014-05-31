@@ -3,6 +3,7 @@ Yii::app()->clientScript->registerScript(
     'passVariables',
     'var mapFields = '.CJSON::encode($mapFields).';'.
     'var battleResources = '.CJSON::encode($battleResources).';'.
+    'var playerInfo = '.CJSON::encode($playerInfo).';'.
     'var map = '.CJSON::encode($map).';'.
     'var imagesUrl = "'.Yii::app()->baseUrl.'/images/";'.
     'var objectsImagesUrl = "'.Yii::app()->baseUrl.'/images/objects/";',

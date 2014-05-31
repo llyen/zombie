@@ -8,4 +8,4 @@ $this->widget(
 );
 ?>
 <h2>Walka</h2>
-<?php $this->renderPartial('_map_battle', array('mapFields'=>$mapFields,'battleResources'=>$battleResources,'map'=>$map)); ?>
+<?php $this->renderPartial('_map_battle', array('mapFields'=>$mapFields,'battleResources'=>$battleResources,'playerInfo'=>$playerInfo,'map'=>$map)); ?>
