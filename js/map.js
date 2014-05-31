@@ -82,6 +82,7 @@ function init(type)
     var mapSize = 400; //ile
     var pieces = new Array(); //p
     var resources = new Array();
+    var resourcesCounter = new Array();
     var resourcesLayer = new Array();
 	var step_x = 0;
 	var step_y = 0;
@@ -600,31 +601,64 @@ function init(type)
             {
                 if(pieces[i].x == target.x && pieces[i].y == target.y)
                 {
-                    // count !!
-                    //pieces[i].effect ...
-                    resources[i] = currentField;
-                    stage.removeChild(resourcesLayer[i]);
-                    resourcesLayer[i] = new createjs.Bitmap(objectsImagesUrl + resources[i].image + '.png');
-                    resourcesLayer[i].x = pieces[i].x;
-                    resourcesLayer[i].y = pieces[i].y;
-                    resourcesLayer[i].addEventListener(handleMouseDown);
-                    stage.addChild(resourcesLayer[i]);
+                    if(resourcesCounter[currentField.id] == undefined)
+                            resourcesCounter[currentField.id] = 1;
                     
-                    /* damage pattern */
-                    var offset_x = 0;
-                    var offset_y = 0;
-                    for(var j in resources[i].damagePattern)
+                    if(resources[i] != undefined && resources[i].id == currentField.id)
                     {
-                        for(var k in resources[i].damagePattern[j])
+                        delete resources[i];
+                        while(stage.getChildByName('damagePattern_' + currentField.id + '_' + i) != null)
+                            stage.removeChild(stage.getChildByName('damagePattern_' + currentField.id + '_' + i));
+                        stage.removeChild(resourcesLayer[i]);
+                        resourcesCounter[currentField.id]--;
+                        continue;
+                    }
+                    
+                    if(resourcesCounter[currentField.id] <= currentField.count)
+                    {
+                        //pieces[i].effect ...
+                        if(resources[i] != undefined)
                         {
-                            var shp = new createjs.Shape();
-                            shp.graphics.beginFill("#9977ff").drawRect(pieces[i].x - 64 + offset_x, pieces[i].y - 64 + offset_y, 32, 32);
-                            shp.alpha = 0.4 * resources[i].damagePattern[j][k]/100;
-                            stage.addChild(shp);
-                            offset_x += 32;
+                            resourcesCounter[resources[i].id]--;
+                            while(stage.getChildByName('damagePattern_' + resources[i].id + '_' + i) != null)
+                                stage.removeChild(stage.getChildByName('damagePattern_' + resources[i].id + '_' + i));
                         }
-                        offset_x = 0;
-                        offset_y += 32;
+                        resources[i] = currentField;
+                        stage.removeChild(resourcesLayer[i]);
+                        resourcesLayer[i] = new createjs.Bitmap(objectsImagesUrl + resources[i].image + '.png');
+                        resourcesLayer[i].x = pieces[i].x;
+                        resourcesLayer[i].y = pieces[i].y;
+                        resourcesLayer[i].addEventListener(handleMouseDown);
+                        stage.addChild(resourcesLayer[i]);
+                        
+                        resourcesCounter[resources[i].id]++;
+                        
+                        /* damage pattern */
+                        var offset_x = 0;
+                        var offset_y = 0;
+                        for(var j in resources[i].damagePattern)
+                        {
+                            for(var k in resources[i].damagePattern[j])
+                            {
+                                var tmp_x = pieces[i].x - 64 + offset_x;
+                                var tmp_y = pieces[i].y - 64 + offset_y;
+                                if((tmp_x >= 0 && tmp_x < 640) && (tmp_y >= 0 && tmp_y < 640))
+                                {
+                                    var shp = new createjs.Shape();
+                                    shp.graphics.beginFill("#9977ff").drawRect(tmp_x, tmp_y, 32, 32);
+                                    shp.alpha = 0.4 * resources[i].damagePattern[j][k]/100;
+                                    shp.name = 'damagePattern_' + resources[i].id + '_' + i;
+                                    stage.addChild(shp);
+                                }
+                                offset_x += 32;
+                            }
+                            offset_x = 0;
+                            offset_y += 32;
+                        }
+                    }
+                    else
+                    {
+                        alert('Limit dostępnych obiektów został wykorzystany.');
                     }
                 }
             }
