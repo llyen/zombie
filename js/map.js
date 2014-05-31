@@ -80,8 +80,9 @@ function init(type)
     var stage = new createjs.Stage("map");
     stage.enableMouseOver(50);
     var mapSize = 400; //ile
-    window.pieces = new Array(); //p
-                
+    var pieces = new Array(); //p
+    var resources = new Array();
+    var resourcesLayer = new Array();
 	var step_x = 0;
 	var step_y = 0;
 	var count_x = 0; //liczx
@@ -301,6 +302,17 @@ function init(type)
                 }
             }
         }
+        
+        /* begin battle button */
+        var beginBattleText = new createjs.Text('Rozpocznij walkę', '28px Arial', '#FFF');
+        var beginBattleButton = new createjs.Shape();
+        beginBattleButton.graphics.beginFill('rgba(255, 255, 255, 0.01)').drawRect(40, 590, 280, 40);
+        beginBattleText.x = 40;
+        beginBattleText.y = 600;
+        beginBattleText.name = 'beginBattleText';
+        beginBattleText.addEventListener('mousedown', handleMouseDownBeginBattleTextAndButton);
+        beginBattleButton.addEventListener('mousedown', handleMouseDownBeginBattleTextAndButton);
+        panel.addChild(beginBattleText, beginBattleButton);
     }
         
     /* stage : panel */
@@ -364,6 +376,12 @@ function init(type)
                 alert('Zapisano mapę.');
             },
         });
+    }
+    
+    /* begin battle : mouse down */
+    function handleMouseDownBeginBattleTextAndButton(event)
+    {
+        
     }
     
     /* layer : mouse over, mouse down */
@@ -580,7 +598,35 @@ function init(type)
             }
             else
             {
-                
+                if(pieces[i].x == target.x && pieces[i].y == target.y)
+                {
+                    // count !!
+                    //pieces[i].effect ...
+                    resources[i] = currentField;
+                    stage.removeChild(resourcesLayer[i]);
+                    resourcesLayer[i] = new createjs.Bitmap(objectsImagesUrl + resources[i].image + '.png');
+                    resourcesLayer[i].x = pieces[i].x;
+                    resourcesLayer[i].y = pieces[i].y;
+                    resourcesLayer[i].addEventListener(handleMouseDown);
+                    stage.addChild(resourcesLayer[i]);
+                    
+                    /* damage pattern */
+                    var offset_x = 0;
+                    var offset_y = 0;
+                    for(var j in resources[i].damagePattern)
+                    {
+                        for(var k in resources[i].damagePattern[j])
+                        {
+                            var shp = new createjs.Shape();
+                            shp.graphics.beginFill("#9977ff").drawRect(pieces[i].x - 64 + offset_x, pieces[i].y - 64 + offset_y, 32, 32);
+                            shp.alpha = 0.4 * resources[i].damagePattern[j][k]/100;
+                            stage.addChild(shp);
+                            offset_x += 32;
+                        }
+                        offset_x = 0;
+                        offset_y += 32;
+                    }
+                }
             }
         }
     }
