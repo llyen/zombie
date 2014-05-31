@@ -4,14 +4,13 @@ var limitedObjectIndex = 0; //onlyone
 
 
 /* class definition */
-function mapObject(x, y, id, image, solid, empty)
+function mapObject(x, y, id, image, solid)
 {
     this.x = x;
     this.y = y;
     this.id = id;
     this.image = image;
-    this.solid = solid || null;
-    this.empty = empty || null;
+    this.solid = solid || false;
 }
 	
 function mapField(id, name, image, solid, speed, effect)
@@ -55,14 +54,16 @@ function init(type)
     type = type || 'design';
     
     var menu = new Array();
-    var mapFieldsImages = new Array();
+    var mapFieldsParams = new Array();
     var battleResourcesImages = new Array();
 
     for(i = 0; i < mapFields.length; i++)
     {
         if(type == 'design')
             menu[i] = new mapField(mapFields[i]['id'], mapFields[i]['name'], mapFields[i]['image'], mapFields[i]['solid'], mapFields[i]['speed'], mapFields[i]['effect']);
-        mapFieldsImages[mapFields[i]['id']] = mapFields[i]['image'];
+        mapFieldsParams[mapFields[i]['id']] = new Array();
+        mapFieldsParams[mapFields[i]['id']]['image'] = mapFields[i]['image'];
+        mapFieldsParams[mapFields[i]['id']]['solid'] = (mapFields[i]['solid'] == 1) ? true : false;
     }
 
     
@@ -79,7 +80,7 @@ function init(type)
     var stage = new createjs.Stage("map");
     stage.enableMouseOver(50);
     var mapSize = 400; //ile
-    var pieces = new Array(); //p
+    window.pieces = new Array(); //p
                 
 	var step_x = 0;
 	var step_y = 0;
@@ -87,7 +88,7 @@ function init(type)
 					
 	for(i = 0; i < mapSize; i++)
 	{
-		pieces[i] = new mapObject(step_x, step_y, map[i], mapFieldsImages[map[i]]);
+		pieces[i] = new mapObject(step_x, step_y, map[i], mapFieldsParams[map[i]]['image'], mapFieldsParams[map[i]]['solid']);
         count_x++;
         if(count_x == 20)
         {
@@ -301,14 +302,10 @@ function init(type)
             }
         }
     }
-    
-    
+        
     /* stage : panel */
 	stage.addChild(panel);		
 
-    
-    
-    
     /* brush : hint fields */
     var hintFields = new Array();
     hintFields['1x1'] = new createjs.Shape();
@@ -404,180 +401,187 @@ function init(type)
 				
         for(i = 0; i < mapSize; i++)
 		{
-			if (pieces[i].x == target.x && pieces[i].y == target.y)
-			{ 	
-                if(currentField.id == 8)
-				{
-					for(j = 0; j < mapSize; j++)
-					{
-						if(pieces[j].image == 'cw')
-						{
-							limitedObjectIndex = j;
-						}
-					}
-	
-					pieces[i].id = currentField.id;      
-					pieces[i].image = currentField.image;  
+            if(type == 'design')
+            {
+                if(pieces[i].x == target.x && pieces[i].y == target.y)
+                { 	
+                    if(currentField.id == 8)
+                	{
+                		for(j = 0; j < mapSize; j++)
+                		{
+                			if(pieces[j].image == 'cw')
+                			{
+                				limitedObjectIndex = j;
+                			}
+                		}
+        
+                		pieces[i].id = currentField.id;      
+                		pieces[i].image = currentField.image;  
             
-                    stage.removeChild(layer[i]);
-					layer[i] = new createjs.Bitmap(objectsImagesUrl + currentField.image + '.png');
-					layer[i].x = pieces[i].x;
-					layer[i].y = pieces[i].y;
-					layer[i].addEventListener('mousedown', handleMouseDown);
-					stage.addChild(layer[i]);
+                        stage.removeChild(layer[i]);
+                		layer[i] = new createjs.Bitmap(objectsImagesUrl + currentField.image + '.png');
+                		layer[i].x = pieces[i].x;
+                		layer[i].y = pieces[i].y;
+                		layer[i].addEventListener('mousedown', handleMouseDown);
+                		stage.addChild(layer[i]);
 
-					if(limitedObjectIndex != 0)
-					{
-						pieces[limitedObjectIndex].id = 0;      
-						pieces[limitedObjectIndex].image = 'skala.png';
+                		if(limitedObjectIndex != 0)
+                		{
+                			pieces[limitedObjectIndex].id = 0;      
+                			pieces[limitedObjectIndex].image = 'skala.png';
                         
-						stage.removeChild(layer[limitedObjectIndex]);
-						layer[limitedObjectIndex] = new createjs.Bitmap(objectsImagesUrl + 'skala.png');
-						layer[limitedObjectIndex].x = pieces[limitedObjectIndex].x
-                        layer[limitedObjectIndex].y = pieces[limitedObjectIndex].y
-                        layer[limitedObjectIndex].addEventListener('mousedown', handleMouseDown);
-                        stage.addChild(layer[limitedObjectIndex]);
-					}
-                }
+                			stage.removeChild(layer[limitedObjectIndex]);
+                			layer[limitedObjectIndex] = new createjs.Bitmap(objectsImagesUrl + 'skala.png');
+                			layer[limitedObjectIndex].x = pieces[limitedObjectIndex].x
+                            layer[limitedObjectIndex].y = pieces[limitedObjectIndex].y
+                            layer[limitedObjectIndex].addEventListener('mousedown', handleMouseDown);
+                            stage.addChild(layer[limitedObjectIndex]);
+                		}
+                    }
                 
-				if(currentField.id == 7 && (pieces[i].y == 0 || pieces[i].x == 0 || pieces[i].y == 608 || pieces[i].x == 608))
-				{
-					pieces[i].id = currentField.id;      
-					pieces[i].image = currentField.img;  
-	  
-					stage.removeChild(layer[i]);
-					layer[i] = new createjs.Bitmap(objectsImagesUrl + currentField.image + '.png');
-					layer[i].x = pieces[i].x;
-					layer[i].y = pieces[i].y;
-					layer[i].addEventListener('mousedown', handleMouseDown);
-					stage.addChild(layer[i]);
-				}	
-				else
-				{
-					if(brushSize[brushSizeIndex] == '1x1' && currentField.id != 7 && currentField.id != 8)
-					{
-                        pieces[i].id = currentField.id;      
-						pieces[i].image = currentField.img;  
+                	if(currentField.id == 7 && (pieces[i].y == 0 || pieces[i].x == 0 || pieces[i].y == 608 || pieces[i].x == 608))
+                	{
+                		pieces[i].id = currentField.id;      
+                		pieces[i].image = currentField.img;  
+        
+                		stage.removeChild(layer[i]);
+                		layer[i] = new createjs.Bitmap(objectsImagesUrl + currentField.image + '.png');
+                		layer[i].x = pieces[i].x;
+                		layer[i].y = pieces[i].y;
+                		layer[i].addEventListener('mousedown', handleMouseDown);
+                		stage.addChild(layer[i]);
+                	}	
+                	else
+                	{
+                		if(brushSize[brushSizeIndex] == '1x1' && currentField.id != 7 && currentField.id != 8)
+                		{
+                            pieces[i].id = currentField.id;      
+                			pieces[i].image = currentField.img;  
 			  
-						stage.removeChild(layer[i]);
-						layer[i] = new createjs.Bitmap(objectsImagesUrl + currentField.image + '.png');
-						layer[i].x = pieces[i].x;
-						layer[i].y = pieces[i].y;
-						layer[i].addEventListener('mousedown', handleMouseDown);
-						stage.addChild(layer[i]);
-					}
+                			stage.removeChild(layer[i]);
+                			layer[i] = new createjs.Bitmap(objectsImagesUrl + currentField.image + '.png');
+                			layer[i].x = pieces[i].x;
+                			layer[i].y = pieces[i].y;
+                			layer[i].addEventListener('mousedown', handleMouseDown);
+                			stage.addChild(layer[i]);
+                		}
 						
-					if(brushSize[brushSizeIndex] == '3x3' && currentField.id != 7 && currentField.id != 8)
-					{
-						var lock = 0; //ZL
-						var tempSize = [-21, -1, 19, -20, 0, 20, -19, 1, 21]; //wielkosctab
-						var forbiddenFields = [0, 20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300, 320, 340, 360, 380, 400]; //zakazaneL
-						for(k = 0; k < 20; k++)
-						{
-							if(i == forbiddenFields[k] || i == forbiddenFields[k]-1)
-								lock = 1;
-						}
+                		if(brushSize[brushSizeIndex] == '3x3' && currentField.id != 7 && currentField.id != 8)
+                		{
+                			var lock = 0; //ZL
+                			var tempSize = [-21, -1, 19, -20, 0, 20, -19, 1, 21]; //wielkosctab
+                			var forbiddenFields = [0, 20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300, 320, 340, 360, 380, 400]; //zakazaneL
+                			for(k = 0; k < 20; k++)
+                			{
+                				if(i == forbiddenFields[k] || i == forbiddenFields[k]-1)
+                					lock = 1;
+                			}
+                			
+                            if(lock == 0)
+                			{
+                				var safetyVarFirst = 0;
+                				var safetyVarSecond = 9;
+                			}
 						
-                        if(lock == 0)
-						{
-							var safetyVarFirst = 0;
-							var safetyVarSecond = 9;
-						}
-						
-                        if(lock == 1)
-						{
-							if(i%10 == 0)
-							{
-								var safetyVarFirst = 3;
-								var safetyVarSecond = 9;
-							}
+                            if(lock == 1)
+                			{
+                				if(i%10 == 0)
+                				{
+                					var safetyVarFirst = 3;
+                					var safetyVarSecond = 9;
+                				}
                             
-							if(i%10 != 0)
-							{
-								var safetyVarFirst = 0;
-								var safetyVarSecond = 6;
-							}
-						}
+                				if(i%10 != 0)
+                				{
+                					var safetyVarFirst = 0;
+                					var safetyVarSecond = 6;
+                				}
+                			}
                         
-						for(l = safetyVarFirst; l < safetyVarSecond; l++)
-						{
-							if(typeof pieces[i+tempSize[l]] != 'undefined')
-							{
-								pieces[i + tempSize[l]].id = currentField.id;      
-								pieces[i + tempSize[l]].image = currentField.image;
+                			for(l = safetyVarFirst; l < safetyVarSecond; l++)
+                			{
+                				if(typeof pieces[i+tempSize[l]] != 'undefined')
+                				{
+                					pieces[i + tempSize[l]].id = currentField.id;      
+            						pieces[i + tempSize[l]].image = currentField.image;
 								
-                                stage.removeChild(layer[i + tempSize[l]]);
-								layer[i + tempSize[l]] = new createjs.Bitmap(objectsImagesUrl + currentField.image + '.png');
-								layer[i + tempSize[l]].x = pieces[i + tempSize[l]].x;
-								layer[i + tempSize[l]].y = pieces[i + tempSize[l]].y;
-								layer[i + tempSize[l]].addEventListener('mousedown', handleMouseDown);
-								stage.addChild(layer[i + tempSize[l]]);
-                            }
-						}
-					}
-
-                    if(brushSize[brushSizeIndex] == '5x5' && currentField.id != 7 && currentField.id != 8)
-					{
-						var lock = 0; //ZL
-						var tempSize = [-42, -22, -2, 18, 38, -41, -21, -1, 19, 39, -40, -20, 0, 20, 40, -39, -19, 1, 21, 41, -38, -18, 2, 22, 42]; //wielkosctab
-						var forbiddenFields = [0, 1, 19, 20, 21, 39, 40, 41, 59, 60, 61, 79, 80, 81, 99, 100, 101, 119, 120, 121, 139, 140, 141, 159, 160, 161, 179, 180, 181, 199, 200, 201, 219, 220, 221, 239, 240, 241, 259, 260, 261, 279, 280, 281, 299, 300, 301, 319, 320, 321, 339, 340, 341, 359, 360, 361, 379, 380, 381, 399, 400]; //zakazaneL
-						for(k = 0; k < 60; k++)
-						{
-							if(i == forbiddenFields[k] || i == forbiddenFields[k]-1)
-								lock = 1;
-						}
+                                    stage.removeChild(layer[i + tempSize[l]]);
+            						layer[i + tempSize[l]] = new createjs.Bitmap(objectsImagesUrl + currentField.image + '.png');
+            						layer[i + tempSize[l]].x = pieces[i + tempSize[l]].x;
+            						layer[i + tempSize[l]].y = pieces[i + tempSize[l]].y;
+            						layer[i + tempSize[l]].addEventListener('mousedown', handleMouseDown);
+            						stage.addChild(layer[i + tempSize[l]]);
+                                }
+        					}
+        				}
+    
+                        if(brushSize[brushSizeIndex] == '5x5' && currentField.id != 7 && currentField.id != 8)
+        				{
+        					var lock = 0; //ZL
+        					var tempSize = [-42, -22, -2, 18, 38, -41, -21, -1, 19, 39, -40, -20, 0, 20, 40, -39, -19, 1, 21, 41, -38, -18, 2, 22, 42]; //wielkosctab
+        					var forbiddenFields = [0, 1, 19, 20, 21, 39, 40, 41, 59, 60, 61, 79, 80, 81, 99, 100, 101, 119, 120, 121, 139, 140, 141, 159, 160, 161, 179, 180, 181, 199, 200, 201, 219, 220, 221, 239, 240, 241, 259, 260, 261, 279, 280, 281, 299, 300, 301, 319, 320, 321, 339, 340, 341, 359, 360, 361, 379, 380, 381, 399, 400]; //zakazaneL
+        					for(k = 0; k < 60; k++)
+        					{
+        						if(i == forbiddenFields[k] || i == forbiddenFields[k]-1)
+        							lock = 1;
+        					}
 						
-                        if(lock == 0)
-						{
-							var safetyVarFirst = 0;
-							var safetyVarSecond = 25;
-						}
-						
-                        if(lock == 1)
-						{
-							if(i%10 == 0)
-							{
-								var safetyVarFirst = 10;
-								var safetyVarSecond = 25;
-							}
+                            if(lock == 0)
+    						{
+    							var safetyVarFirst = 0;
+    							var safetyVarSecond = 25;
+    						}
+    						
+                            if(lock == 1)
+    						{
+    							if(i%10 == 0)
+    							{
+    								var safetyVarFirst = 10;
+    								var safetyVarSecond = 25;
+    							}
 		
-							if(i%10 == 1)
-							{
-								var safetyVarFirst = 5;
-								var safetyVarSecond = 25;
-							}
+    							if(i%10 == 1)
+    							{
+    								var safetyVarFirst = 5;
+    								var safetyVarSecond = 25;
+    							}
 								
-							if(i%10 == 8)
-							{
-								var safetyVarFirst = 0;
-								var safetyVarSecond = 20;
-							}
+    							if(i%10 == 8)
+    							{
+    								var safetyVarFirst = 0;
+    								var safetyVarSecond = 20;
+    							}
 							
-							if(i%10 == 9)
-							{
-								var safetyVarFirst = 0;
-								var safetyVarSecond = 15;
-							}
-						}
+    							if(i%10 == 9)
+    							{
+    								var safetyVarFirst = 0;
+    								var safetyVarSecond = 15;
+    							}
+    						}
                         
-						for(l = safetyVarFirst; l < safetyVarSecond; l++)
-						{
-							if(typeof pieces[i+tempSize[l]] != 'undefined')
-							{
-								pieces[i + tempSize[l]].id = currentField.id;      
-								pieces[i + tempSize[l]].image = currentField.image;
-								
-                                stage.removeChild(layer[i + tempSize[l]]);
-								layer[i + tempSize[l]] = new createjs.Bitmap(objectsImagesUrl + currentField.image + '.png');
-								layer[i + tempSize[l]].x = pieces[i + tempSize[l]].x;
-								layer[i + tempSize[l]].y = pieces[i + tempSize[l]].y;
-								layer[i + tempSize[l]].addEventListener('mousedown', handleMouseDown);
-								stage.addChild(layer[i + tempSize[l]]);
-                            }
-						}
-					}
-				}	
-			}
+    						for(l = safetyVarFirst; l < safetyVarSecond; l++)
+    						{
+    							if(typeof pieces[i+tempSize[l]] != 'undefined')
+        						{
+                    				pieces[i + tempSize[l]].id = currentField.id;      
+                    				pieces[i + tempSize[l]].image = currentField.image;
+                    				
+                                    stage.removeChild(layer[i + tempSize[l]]);
+                    				layer[i + tempSize[l]] = new createjs.Bitmap(objectsImagesUrl + currentField.image + '.png');
+                    				layer[i + tempSize[l]].x = pieces[i + tempSize[l]].x;
+                    				layer[i + tempSize[l]].y = pieces[i + tempSize[l]].y;
+                    				layer[i + tempSize[l]].addEventListener('mousedown', handleMouseDown);
+                    				stage.addChild(layer[i + tempSize[l]]);
+                                }
+                    		}
+                        }
+                    }	
+                }
+            }
+            else
+            {
+                
+            }
         }
     }
 
