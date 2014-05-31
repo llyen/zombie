@@ -4,12 +4,14 @@ var limitedObjectIndex = 0; //onlyone
 
 
 /* class definition */
-function mapObject(x, y, id, image)
+function mapObject(x, y, id, image, solid, empty)
 {
     this.x = x;
     this.y = y;
     this.id = id;
     this.image = image;
+    this.solid = solid || null;
+    this.empty = empty || null;
 }
 	
 function mapField(id, name, image, solid, speed, effect)
@@ -22,18 +24,58 @@ function mapField(id, name, image, solid, speed, effect)
     this.effect = effect;
 }
 
-var menu = new Array();
-var mapFieldsImages = new Array();
-
-for(i = 0; i < mapFields.length; i++)
+function player(x, y, health, damage)
 {
-    menu[i] = new mapField(mapFields[i]['id'], mapFields[i]['name'], mapFields[i]['image'], mapFields[i]['solid'], mapFields[i]['speed'], mapFields[i]['effect']);
-    mapFieldsImages[mapFields[i]['id']] = mapFields[i]['image'];
+    this.x = x;
+    this.y = y;
+    this.health = health;
+    this.damage = damage;
+}
+
+function zombie()
+{
+    
+}
+
+function battleResource(id, name, image, type, damage, damagePattern, effect, count)
+{
+    this.id = id;
+    this.name = name;
+    this.image = image;
+    this.type = type;
+    this.damage = damage;
+    this.damagePattern = damagePattern;
+    this.effect = effect;
+    this.count = count;
 }
 
 /* map objects init */
-function init()
+function init(type)
 {
+    type = type || 'design';
+    
+    var menu = new Array();
+    var mapFieldsImages = new Array();
+    var battleResourcesImages = new Array();
+
+    for(i = 0; i < mapFields.length; i++)
+    {
+        if(type == 'design')
+            menu[i] = new mapField(mapFields[i]['id'], mapFields[i]['name'], mapFields[i]['image'], mapFields[i]['solid'], mapFields[i]['speed'], mapFields[i]['effect']);
+        mapFieldsImages[mapFields[i]['id']] = mapFields[i]['image'];
+    }
+
+    
+    if(type == 'deploy')
+    {
+        for(i = 0; i < battleResources.length; i++)
+        {
+            menu[i] = new battleResource(battleResources[i]['params']['id'], battleResources[i]['params']['name'], battleResources[i]['params']['img'] + '_32x32px', battleResources[i]['params']['type'], battleResources[i]['params']['dmg'], battleResources[i]['params']['dmgPattern'], battleResources[i]['params']['effect'], battleResources[i]['count']);
+            battleResourcesImages[battleResources[i]['params']['id']] = battleResources[i]['params']['img'];
+        }
+    }
+    
+    
     var stage = new createjs.Stage("map");
     stage.enableMouseOver(50);
     var mapSize = 400; //ile
@@ -83,98 +125,190 @@ function init()
     var offset_x = 32;
     var offset_y = 32;
     
-    for(i = 0; i < mapFields.length; i++)
+    if(type == 'design')
     {
-        panelFields[i] = new createjs.Bitmap(objectsImagesUrl + menu[i].image + '.png');
-        panelFields[i].x = offset_x + 5;
-        panelFields[i].y = offset_y + 258;
-        offset_x += 40;
-        if(offset_x > 256)
-        {
-            offset_x = 32;
-            offset_y += 40;
-        }
-        panel.addChild(panelFields[i]);
-    }
-	
-    /* panel : current field text */
-    var panelCurrentFieldText = new createjs.Text('Aktualne pole:', '20px Arial', '#FFF');
-    panelCurrentFieldText.x = 80;
-    panelCurrentFieldText.y = 30;
-    panel.addChild(panelCurrentFieldText);
-    
-    /* panel : current field selection, desc */
-    var currentField = menu[0];	
-	
-    stage.onMouseDown = function(e)
-    {
-        var selected = this.getObjectsUnderPoint(e.stageX, e.stageY);
         for(i = 0; i < mapFields.length; i++)
         {
-            if(panelFields[i].x == selected[0].x && panelFields[i].y == selected[0].y)
+            panelFields[i] = new createjs.Bitmap(objectsImagesUrl + menu[i].image + '.png');
+            panelFields[i].x = offset_x + 5;
+            panelFields[i].y = offset_y + 258;
+            offset_x += 40;
+            if(offset_x > 256)
             {
-                currentField = menu[i];
-                panel.removeChild(panel.getChildByName('fieldName'), panel.getChildByName('fieldImage'), panel.getChildByName('fieldDescription'));
-                
-                var fieldName = new createjs.Text(currentField.name, '20px Arial', '#FFF');
-                fieldName.x = 80;
-                fieldName.y = 80;
-                fieldName.name = 'fieldName';
-                
-                var fieldImage = new createjs.Bitmap(objectsImagesUrl + currentField.image + '.png');
-                fieldImage.x = 20;
-                fieldImage.y = 80;
-                fieldImage.name = 'fieldImage';
-                
-                // parse boolean values
-                var solid;
-                var effect;
-                
-                if(currentField.solid == 0)
-                    solid = 'Nie';
-                else
-                    solid = 'Tak';
+                offset_x = 32;
+                offset_y += 40;
+            }
+            panel.addChild(panelFields[i]);
+        }
+	
+        /* panel : current field text */
+        var panelCurrentFieldText = new createjs.Text('Aktualne pole:', '20px Arial', '#FFF');
+        panelCurrentFieldText.x = 80;
+        panelCurrentFieldText.y = 30;
+        panel.addChild(panelCurrentFieldText);
+    
+        /* panel : current field selection, desc */
+        var currentField = menu[0];	
+	
+        stage.onMouseDown = function(e)
+        {
+            var selected = this.getObjectsUnderPoint(e.stageX, e.stageY);
+            for(i = 0; i < mapFields.length; i++)
+            {
+                if(panelFields[i].x == selected[0].x && panelFields[i].y == selected[0].y)
+                {
+                    currentField = menu[i];
+                    panel.removeChild(panel.getChildByName('fieldName'), panel.getChildByName('fieldImage'), panel.getChildByName('fieldDescription'));
                     
-                if(currentField.effect == 0)
-                    effect = 'Brak';
-                else
-                    effect = 'Tak'; //other values??
+                    var fieldName = new createjs.Text(currentField.name, '20px Arial', '#FFF');
+                    fieldName.x = 80;
+                    fieldName.y = 80;
+                    fieldName.name = 'fieldName';
                 
-                var fieldDescription = new createjs.Text("Statystyki pola:\n\nPrzechodne:"+solid+"\nEfekt:"+effect+" ", '16px Arial', '#FFF');
-                fieldDescription.x = 80;
-                fieldDescription.y = 120;
-                fieldDescription.name = 'fieldDescription';
+                    var fieldImage = new createjs.Bitmap(objectsImagesUrl + currentField.image + '.png');
+                    fieldImage.x = 20;
+                    fieldImage.y = 80;
+                    fieldImage.name = 'fieldImage';
                 
-                panel.addChild(fieldName, fieldImage, fieldDescription);
+                    // parse boolean values
+                    var solid;
+                    var effect;
+                
+                    if(currentField.solid == 0)
+                        solid = 'Nie';
+                    else
+                        solid = 'Tak';
+                    
+                    if(currentField.effect == 0)
+                        effect = 'Brak';
+                    else
+                        effect = 'Tak'; //other values??
+                
+                    var fieldDescription = new createjs.Text("Statystyki pola:\n\nPrzechodne:"+solid+"\nEfekt:"+effect+" ", '16px Arial', '#FFF');
+                    fieldDescription.x = 80;
+                    fieldDescription.y = 120;
+                    fieldDescription.name = 'fieldDescription';
+                
+                    panel.addChild(fieldName, fieldImage, fieldDescription);
+                }
+            }
+        }
+			
+        /* brush : size select */
+        var brushSizeText = new createjs.Text('Wielkość pędzla: '+brushSize[brushSizeIndex], '30px Arial', '#FFF');
+        var brushSizeButton = new createjs.Shape();
+        brushSizeButton.graphics.beginFill('rgba(255, 255, 255, 0.01)').drawRect(10, 540, 280, 40);
+        brushSizeText.x = 10;
+        brushSizeText.y = 550;
+        brushSizeText.name = 'brushSizeText';
+        brushSizeText.addEventListener('mousedown', handleMouseDownBrushSizeTextAndButton);
+        brushSizeButton.addEventListener('mousedown', handleMouseDownBrushSizeTextAndButton);
+        panel.addChild(brushSizeText, brushSizeButton);
+    
+        /* map : save button */
+        var mapSaveText = new createjs.Text('Zapisz mapę', '40px Arial', '#FFF');
+        var mapSaveButton = new createjs.Shape();
+        mapSaveButton.graphics.beginFill('rgba(255, 255, 255, 0.01)').drawRect(40, 590, 280, 40);
+        mapSaveText.x = 40;
+        mapSaveText.y = 600;
+        mapSaveText.name = 'mapSaveText';
+        mapSaveText.addEventListener('mousedown', handleMouseDownMapSaveTextAndButton);
+        mapSaveButton.addEventListener('mousedown', handleMouseDownMapSaveTextAndButton);
+        panel.addChild(mapSaveText, mapSaveButton);
+    }
+    
+    if(type == 'deploy')
+    {
+        var panelFieldsBackgrounds = Array();
+        for(i = 0; i < battleResources.length; i++)
+        {
+            if(menu[i].count > 0)
+            {
+                panelFields[i] = new createjs.Bitmap(objectsImagesUrl + menu[i].image + '.png');
+                panelFields[i].x = offset_x + 5;
+                panelFields[i].y = offset_y + 258;
+                panelFieldsBackgrounds[i] = new createjs.Bitmap(objectsImagesUrl + 'trawa.png');
+                panelFieldsBackgrounds[i].x = panelFields[i].x;
+                panelFieldsBackgrounds[i].y = panelFields[i].y;
+                offset_x += 40;
+                if(offset_x > 256)
+                {
+                    offset_x = 32;
+                    offset_y += 40;
+                }
+                panel.addChild(panelFieldsBackgrounds[i], panelFields[i]);
+            }
+        }
+	
+        /* panel : current object text */
+        var panelCurrentFieldText = new createjs.Text('Aktualny obiekt:', '20px Arial', '#FFF');
+        panelCurrentFieldText.x = 80;
+        panelCurrentFieldText.y = 30;
+        panel.addChild(panelCurrentFieldText);
+    
+        /* panel : current field selection, desc */
+        var currentField = menu[0];
+        
+        stage.onMouseDown = function(e)
+        {
+            var selected = this.getObjectsUnderPoint(e.stageX, e.stageY);
+            for(i = 0; i < battleResources.length; i++)
+            {
+                if(menu[i].count > 0)
+                {
+                    if(panelFields[i].x == selected[0].x && panelFields[i].y == selected[0].y)
+                    {
+                        currentField = menu[i];
+                        panel.removeChild(panel.getChildByName('fieldName'), panel.getChildByName('fieldImageBackground'), panel.getChildByName('fieldImage'), panel.getChildByName('fieldDescription'));
+                    
+                        if(currentField.name.length < 25)
+						{
+							var fieldName = new createjs.Text(currentField.name, "20px Arial", "#FFF");
+						}
+						else
+							var fieldName = new createjs.Text(currentField.name.substr(0, 20)+"...", "18px Arial", "#FFF");
+                    
+                        fieldName.x = 80;
+                        fieldName.y = 80;
+                        fieldName.name = 'fieldName';
+                
+                        var fieldImageBackground = new createjs.Bitmap(objectsImagesUrl + 'trawa.png');
+                        fieldImageBackground.x = 20;
+                        fieldImageBackground.y = 80;
+                        fieldImageBackground.name = 'fieldImageBackground';
+                
+                        var fieldImage = new createjs.Bitmap(objectsImagesUrl + currentField.image + '.png');
+                        fieldImage.x = 20;
+                        fieldImage.y = 80;
+                        fieldImage.name = 'fieldImage';
+                
+                        // parse boolean values
+                        var effect;
+                        
+                        if(currentField.effect == 0)
+                            effect = 'Brak';
+                        else
+                            effect = 'Tak'; //other values??
+                
+                        var fieldDescription = new createjs.Text("Statystyki obiektu:\n\nTyp: "+currentField.type+"\nObrażenia: "+currentField.damage+"\nEfekt: "+effect+"\nDostępna ilość: "+currentField.count+" ", '16px Arial', '#FFF');
+                        fieldDescription.x = 80;
+                        fieldDescription.y = 120;
+                        fieldDescription.name = 'fieldDescription';
+                
+                        panel.addChild(fieldName, fieldImageBackground, fieldImage, fieldDescription);
+                    }
+                }
             }
         }
     }
-			
-    /* brush : size select */
-    var brushSizeText = new createjs.Text('Wielkość pędzla: '+brushSize[brushSizeIndex], '30px Arial', '#FFF');
-    var brushSizeButton = new createjs.Shape();
-    brushSizeButton.graphics.beginFill('rgba(255, 255, 255, 0.01)').drawRect(10, 540, 280, 40);
-    brushSizeText.x = 10;
-    brushSizeText.y = 550;
-    brushSizeText.name = 'brushSizeText';
-    brushSizeText.addEventListener('mousedown', handleMouseDownBrushSizeTextAndButton);
-    brushSizeButton.addEventListener('mousedown', handleMouseDownBrushSizeTextAndButton);
-    panel.addChild(brushSizeText, brushSizeButton);
     
-    /* map : save button */
-    var mapSaveText = new createjs.Text('Zapisz mapę', '40px Arial', '#FFF');
-    var mapSaveButton = new createjs.Shape();
-    mapSaveButton.graphics.beginFill('rgba(255, 255, 255, 0.01)').drawRect(40, 590, 280, 40);
-    mapSaveText.x = 40;
-    mapSaveText.y = 600;
-    mapSaveText.name = 'mapSaveText';
-    mapSaveText.addEventListener('mousedown', handleMouseDownMapSaveTextAndButton);
-    mapSaveButton.addEventListener('mousedown', handleMouseDownMapSaveTextAndButton);
-    panel.addChild(mapSaveText, mapSaveButton);
     
     /* stage : panel */
 	stage.addChild(panel);		
 
+    
+    
+    
     /* brush : hint fields */
     var hintFields = new Array();
     hintFields['1x1'] = new createjs.Shape();

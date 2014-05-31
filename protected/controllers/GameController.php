@@ -44,4 +44,15 @@ class GameController extends Controller
 		}
 		return false;
 	}
+	
+	public function actionBattle()
+	{
+		$player = User::model()->findByPk(Yii::app()->user->id)->player;
+		$map = explode('x', $player->map->map);
+		$this->render('battle', array(
+			'mapFields'=>Settings::loadMapFields(),
+			'battleResources'=>Settings::loadTowers(Yii::app()->user->id),
+			'map'=>$map,
+		));
+	}
 }
