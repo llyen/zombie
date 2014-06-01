@@ -23,16 +23,25 @@ function mapField(id, name, image, solid, speed, effect)
     this.effect = effect;
 }
 
-function champion(x, y, health, damage)
+function champion(x, y, health, damage, wayPointId)
 {
     this.x = x;
     this.y = y;
     this.health = health;
     this.damage = damage;
+    this.wayPointId = wayPointId;
 }
 
-function enemySpawn(x, y)
+function enemySpawn(x, y, wayPointId)
 {
+    this.x = x;
+    this.y = y;
+    this.wayPointId = wayPointId;
+}
+
+function wayPoint(id, x, y)
+{
+    this.id = id;
     this.x = x;
     this.y = y;
 }
@@ -56,6 +65,43 @@ function battleResource(id, name, image, type, damage, damagePattern, effect, co
     this.effect = effect;
     this.count = count;
 }
+
+var wayPoints = new Array(
+    new wayPoint('wp1', 0, 0),
+    new wayPoint('wp2', 128, 0),
+    new wayPoint('wp3', 288, 0),
+    new wayPoint('wp4', 448, 0),
+    new wayPoint('wp5', 608, 0),
+    new wayPoint('wp6', 0, 128),
+    new wayPoint('wp7', 128, 128),
+    new wayPoint('wp8', 288, 128),
+    new wayPoint('wp9', 448, 128),
+    new wayPoint('wp10', 608, 128),
+    new wayPoint('wp11', 0, 288),
+    new wayPoint('wp12', 128, 288),
+    new wayPoint('wp13', 288, 288),
+    new wayPoint('wp14', 448, 288),
+    new wayPoint('wp15', 608, 288),
+    new wayPoint('wp16', 0, 448),
+    new wayPoint('wp17', 128, 448),
+    new wayPoint('wp18', 288, 448),
+    new wayPoint('wp19', 448, 448),
+    new wayPoint('wp20', 608, 448),
+    new wayPoint('wp21', 0, 608),
+    new wayPoint('wp22', 128, 608),
+    new wayPoint('wp23', 288, 608),
+    new wayPoint('wp24', 448, 608),
+    new wayPoint('wp25', 608, 608)
+);
+
+var wayPointsConnections = new Array(
+    {id: 'wp1', connections: new Array({id: 'wp2', weight: 1}, {id: 'wp6', weight: 1}, {id: 'wp7', weight: 1.5})},
+    {id: 'wp2', connections: new Array({id: 'wp1', weight: 1}, {id: 'wp3', weight: 1}, {id: 'wp6', weight: 1.5}, {id: 'wp7', weight: 1}, {id: 'wp8', weight: 1.5})},
+    {id: 'wp3', connections: new Array({id: 'wp2', weight: 1}, {id: 'wp4', weight: 1}, {id: 'wp6', weight: 1.5}, {id: 'wp7', weight: 1}, {id: 'wp8', weight: 1.5})},
+    {id: 'wp4', connections: new Array({id: 'wp3', weight: 1}, {id: 'wp5', weight: 1}, {id: 'wp8', wieght: 1.5}, {id: 'wp9', weight: 1}, {id: 'wp10', weight: 1.5})},
+    {id: 'wp5', connections: new Array({id: 'wp4', weight: 1}, {id: 'wp9', weight: 1.5}, {id: 'wp10', weight: 1})},
+    
+);
 
 /* map objects init */
 function init(type)
