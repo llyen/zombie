@@ -72,21 +72,25 @@ var wayPoints = new Array(
     new wayPoint('wp3', 288, 0),
     new wayPoint('wp4', 448, 0),
     new wayPoint('wp5', 608, 0),
+    
     new wayPoint('wp6', 0, 128),
     new wayPoint('wp7', 128, 128),
     new wayPoint('wp8', 288, 128),
     new wayPoint('wp9', 448, 128),
     new wayPoint('wp10', 608, 128),
+    
     new wayPoint('wp11', 0, 288),
     new wayPoint('wp12', 128, 288),
     new wayPoint('wp13', 288, 288),
     new wayPoint('wp14', 448, 288),
     new wayPoint('wp15', 608, 288),
+    
     new wayPoint('wp16', 0, 448),
     new wayPoint('wp17', 128, 448),
     new wayPoint('wp18', 288, 448),
     new wayPoint('wp19', 448, 448),
     new wayPoint('wp20', 608, 448),
+    
     new wayPoint('wp21', 0, 608),
     new wayPoint('wp22', 128, 608),
     new wayPoint('wp23', 288, 608),
@@ -97,10 +101,33 @@ var wayPoints = new Array(
 var wayPointsConnections = new Array(
     {id: 'wp1', connections: new Array({id: 'wp2', weight: 1}, {id: 'wp6', weight: 1}, {id: 'wp7', weight: 1.5})},
     {id: 'wp2', connections: new Array({id: 'wp1', weight: 1}, {id: 'wp3', weight: 1}, {id: 'wp6', weight: 1.5}, {id: 'wp7', weight: 1}, {id: 'wp8', weight: 1.5})},
-    {id: 'wp3', connections: new Array({id: 'wp2', weight: 1}, {id: 'wp4', weight: 1}, {id: 'wp6', weight: 1.5}, {id: 'wp7', weight: 1}, {id: 'wp8', weight: 1.5})},
+    {id: 'wp3', connections: new Array({id: 'wp2', weight: 1}, {id: 'wp4', weight: 1}, {id: 'wp7', weight: 1.5}, {id: 'wp8', weight: 1}, {id: 'wp9', weight: 1.5})},
     {id: 'wp4', connections: new Array({id: 'wp3', weight: 1}, {id: 'wp5', weight: 1}, {id: 'wp8', wieght: 1.5}, {id: 'wp9', weight: 1}, {id: 'wp10', weight: 1.5})},
     {id: 'wp5', connections: new Array({id: 'wp4', weight: 1}, {id: 'wp9', weight: 1.5}, {id: 'wp10', weight: 1})},
     
+    {id: 'wp6', connections: new Array({id: 'wp1', weight: 1}, {id: 'wp2', weight: 1.5}, {id: 'wp7', weight: 1}, {id: 'wp11', weight: 1}, {id: 'wp12', weight: 1.5})},
+    {id: 'wp7', connections: new Array({id: 'wp1', weight: 1.5}, {id: 'wp2', weight: 1}, {id: 'wp3', weight: 1.5}, {id: 'wp6', weight: 1}, {id: 'wp8', weight: 1}, {id: 'wp11', weight: 1.5}, {id: 'wp12', weight: 1}, {id: 'wp13', weight: 1.5})},
+    {id: 'wp8', connections: new Array({id: 'wp2', weight: 1.5}, {id: 'wp3', weight: 1}, {id: 'wp4', weight: 1.5}, {id: 'wp7', weight: 1}, {id: 'wp9', weight: 1}, {id: 'wp12', weight: 1.5}, {id: 'wp13', weight: 1}, {id: 'wp14', weight: 1.5})},
+    {id: 'wp9', connections: new Array({id: 'wp3', weight: 1.5}, {id: 'wp4', weight: 1}, {id: 'wp5', weight: 1.5}, {id: 'wp8', weight: 1}, {id: 'wp10', weight: 1}, {id: 'wp13', weight: 1.5}, {id: 'wp14', weight: 1}, {id: 'wp15', weight: 1.5})},
+    {id: 'wp10', connections: new Array({id: 'wp4', weight: 1.5}, {id: 'wp5', weight: 1}, {id: 'wp9', weight: 1}, {id: 'wp14', weight: 1.5}, {id: 'wp15', weight: 1})},
+    
+    {id: 'wp11', connections: new Array({id: 'wp6', weight: 1}, {id: 'wp7', weight: 1.5}, {id: 'wp12', weight: 1}, {id: 'wp16', weight: 1}, {id: 'wp17', weight: 1.5})},
+    {id: 'wp12', connections: new Array({id: 'wp6', weight: 1.5}, {id: 'wp7', weight: 1}, {id: 'wp8', weight: 1.5}, {id: 'wp11', weight: 1}, {id: 'wp13', weight: 1}, {id: 'wp16', weight: 1.5}, {id: 'wp17', weight: 1}, {id: 'wp18', weight: 1.5})},
+    {id: 'wp13', connections: new Array({id: 'wp7', weight: 1.5}, {id: 'wp8', weight: 1}, {id: 'wp9', weight: 1.5}, {id: 'wp12', weight: 1}, {id: 'wp14', weight: 1}, {id: 'wp17', weight: 1.5}, {id: 'wp18', weight: 1}, {id: 'wp19', weight: 1.5})},
+    {id: 'wp14', connections: new Array({id: 'wp8', weight: 1.5}, {id: 'wp9', weight: 1}, {id: 'wp10', weight: 1.5}, {id: 'wp13', weight: 1}, {id: 'wp15', weight: 1}, {id: 'wp18', weight: 1.5}, {id: 'wp19', weight: 1}, {id: 'wp20', weight: 1.5})},
+    {id: 'wp15', connections: new Array({id: 'wp9', weight: 1.5}, {id: 'wp10', weight: 1}, {id: 'wp14', weight: 1}, {id: 'wp19', weight: 1.5}, {id: 'wp20', weight: 1})},
+    
+    {id: 'wp16', connections: new Array({id: 'wp11', weight: 1}, {id: 'wp12', weight: 1.5}, {id: 'wp17', weight: 1}, {id: 'wp21', weight: 1}, {id: 'wp22', weight: 1.5})},
+    {id: 'wp17', connections: new Array({id: 'wp11', weight: 1.5}, {id: 'wp12', weight: 1}, {id: 'wp13', weight: 1.5}, {id: 'wp16', weight: 1}, {id: 'wp18', weight: 1}, {id: 'wp21', weight: 1.5}, {id: 'wp22', weight: 1}, {id: 'wp23', weight: 1.5})},
+    {id: 'wp18', connections: new Array({id: 'wp12', weight: 1.5}, {id: 'wp13', weight: 1}, {id: 'wp14', weight: 1.5}, {id: 'wp17', weight: 1}, {id: 'wp19', weight: 1}, {id: 'wp22', weight: 1.5}, {id: 'wp23', weight: 1}, {id: 'wp24', weight: 1.5})},
+    {id: 'wp19', connections: new Array({id: 'wp13', weight: 1.5}, {id: 'wp14', weight: 1}, {id: 'wp15', weight: 1.5}, {id: 'wp18', weight: 1}, {id: 'wp20', weight: 1}, {id: 'wp23', weight: 1.5}, {id: 'wp24', weight: 1}, {id: 'wp25', weight: 1.5})},
+    {id: 'wp20', connections: new Array({id: 'wp14', weight: 1.5}, {id: 'wp15', weight: 1}, {id: 'wp19', weight: 1}, {id: 'wp24', weight: 1.5}, {id: 'wp25', weight: 1})},
+    
+    {id: 'wp21', connections: new Array({id: 'wp22', weight: 1}, {id: 'wp16', weight: 1}, {id: 'wp17', weight: 1.5})},
+    {id: 'wp22', connections: new Array({id: 'wp21', weight: 1}, {id: 'wp23', weight: 1}, {id: 'wp16', weight: 1.5}, {id: 'wp17', weight: 1}, {id: 'wp18', weight: 1.5})},
+    {id: 'wp23', connections: new Array({id: 'wp22', weight: 1}, {id: 'wp24', weight: 1}, {id: 'wp17', weight: 1.5}, {id: 'wp18', weight: 1}, {id: 'wp19', weight: 1.5})},
+    {id: 'wp24', connections: new Array({id: 'wp23', weight: 1}, {id: 'wp25', weight: 1}, {id: 'wp18', wieght: 1.5}, {id: 'wp19', weight: 1}, {id: 'wp20', weight: 1.5})},
+    {id: 'wp25', connections: new Array({id: 'wp24', weight: 1}, {id: 'wp19', weight: 1.5}, {id: 'wp20', weight: 1})}
 );
 
 /* map objects init */
@@ -159,10 +186,19 @@ function init(type)
         {
             player.x = step_x;
             player.y = step_y;
+            for(var w in wayPoints)
+                if((player.x >= wayPoints[w].x - 64 && player.x <= wayPoints[w].x + 64) && (player.y >= wayPoints[w].y - 64 && player.y <= wayPoints[w].y + 64))
+                    player.wayPointId = wayPoints[w].id;
         }
         
         if(map[i] == 7)
-            enemySpawns.push(new enemySpawn(step_x, step_y));
+        {
+            var tmp_id;
+            for(var w in wayPoints)
+                if((step_x >= wayPoints[w].x - 64 && step_x <= wayPoints[w].x + 64) && (step_y >= wayPoints[w].y - 64 && step_y <= wayPoints[w].y + 64))
+                    tmp_id = wayPoints[w].id;
+            enemySpawns.push(new enemySpawn(step_x, step_y, tmp_id));
+        }
             
 		pieces[i] = new mapObject(step_x, step_y, map[i], mapFieldsParams[map[i]]['image'], mapFieldsParams[map[i]]['solid']);
         count_x++;
