@@ -37,9 +37,12 @@ function enemySpawn(x, y)
     this.y = y;
 }
 
-function zombie()
+function zombie(x, y, health, damage) //id, image
 {
-    
+    this.x = x;
+    this.y = y;
+    this.health = health;
+    this.damage = damage;
 }
 
 function battleResource(id, name, image, type, damage, damagePattern, effect, count)
@@ -98,6 +101,8 @@ function init(type)
     var resourcesCounter = new Array();
     var resourcesLayer = new Array();
     var enemySpawns = Array();
+    var zombies = new Array();
+    var wave = 1;
 	var step_x = 0;
 	var step_y = 0;
 	var count_x = 0; //liczx
@@ -355,6 +360,17 @@ function init(type)
     hintFields['5x5'].visible = false;
 	stage.addChild(hintFields['1x1'], hintFields['3x3'], hintFields['5x5']);
 	
+    /* battle: next turn */
+    function nextWave()
+    {
+        for(i = 0; i < enemySpawns.length; i++)
+            zombies.push(new zombie(enemySpawns[i].x, enemySpawns[i].y, 50*wave, 30*wave));
+        
+        
+            
+        wave++;
+    }
+    
     /* panel : mouse over */
     function handleMouseOverPanelBackground(event)
     {
@@ -405,7 +421,31 @@ function init(type)
     /* begin battle : mouse down */
     function handleMouseDownBeginBattleTextAndButton(event)
     {
+        /* remove panel elements */
+        panel.removeAllChildren();
+        panel.addChild(panelBackground);
         
+        for(i = 0; i < mapSize; i++)
+            layer[i].removeAllEventListeners();
+        
+        var playerHP = new createjs.Text(player.health, '10px Arial', '#FFF');
+        playerHP.x = player.x + 5;
+        playerHP.y = (player.y == 0) ? 40: player.y - 10;
+        stage.addChild(playerHP);
+        
+        var battleLogText = new createjs.Text('Przebieg walki:', '18px Arial', '#FFF');
+        battleLogText.x = 80;
+        battleLogText.y = 30;
+        panel.addChild(battleLogText);
+        
+        var battleLog = new createjs.Container();
+        battleLog.x = 10;
+        battleLog.y = 50;
+        
+        /* battle : begin */
+        nextWave();
+        
+        panel.addChild(battleLog);
     }
     
     /* layer : mouse over, mouse down */
