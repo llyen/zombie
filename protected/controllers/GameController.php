@@ -6,7 +6,7 @@ class GameController extends Controller
 	{
 		return array(
 			'accessControl',
-			'ajaxOnly + saveMap',
+			'ajaxOnly + saveMap, findPath',
 		);
 	}
 	
@@ -14,7 +14,7 @@ class GameController extends Controller
 	{
 		return array(
             array('allow',
-                'actions'=>array('map', 'saveMap', 'battle'), //??
+                'actions'=>array('map', 'saveMap', 'battle'),
                 'users'=>array('@'),
             ),
 			array('deny',
@@ -71,4 +71,5 @@ class GameController extends Controller
 			'map'=>$map,
 		));
 	}
+	
 }
