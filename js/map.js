@@ -62,6 +62,53 @@ function battleResource(id, name, image, type, damage, damagePattern, effect, co
     this.count = count;
 }
 
+function mapIndexToXY(index)
+{
+    switch(index)
+    {
+        case 0:
+            return 0;
+        case 1:
+            return 32;
+        case 2:
+            return 64;
+        case 3:
+            return 96;
+        case 4:
+            return 128;
+        case 5:
+            return 160;
+        case 6:
+            return 192;
+        case 7:
+            return 224;
+        case 8:
+            return 256;
+        case 9:
+            return 288;
+        case 10:
+            return 320;
+        case 11:
+            return 352;
+        case 12:
+            return 384;
+        case 13:
+            return 416;
+        case 14:
+            return 448;
+        case 15:
+            return 480;
+        case 16:
+            return 512;
+        case 17:
+            return 544;
+        case 18:
+            return 576;
+        case 19:
+            return 608;
+    }
+}
+
 /* map objects init */
 function init(type)
 {
@@ -390,11 +437,30 @@ function init(type)
             var enemyPosition = mapGraph.nodes[enemySpawns[i].y_index][enemySpawns[i].x_index];
             var path = astar.search(mapGraph.nodes, enemyPosition, playerPosition, {diagonal: true, closest: true});
             zombies.push(new zombie(enemySpawns[i].x, enemySpawns[i].y, 50*wave, 30*wave, path));
+            var sprite = new createjs.Bitmap(objectsImagesUrl + 'zombie1.png'); //image!!!
+            sprite.x = enemySpawns[i].x;
+            sprite.y = enemySpawns[i].y;
+            sprite.name = 'zombieSprite_'+sprite.x+'_'+sprite.y;
+            stage.addChild(sprite);
         }
         
-        
-            
         wave++;
+    }
+    
+    function moveEnemy(enemy)
+    {
+        if(enemy.path[0])
+        {
+            stage.removeChild(stage.getChildByName('zombieSprite_'+enemy.x+'_'+enemy.y));
+            enemy.x = mapIndexToXY(enemy.path[0].y);
+            enemy.y = mapIndexToXY(enemy.path[0].x);
+            enemy.path.shift();
+            var sprite = new createjs.Bitmap(objectsImagesUrl + 'zombie1.png');
+            sprite.x = enemy.x;
+            sprite.y = enemy.y;
+            sprite.name = 'zombieSprite_'+enemy.x+'_'+enemy.y;
+            stage.addChild(sprite);
+        }
     }
     
     /* panel : mouse over */
@@ -467,6 +533,11 @@ function init(type)
         var battleLog = new createjs.Container();
         battleLog.x = 10;
         battleLog.y = 50;
+        
+        /* ticker */
+        //createjs.Ticker.setFPS(24);
+        createjs.Ticker.setInterval(500);
+        createjs.Ticker.setPaused(false);
         
         /* battle : begin */
         nextWave();
@@ -756,10 +827,15 @@ function init(type)
         }
     }
 
-	createjs.Ticker.addListener(stage);
-
+    createjs.Ticker.addEventListener('tick', tick);
+    createjs.Ticker.setPaused(true);
+    
 	function tick()
     {
+        if(!createjs.Ticker.getPaused())
+            if(player.health > 0)
+                for(z = 0; z < zombies.length; z++)
+                    moveEnemy(zombies[z]);
 		stage.update();
 	}
 }	
