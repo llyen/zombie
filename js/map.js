@@ -23,26 +23,31 @@ function mapField(id, name, image, solid, speed, effect)
     this.effect = effect;
 }
 
-function champion(x, y, health, damage)
+function champion(x, y, x_index, y_index, health, damage)
+{
+    this.x = x;
+    this.y = y;
+    this.x_index = x_index;
+    this.y_index = y_index;
+    this.health = health;
+    this.damage = damage;
+}
+
+function enemySpawn(x, y, x_index, y_index)
+{
+    this.x = x;
+    this.y = y;
+    this.x_index = x_index;
+    this.y_index = y_index;
+}
+
+function zombie(x, y, health, damage, path) //id, image
 {
     this.x = x;
     this.y = y;
     this.health = health;
     this.damage = damage;
-}
-
-function enemySpawn(x, y)
-{
-    this.x = x;
-    this.y = y;
-}
-
-function zombie(x, y, health, damage) //id, image
-{
-    this.x = x;
-    this.y = y;
-    this.health = health;
-    this.damage = damage;
+    this.path = path;
 }
 
 function battleResource(id, name, image, type, damage, damagePattern, effect, count)
@@ -106,30 +111,47 @@ function init(type)
 	var step_x = 0;
 	var step_y = 0;
 	var count_x = 0; //liczx
+    var count_y = 0;
+    var mapMatrix = new Array();
+    var mapMatrixRow = new Array();
 	for(i = 0; i < mapSize; i++)
 	{
-        if(type == 'deploy' && map[i] == 8)
+        if(type=='deploy' && map[i] == 8)
         {
             player.x = step_x;
             player.y = step_y;
+            player.x_index = count_x;
+            player.y_index = count_y;
         }
         
         if(map[i] == 7)
-            enemySpawns.push(new enemySpawn(step_x, step_y));
+            enemySpawns.push(new enemySpawn(step_x, step_y, count_x, count_y));
             
 		pieces[i] = new mapObject(step_x, step_y, map[i], mapFieldsParams[map[i]]['image'], mapFieldsParams[map[i]]['solid']);
+        
+        if(pieces[i].solid == 1)
+            mapMatrixRow[count_x] = 0;
+        else
+            mapMatrixRow[count_x] = 1;
+        
         count_x++;
         if(count_x == 20)
         {
+            mapMatrix[count_y] = mapMatrixRow;
+            mapMatrixRow = new Array();
 			step_x = 0;
 			step_y += 32;
 			count_x = 0;
+            count_y++;
 		}
 		else
 		{
 			step_x += 32;
 		}
 	}
+    
+    if(type == 'deploy')
+        var mapGraph = new Graph(mapMatrix);
 
     /* map layer */
     var layer = new Array();
@@ -205,9 +227,9 @@ function init(type)
                     var effect;
                 
                     if(currentField.solid == 0)
-                        solid = 'Nie';
-                    else
                         solid = 'Tak';
+                    else
+                        solid = 'Nie';
                     
                     if(currentField.effect == 0)
                         effect = 'Brak';
@@ -362,8 +384,13 @@ function init(type)
     /* battle: next turn */
     function nextWave()
     {
+        var playerPosition = mapGraph.nodes[player.y_index][player.x_index];
         for(i = 0; i < enemySpawns.length; i++)
-            zombies.push(new zombie(enemySpawns[i].x, enemySpawns[i].y, 50*wave, 30*wave));
+        {
+            var enemyPosition = mapGraph.nodes[enemySpawns[i].y_index][enemySpawns[i].x_index];
+            var path = astar.search(mapGraph.nodes, enemyPosition, playerPosition, {diagonal: true, closest: true});
+            zombies.push(new zombie(enemySpawns[i].x, enemySpawns[i].y, 50*wave, 30*wave, path));
+        }
         
         
             

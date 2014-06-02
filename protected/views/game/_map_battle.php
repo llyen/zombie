@@ -17,6 +17,7 @@ Yii::app()->clientScript->registerScript(
 );
 
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/easeljs.min.js', CClientScript::POS_HEAD);
+Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/astar.js', CClientScript::POS_HEAD);
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/map.js', CClientScript::POS_BEGIN);
 ?>
 <canvas id="map" width="1000" height="1000">
