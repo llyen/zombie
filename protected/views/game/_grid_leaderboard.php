@@ -10,15 +10,18 @@
         array(
             'name'=>'user.username'
         ),
-        array(
-            'name'=>'user.first_name',
-        ),
-        array(
-            'name'=>'user.last_name',
-        ),
+        //array(
+        //    'name'=>'user.first_name',
+        //),
+        //array(
+        //    'name'=>'user.last_name',
+        //),
         'first_currency',
         'second_currency',
     ),
     'summaryText'=>'',
     'emptyText'=>'Brak danych.',
-    ));
+    'htmlOptions'=>array(
+        'style'=>'width: 75%',
+    ),
+));
