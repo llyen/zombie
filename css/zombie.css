@@ -214,6 +214,10 @@ section.article {
 	content: "\e00f";
 }
 
+.icon-files:after {
+	content: "\e601";
+}
+
 .main {
 	margin: 10px 0px 60px;
 	padding: 0px;

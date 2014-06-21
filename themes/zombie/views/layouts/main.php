@@ -55,13 +55,15 @@
 						echo CHtml::link('', array('/user/list'), array('class'=>'bp-icon icon-user', 'data-info'=>'Użytkownicy'));
 						//echo CHtml::link('', '#', array('class'=>'bp-icon icon-preferences', 'data-info'=>'Wyzwania', 'id'=>'showLeftPreferences'));
 						echo CHtml::link('', array('/group/list'), array('class'=>'bp-icon icon-group', 'data-info'=>'Grupy'));
-						echo CHtml::link('', array('/notification/send'), array('class'=>'bp-icon icon-communication', 'data-info'=>'Komunikacja'));	
+						echo CHtml::link('', array('/notification/send'), array('class'=>'bp-icon icon-communication', 'data-info'=>'Komunikacja'));
+						echo CHtml::link('', array('/file/list'), array('class'=>'bp-icon icon-files', 'data-info'=>'Udostępnione pliki'));
 					}
 					else
 					{
 						echo CHtml::link('', '#', array('class'=>'bp-icon icon-inventory', 'data-info'=>'Dashboard'));
 						echo CHtml::link('', array('/user/index'), array('class'=>'bp-icon icon-user', 'data-info'=>'Karta postaci'));
 						echo CHtml::link('', array('/class_/index'), array('class'=>'bp-icon icon-classes', 'data-info'=>'Terminy zajęć'));
+						echo CHtml::link('', array('/file/index'), array('class'=>'bp-icon icon-files', 'data-info'=>'Udostępnione pliki'));
 						echo CHtml::link('', array('/resource/items'), array('class'=>'bp-icon icon-shop', 'data-info'=>'Dostępne zasoby'));
 						echo CHtml::link('', array('/resource/abilities'), array('class'=>'bp-icon icon-abilities', 'data-info'=>'Umiejętności'));
 						echo CHtml::link('', array('/game/map'), array('class'=>'bp-icon icon-epic-battle', 'data-info'=>'Epickie wyzwanie'));
