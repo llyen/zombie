@@ -66,6 +66,7 @@
 						echo CHtml::link('', array('/resource/abilities'), array('class'=>'bp-icon icon-abilities', 'data-info'=>'Umiejętności'));
 						echo CHtml::link('', array('/game/map'), array('class'=>'bp-icon icon-epic-battle', 'data-info'=>'Epickie wyzwanie'));
 					}
+					echo CHtml::link('', array('/game/leaderboard'), array('class'=>'bp-icon icon-ranking', 'data-info'=>'Ranking graczy'));
 					echo CHtml::link('', array('/user/logout'), array('class'=>'bp-icon icon-logout', 'data-info'=>'Wyloguj się'));
 			    }
 			    else

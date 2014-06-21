@@ -6,7 +6,7 @@ class GameController extends Controller
 	{
 		return array(
 			'accessControl',
-			'ajaxOnly + saveMap, findPath',
+			'ajaxOnly + saveMap',
 		);
 	}
 	
@@ -14,7 +14,7 @@ class GameController extends Controller
 	{
 		return array(
             array('allow',
-                'actions'=>array('map', 'saveMap', 'battle'),
+                'actions'=>array('map', 'saveMap', 'battle', 'leaderboard'),
                 'users'=>array('@'),
             ),
 			array('deny',
@@ -63,4 +63,16 @@ class GameController extends Controller
 		));
 	}
 	
+	public function actionLeaderboard()
+	{
+		$model = new Player('search');
+		$model->top();
+		$model->unsetAttributes();  // clear any default values
+		if(isset($_GET['Player']))
+			$model->attributes=$_GET['Player'];
+		
+		$this->render('leaderboard', array(
+			'model' => $model,
+		));
+	}
 }

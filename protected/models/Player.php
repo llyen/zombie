@@ -107,6 +107,15 @@ class Player extends CActiveRecord
 		));
 	}
 
+	public function top()
+	{
+		$this->getDbCriteria()->mergeWith(array(
+			'order'=>'first_currency desc, second_currency desc',
+			'limit'=>10,
+		));
+		return $this;
+	}
+	
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
