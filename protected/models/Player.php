@@ -110,7 +110,7 @@ class Player extends CActiveRecord
 	public function top()
 	{
 		$this->getDbCriteria()->mergeWith(array(
-			'order'=>'first_currency desc, second_currency desc',
+			'order'=>'first_currency + second_currency desc',
 			'limit'=>10,
 		));
 		return $this;
