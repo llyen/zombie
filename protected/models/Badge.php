@@ -32,8 +32,9 @@ class Badge extends ManyManyActiveRecord
 		// will receive user inputs.
 		return array(
 			array('name', 'required'),
-			array('name, image', 'length', 'max'=>255),
+			array('name, image', 'length', 'max'=>255, 'message'=>'{attribute} może mieć maksymalną długość 255 znaków'),
 			array('description', 'safe'),
+			array('image', 'file', 'allowEmpty'=>true, 'types'=>'gif, jpg, png', 'wrongType'=>'Nieprawidłowy typ pliku ({extensions})'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, name, description, image', 'safe', 'on'=>'search'),

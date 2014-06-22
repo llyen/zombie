@@ -51,8 +51,15 @@ class BadgeController extends Controller
 		if(isset($_POST['Badge']))
 		{
 			$model->attributes=$_POST['Badge'];
+            $image = CUploadedFile::getInstance($model, 'image');
+			if($image !== null) $model->image = $image->name;
+			
 			if($model->save())
+			{
+				if($image !== null)
+					$image->saveAs(Yii::app()->basePath.'/../badges/'.$model->image);
 				$this->redirect(array('badge/list'));
+            }
 		}
 
 		$this->render('create',array(

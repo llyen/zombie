@@ -23,6 +23,8 @@
         ),
         array(
             'name' => 'description',
+            'type' => 'raw',
+            'value' => '$this->grid->controller->markdown->transform($data->description)',  
             'htmlOptions' => array(
                 'style' => 'vertical-align: middle;',
             ),
