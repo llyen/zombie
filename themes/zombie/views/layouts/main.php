@@ -55,6 +55,8 @@
 						echo CHtml::link('', array('/user/list'), array('class'=>'bp-icon icon-user', 'data-info'=>'Użytkownicy'));
 						//echo CHtml::link('', '#', array('class'=>'bp-icon icon-preferences', 'data-info'=>'Wyzwania', 'id'=>'showLeftPreferences'));
 						echo CHtml::link('', array('/group/list'), array('class'=>'bp-icon icon-group', 'data-info'=>'Grupy'));
+						echo CHtml::link('', array('/badge/list'), array('class'=>'bp-icon icon-badge', 'data-info'=>'Odznaczenia'));
+						echo CHtml::link('', array('/challenge/list'), array('class'=>'bp-icon icon-challenge', 'data-info'=>'Wyzwania'));
 						echo CHtml::link('', array('/notification/send'), array('class'=>'bp-icon icon-communication', 'data-info'=>'Komunikacja'));
 						echo CHtml::link('', array('/file/list'), array('class'=>'bp-icon icon-files', 'data-info'=>'Udostępnione pliki'));
 					}

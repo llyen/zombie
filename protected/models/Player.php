@@ -17,8 +17,10 @@
  * @property User $user
  * @property Presence[] $presences
  * @property Resource[] $resources
+ * @property Badge[] $badges
+ * @property Challenge[] $challenges
  */
-class Player extends CActiveRecord
+class Player extends ManyManyActiveRecord
 {
 	/**
 	 * @return string the associated database table name
@@ -57,6 +59,8 @@ class Player extends CActiveRecord
 			'user' => array(self::BELONGS_TO, 'User', 'user_id'),
 			'presences' => array(self::HAS_MANY, 'Presence', 'player_id'),
 			'resources' => array(self::HAS_MANY, 'Resource', 'player_id'),
+			'badges' => array(self::MANY_MANY, 'Badge', 'players_badges(player_id, badge_id)'),
+			'challenges' => array(self::MANY_MANY, 'Challenge', 'players_challenges(player_id, challenge_id)'),
 		);
 	}
 

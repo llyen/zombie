@@ -218,6 +218,14 @@ section.article {
 	content: "\e601";
 }
 
+.icon-badge:after {
+	content: "\e605";
+}
+
+.icon-challenge:after {
+	content: "\e604";
+}
+
 .main {
 	margin: 10px 0px 60px;
 	padding: 0px;

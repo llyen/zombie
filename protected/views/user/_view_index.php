@@ -169,3 +169,38 @@
     </table>
 </div>
 <?php endif; ?>
+<?php if(!empty($model->player->badges)): ?>
+<?php
+    $this->widget(
+		'bootstrap.widgets.TbLabel',
+		array(
+			'type' => 'important',
+		    'label' => 'Odznaczenia',
+			'htmlOptions' => array(
+				'style' => 'margin: 10px 0px; width: 100%; text-align:center; font-weight: normal; padding: 8px 0px; font-size: 16px;',	
+			),
+		)
+	);
+?>
+
+<div class="grid-view">
+    <table class="items table table-striped table-condensed">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Nazwa</th>
+                <th>Opis</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach($model->player->badges as $badge): ?>
+                <tr>
+                    <td style="vertical-align: middle;"><?php echo $badge->image; ?></td>
+                    <td style="vertical-align: middle;"><?php echo $badge->name; ?></td>
+                    <td style="vertical-align: middle;"><?php echo $badge->description; ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
+<?php endif; ?>
