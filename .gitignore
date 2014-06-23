@@ -1,4 +1,6 @@
 assets/*
+badges/*
+files/*
 !assets/.gitignore
 protected/runtime/*
 !protected/runtime/.gitignore
