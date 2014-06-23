@@ -27,7 +27,7 @@
             'buttons'=>array(
                 '_solutions' => array(
                     'label'=>'rozwiązania',
-                    'url'=>'Yii::app()->createUrl(\'challenge/listSolutions\', array(\'id\'=>$data->id))',
+                    'url'=>'Yii::app()->createUrl(\'solution/list\', array(\'id\'=>$data->id))',
                     'imageUrl'=>Yii::app()->request->baseUrl.'/images/solutions.png',
                 ),  
             ),

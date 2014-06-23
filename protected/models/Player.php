@@ -18,7 +18,7 @@
  * @property Presence[] $presences
  * @property Resource[] $resources
  * @property Badge[] $badges
- * @property Challenge[] $challenges
+ * @property Solution[] $solutions
  */
 class Player extends ManyManyActiveRecord
 {
@@ -60,7 +60,7 @@ class Player extends ManyManyActiveRecord
 			'presences' => array(self::HAS_MANY, 'Presence', 'player_id'),
 			'resources' => array(self::HAS_MANY, 'Resource', 'player_id'),
 			'badges' => array(self::MANY_MANY, 'Badge', 'players_badges(player_id, badge_id)'),
-			'challenges' => array(self::MANY_MANY, 'Challenge', 'players_challenges(player_id, challenge_id)'),
+			'solutions' => array(self::HAS_MANY, 'Solution', 'player_id'),
 		);
 	}
 

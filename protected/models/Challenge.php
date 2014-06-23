@@ -16,9 +16,9 @@
  * The followings are the available model relations:
  * @property Badge $badge
  * @property Group $group
- * @property Player[] $players
+ * @property Solution[] $solutions
  */
-class Challenge extends ManyManyActiveRecord
+class Challenge extends CActiveRecord
 {
 	public $group_name;
 	
@@ -59,7 +59,7 @@ class Challenge extends ManyManyActiveRecord
 		return array(
 			'badge' => array(self::BELONGS_TO, 'Badge', 'badge_id'),
 			'group' => array(self::BELONGS_TO, 'Group', 'group_id'),
-			'players' => array(self::MANY_MANY, 'Player', 'players_challenges(challenge_id, player_id)'),
+			'solutions' => array(self::HAS_MANY, 'Solution', 'challenge_id'),
 		);
 	}
 
