@@ -19,7 +19,7 @@ class ChallengeController extends Controller
                 'users'=>array('@'),
             ),
             array('allow',
-                'actions'=>array('list', 'create', 'update', 'delete'),
+                'actions'=>array('list', 'view', 'create', 'update', 'delete'),
                 'expression'=>'$user->isAdmin() === true',
             ),
 			array('deny',
@@ -38,6 +38,13 @@ class ChallengeController extends Controller
 		$this->render('list', array(
 			'model'=>$model,
 		));
+    }
+    
+    public function actionView($id)
+    {
+        $this->render('view', array(
+            'model'=>$this->loadModel($id),
+        ));
     }
     
     public function actionCreate()
@@ -81,6 +88,22 @@ class ChallengeController extends Controller
     {
         $model=$this->loadModel($id);
 		
+        $groupsModel = Group::model()->findAll();
+        $groups = array();
+        
+        foreach($groupsModel as $group)
+        {
+            $groups[$group->id] = $group->name;
+        }
+        
+        $badgesModel = Badge::model()->findAll();
+        $badges = array();
+        $badges[null] = '--- brak ---';
+        foreach($badgesModel as $badge)
+        {
+            $badges[$badge->id] = $badge->name;
+        }
+        
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
@@ -93,6 +116,8 @@ class ChallengeController extends Controller
 
 		$this->render('update',array(
 			'model'=>$model,
+            'groups'=>$groups,
+            'badges'=>$badges,
 		));
     }
     

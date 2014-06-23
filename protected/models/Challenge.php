@@ -132,4 +132,10 @@ class Challenge extends ManyManyActiveRecord
 	{
 		return parent::model($className);
 	}
+	
+	protected function beforeSave()
+	{
+		if($this->badge_id == '') $this->badge_id = null;
+		return parent::beforeSave();
+	}
 }
