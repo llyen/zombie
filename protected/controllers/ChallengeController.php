@@ -1,6 +1,6 @@
 <?php
 
-class BadgeController extends Controller
+class ChallengeController extends Controller
 {
     
     public function filters()
@@ -30,10 +30,10 @@ class BadgeController extends Controller
 	
 	public function actionList()
     {
-        $model=new Badge('search');
+        $model=new Challenge('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Badge']))
-			$model->attributes=$_GET['Badge'];
+		if(isset($_GET['Challenge']))
+			$model->attributes=$_GET['Challenge'];
 
 		$this->render('list', array(
 			'model'=>$model,
@@ -42,34 +42,38 @@ class BadgeController extends Controller
     
     public function actionCreate()
     {
-        $model=new Badge;
-
+        $model=new Challenge;
+        
+        $groupsModel = Group::model()->findAll();
+        $groups = array();
+        
+        foreach($groupsModel as $group)
+        {
+            $groups[$group->id] = $group->name;
+        }
+        
+        $badgesModel = Badge::model()->findAll();
+        $badges = array();
+        $badges[null] = '--- brak ---';
+        foreach($badgesModel as $badge)
+        {
+            $badges[$badge->id] = $badge->name;
+        }
+        
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Badge']))
+		if(isset($_POST['Challenge']))
 		{
-			$model->attributes=$_POST['Badge'];
-			
-			Yii::import('ext.EUploadedImage');
-            $image = EUploadedImage::getInstance($model, 'image');
-			if($image !== null)
-			{
-				$model->image = $image->name;
-				$image->maxWidth = 128;
-				$image->maxHeight = 128;
-			}
-			
+			$model->attributes=$_POST['Challenge'];
 			if($model->save())
-			{
-				if($image !== null)
-					$image->saveAs(Yii::app()->basePath.'/../badges/'.$model->image);
-				$this->redirect(array('badge/list'));
-            }
+				$this->redirect(array('challenge/list'));
 		}
 
 		$this->render('create',array(
 			'model'=>$model,
+            'groups'=>$groups,
+            'badges'=>$badges,
 		));
     }
     
@@ -80,26 +84,12 @@ class BadgeController extends Controller
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Badge']))
+		if(isset($_POST['Challenge']))
 		{
-			$model->attributes=$_POST['Badge'];
-			
-			Yii::import('ext.EUploadedImage');
-			$image = EUploadedImage::getInstance($model, 'image');
-			if($image !== null)
-			{
-				if($model->image != 'default.png') unlink(Yii::app()->basePath.'/../badges'.$model->image);
-				$model->image = $image->name;
-				$image->maxWidth = 128;
-				$image->maxHeight = 128;
-			}
+			$model->attributes=$_POST['Challenge'];
 			if($model->save())
-			{
-				if($image !== null)
-					$image->saveAs(Yii::app()->basePath.'/../badges/'.$model->image);
-				$this->redirect(array('badge/list'));
-			}
-		}
+				$this->redirect(array('challenge/list'));
+        }
 
 		$this->render('update',array(
 			'model'=>$model,
@@ -108,18 +98,16 @@ class BadgeController extends Controller
     
     public function actionDelete($id)
     {
-        $model = $this->loadModel($id);
-		if($model->image != 'default.png') unlink(Yii::app()->basePath.'/../badges/'.$model->image);
-		$model->delete();
+        $this->loadModel($id)->delete();
 	
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		if(!isset($_GET['ajax']))
-			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('badge/list'));
+			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('challenge/list'));
     }
     
     public function loadModel($id)
 	{
-		$model=Badge::model()->findByPk($id);
+		$model=Challenge::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;

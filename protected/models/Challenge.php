@@ -20,6 +20,8 @@
  */
 class Challenge extends ManyManyActiveRecord
 {
+	public $group_name;
+	
 	/**
 	 * @return string the associated database table name
 	 */
@@ -36,13 +38,14 @@ class Challenge extends ManyManyActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('group_id, badge_id, name, deadline', 'required'),
-			array('group_id, badge_id, value_first_currency, value_second_currency', 'length', 'max'=>10),
+			array('group_id, name, deadline', 'required'),
+			array('group_id, badge_id', 'length', 'max'=>10),
 			array('name', 'length', 'max'=>255),
 			array('description', 'safe'),
+			array('value_first_currency, value_second_currency', 'numerical', 'integerOnly'=>true, 'min'=>0, 'tooSmall'=>'Proszę wprowadzić wartość dodatnią!'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, group_id, badge_id, name, description, value_first_currency, value_second_currency, deadline', 'safe', 'on'=>'search'),
+			array('id, group_id, badge_id, name, description, value_first_currency, value_second_currency, deadline, group_name', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -67,13 +70,14 @@ class Challenge extends ManyManyActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'group_id' => 'Group',
-			'badge_id' => 'Badge',
-			'name' => 'Name',
-			'description' => 'Description',
-			'value_first_currency' => 'Value First Currency',
-			'value_second_currency' => 'Value Second Currency',
-			'deadline' => 'Deadline',
+			'group_id' => 'Grupa',
+			'badge_id' => 'Odznaczenie',
+			'name' => 'Nazwa wyzwania',
+			'description' => 'Opis',
+			'value_first_currency' => 'Kapsle za realizację',
+			'value_second_currency' => 'Przeciwciała za realizację',
+			'deadline' => 'Termin realizacji',
+			'group_name' => 'Grupa',
 		);
 	}
 
@@ -94,9 +98,9 @@ class Challenge extends ManyManyActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
-
+		$criteria->with = array('group');
 		$criteria->compare('id',$this->id,true);
-		$criteria->compare('group_id',$this->group_id,true);
+		$criteria->compare('group.name',$this->group_name,true);
 		$criteria->compare('badge_id',$this->badge_id,true);
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('description',$this->description,true);
@@ -106,6 +110,15 @@ class Challenge extends ManyManyActiveRecord
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+			'sort'=>array(
+				'attributes'=>array(
+					'group_name'=>array(
+						'asc'=>'group.name',
+						'desc'=>'group.name desc',
+					),
+					'*',
+				),
+			),
 		));
 	}
 

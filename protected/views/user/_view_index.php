@@ -195,7 +195,7 @@
         <tbody>
             <?php foreach($model->player->badges as $badge): ?>
                 <tr>
-                    <td style="vertical-align: middle;"><?php echo $badge->image; ?></td>
+                    <td style="vertical-align: middle; width: 150px;"><?php echo CHtml::image(Yii::app()->request->baseUrl.'/badges/'.$badge->image); ?></td>
                     <td style="vertical-align: middle;"><?php echo $badge->name; ?></td>
                     <td style="vertical-align: middle;"><?php echo $badge->description; ?></td>
                 </tr>
