@@ -51,8 +51,15 @@ class BadgeController extends Controller
 		if(isset($_POST['Badge']))
 		{
 			$model->attributes=$_POST['Badge'];
-            $image = CUploadedFile::getInstance($model, 'image');
-			if($image !== null) $model->image = $image->name;
+			
+			Yii::import('ext.EUploadedImage');
+            $image = EUploadedImage::getInstance($model, 'image');
+			if($image !== null)
+			{
+				$model->image = $image->name;
+				$image->maxWidth = 128;
+				$image->maxHeight = 128;
+			}
 			
 			if($model->save())
 			{
@@ -70,15 +77,29 @@ class BadgeController extends Controller
     public function actionUpdate($id)
     {
         $model=$this->loadModel($id);
-
+		
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
 		if(isset($_POST['Badge']))
 		{
 			$model->attributes=$_POST['Badge'];
+			
+			Yii::import('ext.EUploadedImage');
+			$image = EUploadedImage::getInstance($model, 'image');
+			if($image !== null)
+			{
+				if($model->image != 'default.png') unlink(Yii::app()->basePath.'/../badges'.$model->image);
+				$model->image = $image->name;
+				$image->maxWidth = 128;
+				$image->maxHeight = 128;
+			}
 			if($model->save())
+			{
+				if($image !== null)
+					$image->saveAs(Yii::app()->basePath.'/../badges/'.$model->image);
 				$this->redirect(array('badge/list'));
+			}
 		}
 
 		$this->render('update',array(
@@ -88,7 +109,9 @@ class BadgeController extends Controller
     
     public function actionDelete($id)
     {
-        $this->loadModel($id)->delete();
+        $model = $this->loadModel($id);
+		if($model->image != 'default.png') unlink(Yii::app()->basePath.'/../badges/'.$model->image);
+		$model->delete();
 	
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		if(!isset($_GET['ajax']))
