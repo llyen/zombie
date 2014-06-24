@@ -147,11 +147,9 @@ class User extends CActiveRecord
 	protected function beforeValidate()
 	{
 		if($this->isNewRecord)
-		{
 			$this->created_at = date('Y-m-d H:i:s');
-			$this->last_visit_at = date('Y-m-d H:i:s');
-		}
-		
+		$this->last_visit_at = date('Y-m-d H:i:s');
+
 		return parent::beforeValidate();
 	}
 	

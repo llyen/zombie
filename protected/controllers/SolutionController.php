@@ -50,9 +50,15 @@ class SolutionController extends Controller
     
 	public function actionList($id)
     {
-        $model = Solution::model()->findAll('challenge_id = :challenge_id', array(':challenge_id' => $id));
-        foreach($model as $m)
-            var_dump($m->player);
+        $model=new Solution('search');
+		$model->byChallenge($id);
+		$model->unsetAttributes();  // clear any default values
+		if(isset($_GET['Solution']))
+			$model->attributes=$_GET['Solution'];
+
+		$this->render('list', array(
+			'model'=>$model,
+		));
     }
     
     public function actionRate()

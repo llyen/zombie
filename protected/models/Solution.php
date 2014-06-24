@@ -11,6 +11,7 @@
  * @property string $file
  * @property integer $completed
  * @property integer $completion_level
+ * @property string $posted_at
  *
  * The followings are the available model relations:
  * @property Challenges $challenge
@@ -34,14 +35,14 @@ class Solution extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('player_id, challenge_id', 'required'),
+			array('player_id, challenge_id, posted_at', 'required'),
 			array('completed, completion_level', 'numerical', 'integerOnly'=>true),
 			array('player_id, challenge_id', 'length', 'max'=>10),
 			array('file', 'length', 'max'=>255),
 			array('solution', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, player_id, challenge_id, solution, file, completed, completion_level', 'safe', 'on'=>'search'),
+			array('id, player_id, challenge_id, solution, file, completed, completion_level, posted_at', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -65,12 +66,13 @@ class Solution extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'player_id' => 'Player',
-			'challenge_id' => 'Challenge',
-			'solution' => 'Solution',
-			'file' => 'File',
-			'completed' => 'Completed',
-			'completion_level' => 'Completion Level',
+			'player_id' => 'Gracz',
+			'challenge_id' => 'Wyzwanie',
+			'solution' => 'Treść rozwiązania',
+			'file' => 'Plik',
+			'completed' => 'Czy zakończone?',
+			'completion_level' => 'Poziom ukończenia',
+			'posted_at' => 'Data zamieszczenia',
 		);
 	}
 
@@ -99,6 +101,7 @@ class Solution extends CActiveRecord
 		$criteria->compare('file',$this->file,true);
 		$criteria->compare('completed',$this->completed);
 		$criteria->compare('completion_level',$this->completion_level);
+		$criteria->compare('posted_at',$this->posted_at,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -114,5 +117,21 @@ class Solution extends CActiveRecord
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
+	}
+	
+	public function byChallenge($challenge_id)
+	{
+		$this->getDbCriteria()->mergeWith(array(
+			'condition'=>'challenge_id='.$challenge_id,
+			'order'=>'posted_at desc',
+		));
+		return $this;
+	}
+	
+	protected function beforeValidate()
+	{
+		if($this->scenario != 'rate')
+			$this->posted_at = date('Y-m-d H:i:s');
+		return parent::beforeValidate();
 	}
 }
