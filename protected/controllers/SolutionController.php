@@ -19,7 +19,7 @@ class SolutionController extends Controller
                 'users'=>array('@'),
             ),
             array('allow',
-                'actions'=>array('list', 'rate'),
+                'actions'=>array('list', 'preview', 'rate'),
                 'expression'=>'$user->isAdmin() === true',
             ),
 			array('deny',
@@ -28,9 +28,11 @@ class SolutionController extends Controller
         );
 	}
 	
-    public function actionView($id)
+    public function actionPreview($id)
     {
-        
+        $this->render('preview', array(
+			'model'=>$this->loadModel($id),
+		));
     }
     
     public function actionCreate($id)
@@ -61,8 +63,31 @@ class SolutionController extends Controller
 		));
     }
     
-    public function actionRate()
+    public function actionRate($id)
     {
+        $model=$this->loadModel($id);
         
+		// Uncomment the following line if AJAX validation is needed
+		// $this->performAjaxValidation($model);
+
+		if(isset($_POST['Solution']))
+		{
+			$model->attributes=$_POST['Solution'];
+			$model->scenario = 'rate';
+			if($model->save())
+				$this->redirect(array('solution/list', 'id'=>$model->challenge_id));
+        }
+
+		$this->render('rate',array(
+			'model'=>$model,
+		));
     }
+	
+	public function loadModel($id)
+	{
+		$model=Solution::model()->findByPk($id);
+		if($model===null)
+			throw new CHttpException(404,'The requested page does not exist.');
+		return $model;
+	}
 }

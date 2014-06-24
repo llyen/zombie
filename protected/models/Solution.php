@@ -36,7 +36,8 @@ class Solution extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('player_id, challenge_id, posted_at', 'required'),
-			array('completed, completion_level', 'numerical', 'integerOnly'=>true),
+			array('completed', 'numerical', 'integerOnly'=>true),
+			array('completion_level', 'numerical', 'integerOnly'=>true, 'min'=>0, 'max'=>100, 'tooSmall'=>'Proszę wprowadzić wartość dodatnią!', 'tooBig'=>'Proszę wprowadzić wartość mniejszą lub równą 100!'),
 			array('player_id, challenge_id', 'length', 'max'=>10),
 			array('file', 'length', 'max'=>255),
 			array('solution', 'safe'),
@@ -132,6 +133,8 @@ class Solution extends CActiveRecord
 	{
 		if($this->scenario != 'rate')
 			$this->posted_at = date('Y-m-d H:i:s');
+		if($this->scenario == 'rate')
+			$this->completed = 1;
 		return parent::beforeValidate();
 	}
 }

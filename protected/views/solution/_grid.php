@@ -6,14 +6,15 @@
     'template'=>"{items}\n{pager}",
     'filter'=>$model,
     'columns'=>array(
-        array(
-            'name'=>'player.user.username',
-        ),
+        'player.user.username',
+        //'player.user.first_name',
+        //'player.user.last_name',
         'posted_at',
         array(
             'name'=>'completed',
             'type'=>'raw',
             'value'=>'($data->completed) ? \'<img src="'.Yii::app()->request->baseUrl.'/images/tick.png" />\' : \'<img src="'.Yii::app()->request->baseUrl.'/images/cross.png" />\'',
+            'filter'=>array(0=>'nie', 1=>'tak'),
         ),
         array(
             'name'=>'completion_level',
@@ -52,8 +53,8 @@
             ),
             'viewButtonIcon'=>false,
             'viewButtonLabel'=>'podgląd',
-            'viewButtonUrl'=>'Yii::app()->createUrl(\'solution/view\', array(\'id\'=>$data->id))',
-            'viewButtonImageUrl'=>Yii::app()->baseUrl.'/images/view.png',
+            'viewButtonUrl'=>'Yii::app()->createUrl(\'solution/preview\', array(\'id\'=>$data->id))',
+            'viewButtonImageUrl'=>Yii::app()->baseUrl.'/images/solutions.png',
         ),
     ),
     'summaryText'=>'',
