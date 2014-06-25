@@ -197,7 +197,7 @@
                 <tr>
                     <td style="vertical-align: middle; width: 150px;"><?php echo CHtml::image(Yii::app()->request->baseUrl.'/badges/'.$badge->image); ?></td>
                     <td style="vertical-align: middle;"><?php echo $badge->name; ?></td>
-                    <td style="vertical-align: middle;"><?php echo $badge->description; ?></td>
+                    <td style="vertical-align: middle;"><?php echo $this->markdown->transform($badge->description); ?></td>
                 </tr>
             <?php endforeach; ?>
         </tbody>
