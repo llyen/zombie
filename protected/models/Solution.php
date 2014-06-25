@@ -132,8 +132,11 @@ class Solution extends CActiveRecord
 	protected function beforeValidate()
 	{
 		if($this->scenario != 'rate')
+		{
 			$this->posted_at = date('Y-m-d H:i:s');
 			$this->player_id = (int) User::model()->findByPk(Yii::app()->user->id)->player->id;
+			$this->file = ($this->file == '') ? null : $this->file;
+		}
 		if($this->scenario == 'rate')
 			$this->completed = 1;
 		return parent::beforeValidate();

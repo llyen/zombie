@@ -60,6 +60,7 @@ class SolutionController extends Controller
 
 		if(isset($_POST['Solution']))
 		{
+			$file = null;
 			$model->attributes=$_POST['Solution'];
 			
 			if(!empty($_FILES['Solution']['tmp_name']['file']))
@@ -100,6 +101,7 @@ class SolutionController extends Controller
 		
 		if(isset($_POST['Solution']))
 		{
+			$file = null;
 			$model->attributes=$_POST['Solution'];
 			
 			if(!empty($_FILES['Solution']['tmp_name']['file']))
@@ -173,7 +175,15 @@ class SolutionController extends Controller
 			$model->attributes=$_POST['Solution'];
 			$model->scenario = 'rate';
 			if($model->save())
-				$this->redirect(array('solution/list', 'id'=>$model->challenge_id));
+			{
+				$challenge = Challenge::model()->findByPk($model->challenge_id);
+				if($challenge->badge_id != null)
+					Reward::claim($model->player_id, array($challenge->badge_id));
+				$model->player->first_currency += ceil($challenge->value_first_currency * $model->completion_level / 100);
+				$model->player->second_currency += ceil($challenge->value_second_currency * $model->completion_level / 100);
+				if($model->player->save())
+					$this->redirect(array('solution/list', 'id'=>$model->challenge_id));
+			}
         }
 
 		$this->render('rate',array(

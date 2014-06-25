@@ -31,11 +31,11 @@
 		</script>
 	</head>
 	<body class="cbp-spmenu-push">
-        <nav class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-left" id="cbp-epic">
-			<h3>Epickie wyzwanie</h3>
-			<?php echo CHtml::link('Kreator mapy', array('/game/map')); ?>
-			<?php echo CHtml::link('Walka', array('/game/battle')); ?>
-		</nav>
+<!--        <nav class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-left" id="cbp-epic">-->
+<!--			<h3>Epickie wyzwanie</h3>-->
+<!--			<?php //echo CHtml::link('Kreator mapy', array('/game/map')); ?>-->
+<!--			<?php //echo CHtml::link('Walka', array('/game/battle')); ?>-->
+<!--		</nav>-->
 		<div class="container">
         	<div class="left hands">
             </div>
@@ -65,6 +65,7 @@
 						echo CHtml::link('', '#', array('class'=>'bp-icon icon-inventory', 'data-info'=>'Dashboard'));
 						echo CHtml::link('', array('/user/index'), array('class'=>'bp-icon icon-user', 'data-info'=>'Karta postaci'));
 						echo CHtml::link('', array('/class_/index'), array('class'=>'bp-icon icon-classes', 'data-info'=>'Terminy zajęć'));
+						echo CHtml::link('', array('/challenge/index'), array('class'=>'bp-icon icon-challenge', 'data-info'=>'Wyzwania'));
 						echo CHtml::link('', array('/file/index'), array('class'=>'bp-icon icon-files', 'data-info'=>'Udostępnione pliki'));
 						echo CHtml::link('', array('/resource/items'), array('class'=>'bp-icon icon-shop', 'data-info'=>'Dostępne zasoby'));
 						echo CHtml::link('', array('/resource/abilities'), array('class'=>'bp-icon icon-abilities', 'data-info'=>'Umiejętności'));
@@ -85,7 +86,7 @@
                     </div>
 		
                     <section class="article">
-			<?php echo $content; ?>
+						<?php echo $content; ?>
                     </section>
                 </div>
             </div>
@@ -95,18 +96,18 @@
             </div>
 		</div>
 		<script>
-			var	menuLeftEpic = document.getElementById( 'cbp-epic' );
-			var	showLeftEpic = document.getElementById( 'showLeftEpic' );
-			var	body = document.body;
-
-
-			if(showLeftEpic != null) {
-				showLeftEpic.onclick = function() {
-					classie.toggle( this, 'active' );
-					classie.toggle( body, 'cbp-spmenu-push-toright' );
-					classie.toggle( menuLeftEpic, 'cbp-spmenu-open' );
-				};
-			}
+			//var	menuLeftEpic = document.getElementById( 'cbp-epic' );
+			//var	showLeftEpic = document.getElementById( 'showLeftEpic' );
+			//var	body = document.body;
+			//
+			//
+			//if(showLeftEpic != null) {
+			//	showLeftEpic.onclick = function() {
+			//		classie.toggle( this, 'active' );
+			//		classie.toggle( body, 'cbp-spmenu-push-toright' );
+			//		classie.toggle( menuLeftEpic, 'cbp-spmenu-open' );
+			//	};
+			//}
     	</script>
 	</body>
 </html>
