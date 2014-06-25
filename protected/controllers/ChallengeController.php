@@ -15,11 +15,11 @@ class ChallengeController extends Controller
 	{
 		return array(
             array('allow',
-                'actions'=>array(''),
+                'actions'=>array('index', 'view'),
                 'users'=>array('@'),
             ),
             array('allow',
-                'actions'=>array('list', 'view', 'create', 'update', 'delete'),
+                'actions'=>array('list', 'preview', 'create', 'update', 'delete'),
                 'expression'=>'$user->isAdmin() === true',
             ),
 			array('deny',
@@ -27,6 +27,27 @@ class ChallengeController extends Controller
 			),
         );
 	}
+	
+	public function actionIndex()
+	{
+		$user = User::model()->findByPk(Yii::app()->user->id);
+		$model = new Challenge('search');
+		$model->byGroup($user->group_id);
+		$model->unsetAttributes();
+		if(isset($_GET['Challenge']))
+			$model->attributes = $_GET['Challenge'];
+		
+		$this->render('index', array(
+			'model'=>$model,
+		));
+	}
+	
+	public function actionView($id)
+    {
+        $this->render('view', array(
+            'model'=>$this->loadModel($id),
+        ));
+    }
 	
 	public function actionList()
     {
@@ -40,9 +61,9 @@ class ChallengeController extends Controller
 		));
     }
     
-    public function actionView($id)
+    public function actionPreview($id)
     {
-        $this->render('view', array(
+        $this->render('preview', array(
             'model'=>$this->loadModel($id),
         ));
     }

@@ -122,6 +122,15 @@ class Challenge extends CActiveRecord
 		));
 	}
 
+	public function byGroup($group_id)
+	{
+		$this->getDbCriteria()->mergeWith(array(
+			'condition'=>'group_id='.$group_id,
+			'order'=>'deadline desc',
+		));
+		return $this;
+	}
+	
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!

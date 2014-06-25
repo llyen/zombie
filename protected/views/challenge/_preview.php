@@ -2,6 +2,9 @@
 $this->widget('bootstrap.widgets.TbDetailView', array(
 	'data'=>$model,
 	'attributes'=>array(
+        array(
+            'name'=>'group.name',
+        ),
 		'name',
 		array(
             'name'=>'description',

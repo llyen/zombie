@@ -33,7 +33,7 @@
             ),
             'viewButtonIcon'=>false,
             'viewButtonLabel'=>'podgląd',
-            'viewButtonUrl'=>'Yii::app()->createUrl(\'challenge/view\', array(\'id\'=>$data->id))',
+            'viewButtonUrl'=>'Yii::app()->createUrl(\'challenge/preview\', array(\'id\'=>$data->id))',
             'viewButtonImageUrl'=>Yii::app()->baseUrl.'/images/view.png',
             'updateButtonIcon'=>false,
             'updateButtonLabel'=>'edycja',

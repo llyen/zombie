@@ -35,6 +35,19 @@ class SolutionController extends Controller
 		));
     }
     
+	public function actionView($id)
+	{
+		$model = $this->loadModel($id);
+		$player = User::model()->findByPk(Yii::app()->user->id)->player;
+		
+		if($model->player_id != $player->id)
+			throw new CHttpException(403,'Dostęp zabroniony.');
+		
+		$this->render('view', array(
+			'model'=>$model,
+		));
+	}
+	
     public function actionCreate($id)
     {
         
@@ -42,14 +55,24 @@ class SolutionController extends Controller
     
     public function actionUpdate($id)
     {
-        
+        $model = $this->loadModel($id);
+		$challenge = Challenge::model()->findByPk($model->challenge_id);
+		$player = User::model()->findByPk(Yii::app()->user->id)->player;
+		
+		if($model->player_id != $player->id)
+			throw new CHttpException(403,'Dostęp zabroniony.');
     }
     
     public function actionDelete($id)
     {
-        
+        $model = $this->loadModel($id);
+		$challenge = Challenge::model()->findByPk($model->challenge_id);
+		$player = User::model()->findByPk(Yii::app()->user->id)->player;
+		
+		if($model->player_id != $player->id)
+			throw new CHttpException(403,'Dostęp zabroniony.');
     }
-    
+	
 	public function actionList($id)
     {
         $model=new Solution('search');
