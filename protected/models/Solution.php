@@ -133,6 +133,7 @@ class Solution extends CActiveRecord
 	{
 		if($this->scenario != 'rate')
 			$this->posted_at = date('Y-m-d H:i:s');
+			$this->player_id = (int) User::model()->findByPk(Yii::app()->user->id)->player->id;
 		if($this->scenario == 'rate')
 			$this->completed = 1;
 		return parent::beforeValidate();

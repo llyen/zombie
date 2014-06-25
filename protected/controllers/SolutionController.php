@@ -50,7 +50,42 @@ class SolutionController extends Controller
 	
     public function actionCreate($id)
     {
-        
+        $model=new Solution;
+        $challenge = Challenge::model()->findByPk($model->challenge_id);
+		
+		if(date('Y-m-d H:i:s') > date('Y-m-d H:i:s', strtotime($challenge->deadline)))
+			throw new CHttpException(403,'Upłynął termin publikacji rozwiązań dla tego wyzwania.');
+		
+		// Uncomment the following line if AJAX validation is needed
+		// $this->performAjaxValidation($model);
+
+		if(isset($_POST['Solution']))
+		{
+			$model->attributes=$_POST['Solution'];
+			
+			if(!empty($_FILES['Solution']['tmp_name']['file']))
+            {
+				$path = Yii::app()->basePath.'/../solutions/'.$id.'/';
+                $file = CUploadedFile::getInstance($model, 'file');
+                if($file !== null)
+				{
+					$model->file = $file->name;
+					if(!is_dir($path))
+						mkdir($path, 0755, true);
+				}
+			}
+			
+			if($model->save())
+			{
+				if($file !== null) $file->saveAs($path.$model->file);
+				$this->redirect(array('challenge/index'));
+			}
+		}
+
+		$this->render('create',array(
+			'model'=>$model,
+			'id'=>$id,
+		));
     }
     
     public function actionUpdate($id)
@@ -61,6 +96,37 @@ class SolutionController extends Controller
 		
 		if($model->player_id != $player->id)
 			throw new CHttpException(403,'Dostęp zabroniony.');
+		if($model->completed || (date('Y-m-d H:i:s') > date('Y-m-d H:i:s', strtotime($challenge->deadline))))
+			throw new CHttpException(403,'Upłynął termin publikacji rozwiązań dla tego wyzwania.');
+		
+		if(isset($_POST['Solution']))
+		{
+			$model->attributes=$_POST['Solution'];
+			
+			if(!empty($_FILES['Solution']['tmp_name']['file']))
+            {
+				$path = Yii::app()->basePath.'/../solutions/'.$model->challenge_id.'/';
+                $file = CUploadedFile::getInstance($model, 'file');
+                if($file !== null)
+				{
+					if(!is_dir($path))
+						mkdir($path, 0755, true);
+					
+					if($model->file !== null) @unlink($path.$model->file);
+					$model->file = $file->name;
+				}
+			}
+			
+			if($model->save())
+			{
+				if($file !== null) $file->saveAs($path.$model->file);
+				$this->redirect(array('challenge/index'));
+			}
+		}
+
+		$this->render('update',array(
+			'model'=>$model,
+		));
     }
     
     public function actionDelete($id)
