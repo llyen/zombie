@@ -7,7 +7,6 @@ class SolutionController extends Controller
 	{
 		return array(
 			'accessControl',
-            'postOnly + delete',
 		);
 	}
 	
@@ -51,7 +50,7 @@ class SolutionController extends Controller
     public function actionCreate($id)
     {
         $model=new Solution;
-        $challenge = Challenge::model()->findByPk($model->challenge_id);
+        $challenge = Challenge::model()->findByPk($id);
 		
 		if(date('Y-m-d H:i:s') > date('Y-m-d H:i:s', strtotime($challenge->deadline)))
 			throw new CHttpException(403,'Upłynął termin publikacji rozwiązań dla tego wyzwania.');
@@ -137,6 +136,16 @@ class SolutionController extends Controller
 		
 		if($model->player_id != $player->id)
 			throw new CHttpException(403,'Dostęp zabroniony.');
+		if($model->completed || (date('Y-m-d H:i:s') > date('Y-m-d H:i:s', strtotime($challenge->deadline))))
+			throw new CHttpException(403,'Upłynął termin publikacji rozwiązań dla tego wyzwania.');
+		
+		if($model->file !== null) @unlink(Yii::app()->basePath.'/../'.$model->challenge_id.'/'.$model->file);
+		
+		$model->delete();
+	
+		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
+		if(!isset($_GET['ajax']))
+			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('challenge/index'));
     }
 	
 	public function actionList($id)
