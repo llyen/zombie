@@ -14,6 +14,7 @@
  * @property string $created_at
  * @property string $last_visit_at
  * @property integer $is_admin
+ * @property string $verify_code
  *
  * The followings are the available model relations:
  * @property Players[] $players
@@ -50,14 +51,14 @@ class User extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('username, password, created_at, last_visit_at', 'required'),
-			array('passwordRepeat', 'required', 'on'=>'update'),
-			array('passwordRepeat', 'compare', 'compareAttribute'=>'password', 'message'=>'Wartości wprowadzone w obu polach różnią się od siebie!', 'on'=>'update'),
+			array('passwordRepeat', 'required', 'on'=>'updateInfo'),
+			array('passwordRepeat', 'compare', 'compareAttribute'=>'password', 'message'=>'Wartości wprowadzone w obu polach różnią się od siebie!', 'on'=>'updateInfo'),
 			array('is_admin', 'numerical', 'integerOnly'=>true),
 			array('group_id', 'length', 'max'=>10),
 			array('username, password, email, first_name, last_name', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, group_id, username, password, email, first_name, last_name, created_at, last_visit_at, is_admin', 'safe', 'on'=>'search'),
+			array('id, group_id, username, password, email, first_name, last_name, created_at, last_visit_at, is_admin, verify_code', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -91,6 +92,7 @@ class User extends CActiveRecord
 			'created_at' => 'Data utworzenia',
 			'last_visit_at' => 'Data ostatniej wizyty',
 			'is_admin' => 'Czy administrator?',
+			'verify_code' => 'Kod weryfikacji',
 		);
 	}
 
@@ -115,6 +117,7 @@ class User extends CActiveRecord
 		$criteria->compare('created_at',$this->created_at,true);
 		$criteria->compare('last_visit_at',$this->last_visit_at,true);
 		$criteria->compare('is_admin',$this->is_admin);
+		$criteria->compare('verify_code',$this->verify_code,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -155,7 +158,7 @@ class User extends CActiveRecord
 	
 	protected function beforeSave()
 	{
-		if($this->isNewRecord || $this->scenario == 'update')
+		if($this->isNewRecord || $this->scenario == 'updateInfo')
 		{
 			$this->password = $this->hashPassword($this->password);
 		}

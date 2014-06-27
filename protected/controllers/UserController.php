@@ -47,7 +47,7 @@ class UserController extends Controller
 	public function actionUpdate()
 	{
 		$model = $this->loadModel(Yii::app()->user->id);
-		$model->scenario = 'update';
+		$model->scenario = 'updateInfo';
 		
 		if(isset($_POST['User']))
 		{

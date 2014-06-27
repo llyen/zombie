@@ -2,10 +2,19 @@
 
 class Notify
 {
-    public static function send(User $user, $title = '', $body = '')
+    public static function send($users, $title = '', $body = '')
 	{
-        if(!is_null($user->email))
-        {
+		$recipients = array();
+
+		if(is_array($users) && !empty($users))
+		{
+			foreach($users as $user)
+				if(!is_null($user->email)) $recipients[] = $user->email; 
+		}
+		else
+			$recipients[] = $users->email;
+        
+        if(!empty($recipients)){
             $subject = '=?UTF-8?B?'.base64_encode($title).'?=';        
         
             $SM = Yii::app()->swiftMailer;
@@ -21,7 +30,7 @@ class Notify
                     ->setFrom(Yii::app()->params['adminEmail'])
                     ->setBody($body, 'text/html');
         
-            $message->setTo($user->email);
+            $message->setTo($recipients);
                 
             if($mailer->send($message))
                 return true;
