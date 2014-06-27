@@ -42,7 +42,7 @@ class BadgeController extends Controller
     
     public function actionCreate()
     {
-        $model=new Badge;
+        $model=new Badge('create');
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
@@ -50,21 +50,23 @@ class BadgeController extends Controller
 		if(isset($_POST['Badge']))
 		{
 			$model->attributes=$_POST['Badge'];
-			
-			Yii::import('ext.EUploadedImage');
-            $image = EUploadedImage::getInstance($model, 'image');
-			if($image !== null)
+			if($model->validate())
 			{
-				$model->image = $image->name;
-				$image->maxWidth = 128;
-				$image->maxHeight = 128;
-			}
-			
-			if($model->save())
-			{
+				Yii::import('ext.EUploadedImage');
+				$image = EUploadedImage::getInstance($model, 'image');
 				if($image !== null)
-					$image->saveAs(Yii::app()->basePath.'/../badges/'.$model->image);
-				$this->redirect(array('badge/list'));
+				{
+					$model->image = $image->name;
+					$image->maxWidth = 128;
+					$image->maxHeight = 128;
+				}
+			
+				if($model->save())
+				{
+					if($image !== null)
+						$image->saveAs(Yii::app()->basePath.'/../badges/'.$model->image);
+					$this->redirect(array('badge/list'));
+				}
             }
 		}
 
