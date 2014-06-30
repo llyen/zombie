@@ -185,7 +185,7 @@ class SolutionController extends Controller
 				$model->player->second_currency += $tmp_value_second_currency;
 				if($model->player->save())
 				{
-					Notify::send($model->player->user, Yii::app()->name.' :: realizacja wyzwania', '<h3>Podsumowanie realizacji wyzwania "'.$challenge->name.'":</h3><p><strong>Poziom ukończenia:</strong>'.$model->completion_level.'%<br /><strong>Zdobyte kapsle:</strong> '.$tmp_value_first_currency.' (łącznie posiadanych: '.$model->player->first_currency.')<br />Zdobyte przeciwciała: '.$tmp_value_second_currency.' (łącznie posiadanych: '.$model->player->second_currency.')</p>');
+					Notify::send($model->player->user, Yii::app()->name.' :: realizacja wyzwania', '<h3>Podsumowanie realizacji wyzwania "'.$challenge->name.'":</h3><p><strong>Poziom ukończenia:</strong> '.$model->completion_level.'%<br /><strong>Zdobyte kapsle:</strong> '.$tmp_value_first_currency.' (łącznie posiadanych: '.$model->player->first_currency.')<br /><strong>Zdobyte przeciwciała:</strong> '.$tmp_value_second_currency.' (łącznie posiadanych: '.$model->player->second_currency.')</p>');
 					$this->redirect(array('solution/list', 'id'=>$model->challenge_id));
 				}
 			}

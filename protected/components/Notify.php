@@ -9,7 +9,7 @@ class Notify
 		if(is_array($users) && !empty($users))
 		{
 			foreach($users as $user)
-				if(!is_null($user->email)) $recipients[] = $user->email; 
+				if(!is_null($user->email) && $user->email != '') $recipients[] = $user->email; 
 		}
 		else
 			$recipients[] = $users->email;
