@@ -95,7 +95,11 @@ class ChallengeController extends Controller
 		{
 			$model->attributes=$_POST['Challenge'];
 			if($model->save())
+			{
+				$users = Group::model()->findByPk((int) $model->group_id)->users;
+				Notify::send($users, Yii::app()->name.' :: nowe wyzwanie', '<h3>Nowe wyzwanie</h3><p>Udostępniono nowe wyzwanie do realizacji. W celu poznania szczegółów zadania proszę się zalogować na platformie.</p>');
 				$this->redirect(array('challenge/list'));
+			}
 		}
 
 		$this->render('create',array(

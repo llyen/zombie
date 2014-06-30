@@ -6,7 +6,10 @@ class Reward
     {
         $player = Player::model()->findByPk($player_id);
         if($player->addRelationRecords('badges', $badges))
+        {
+            Notify::send($player->user, Yii::app()->name.' :: nowe odznaczenie', '<h3>Gratulacje!</h3><p>Zdobyto nowe odznaczenie za realizację wyzwania.</p>');
             return true;
+        }
         return false;
     }
 }

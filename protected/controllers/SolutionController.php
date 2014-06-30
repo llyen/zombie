@@ -179,10 +179,15 @@ class SolutionController extends Controller
 				$challenge = Challenge::model()->findByPk($model->challenge_id);
 				if($challenge->badge_id != null)
 					Reward::claim($model->player_id, array($challenge->badge_id));
-				$model->player->first_currency += ceil($challenge->value_first_currency * $model->completion_level / 100);
-				$model->player->second_currency += ceil($challenge->value_second_currency * $model->completion_level / 100);
+				$tmp_value_first_currency = ceil($challenge->value_first_currency * $model->completion_level / 100);
+				$tmp_value_second_currency = ceil($challenge->value_second_currency * $model->completion_level / 100);
+				$model->player->first_currency += $tmp_value_first_currency;
+				$model->player->second_currency += $tmp_value_second_currency;
 				if($model->player->save())
+				{
+					Notify::send($model->player->user, Yii::app()->name.' :: realizacja wyzwania', '<h3>Podsumowanie realizacji wyzwania "'.$challenge->name.'":</h3><p><strong>Poziom ukończenia:</strong>'.$model->completion_level.'%<br /><strong>Zdobyte kapsle:</strong> '.$tmp_value_first_currency.' (łącznie posiadanych: '.$model->player->first_currency.')<br />Zdobyte przeciwciała: '.$tmp_value_second_currency.' (łącznie posiadanych: '.$model->player->second_currency.')</p>');
 					$this->redirect(array('solution/list', 'id'=>$model->challenge_id));
+				}
 			}
         }
 
