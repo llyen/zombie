@@ -167,7 +167,7 @@ class UserController extends Controller
 			$model->attributes = $_POST['RegisterForm'];
 			if($model->save())
 			{
-				Yii::app()->user->setFlash('userError','Rejestracja przebiegła pomyślnie.');
+				Yii::app()->user->setFlash('userSuccess','Rejestracja przebiegła pomyślnie.');
 				$this->render('success');
 			}
 		}
