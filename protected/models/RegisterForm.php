@@ -19,6 +19,7 @@ class RegisterForm extends CFormModel
 			array('username, password, passwordRepeat, group_id', 'required', 'message'=>'Proszę podaj wartość dla pola {attribute}.'),
 			array('username', 'unique', 'className'=>'User', 'message'=>'Użytkownik o podanej nazwie już istnieje!'),
 			array('passwordRepeat', 'compare', 'compareAttribute'=>'password', 'message'=>'Wartości wprowadzone w obu polach różnią się od siebie!'),
+			array('username, first_name, last_name, email', 'length', 'max'=>255),
 		);
 	}
 
