@@ -85,9 +85,13 @@ class BadgeController extends Controller
 		if(isset($_POST['Badge']))
 		{
 			$model->attributes=$_POST['Badge'];
+			$image = null;
+			if(!empty($_FILES['Badge']['tmp_name']['image']))
+			{
+				Yii::import('ext.EUploadedImage');
+				$image = EUploadedImage::getInstance($model, 'image');
+			}
 			
-			Yii::import('ext.EUploadedImage');
-			$image = EUploadedImage::getInstance($model, 'image');
 			if($image !== null)
 			{
 				if($model->image != 'default.png') unlink(Yii::app()->basePath.'/../badges'.$model->image);
