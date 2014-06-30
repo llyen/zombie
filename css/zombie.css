@@ -429,6 +429,12 @@ ul.yiiPager .selected a
 	color: #FFFFFF;
 }
 
+.dashboard-widget {
+	width: 45%;
+	float: left;
+	margin: 4px 5px;
+}
+
 #footer {
 	width: 100%;
 	padding: 40px 0px;

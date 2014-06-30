@@ -133,9 +133,10 @@ class UserController extends Controller
 			if($model->validate() && $model->login())
 			{
 				$model = $this->loadModel(Yii::app()->user->id);
-				$model->last_visit_at = date('Y-m-d H:i:s');
+				//$model->last_visit_at = date('Y-m-d H:i:s');
 				$model->save();
-				$this->redirect(Yii::app()->user->returnUrl);
+				//$this->redirect(Yii::app()->user->returnUrl);
+				$this->redirect(array((Yii::app()->user->isAdmin()) ? 'dashboard/admin' : 'dashboard/index'));
 			}
 		}
 		// display the login form

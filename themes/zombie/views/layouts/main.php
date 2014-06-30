@@ -51,7 +51,7 @@
 			    {
 					if(Yii::app()->user->isAdmin())
 					{
-						echo CHtml::link('', '#', array('class'=>'bp-icon icon-inventory', 'data-info'=>'Dashboard'));
+						echo CHtml::link('', array('/dashboard/admin'), array('class'=>'bp-icon icon-inventory', 'data-info'=>'Dashboard'));
 						echo CHtml::link('', array('/user/list'), array('class'=>'bp-icon icon-user', 'data-info'=>'Użytkownicy'));
 						//echo CHtml::link('', '#', array('class'=>'bp-icon icon-preferences', 'data-info'=>'Wyzwania', 'id'=>'showLeftPreferences'));
 						echo CHtml::link('', array('/group/list'), array('class'=>'bp-icon icon-group', 'data-info'=>'Grupy'));
@@ -62,7 +62,7 @@
 					}
 					else
 					{
-						echo CHtml::link('', '#', array('class'=>'bp-icon icon-inventory', 'data-info'=>'Dashboard'));
+						echo CHtml::link('', array('/dashboard/index'), array('class'=>'bp-icon icon-inventory', 'data-info'=>'Dashboard'));
 						echo CHtml::link('', array('/user/index'), array('class'=>'bp-icon icon-user', 'data-info'=>'Karta postaci'));
 						echo CHtml::link('', array('/class_/index'), array('class'=>'bp-icon icon-classes', 'data-info'=>'Terminy zajęć'));
 						echo CHtml::link('', array('/challenge/index'), array('class'=>'bp-icon icon-challenge', 'data-info'=>'Wyzwania'));
