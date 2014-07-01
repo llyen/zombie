@@ -47,7 +47,6 @@ class DashboardController extends Controller
 		
         if(!is_null($challenges))
         {
-            ksort($challenges);
             $dashboard['challenges'] = $challenges;
             $dashboard['countChallenges'] = count($challengesCompleted);
         }
@@ -59,6 +58,33 @@ class DashboardController extends Controller
 			'dashboard'=>$dashboard,
 		));
     }
-    
-    
+	
+	public function actionAdmin()
+	{
+		$dashboard = array(); //najnowsze odznaczenie, ostatnio dodane rozwiązania
+		$players = Player::model()->findAll();
+		$dashboard['countPlayers'] = count($players);
+		if(!is_null($players))
+			$dashboard['players'] = $players;
+		$challenges = Challenge::model()->findAll(array('order'=>'deadline desc'));
+		$dashboard['countChallenges'] = count($challenges);
+		if(!is_null($challenges))
+			$dashboard['challenges'] = $challenges;
+		$badges = Badge::model()->findAll(array('order'=>'id desc'));
+		$dashboard['countBadges'] = count($badges);
+		if(!is_null($badges))
+			$dashboard['badges'] = $badges;
+		$classes = Class_::model()->findAll(array('order'=>'term desc'));
+		$dashboard['countClasses'] = count($classes);
+		if(!is_null($classes))
+			$dashboard['classes'] = $classes;
+		$solutions = Solution::model()->findAll(array('order'=>'posted_at desc'));
+		$dashboard['countSolutions'] = count($solutions);
+		if(!is_null($solutions))
+			$dashboard['solutions'] = $solutions;
+		
+		$this->render('admin', array(
+			'dashboard'=>$dashboard,
+		));
+	}
 }
