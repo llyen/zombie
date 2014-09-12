@@ -62,6 +62,16 @@ function battleResource(id, name, image, type, damage, damagePattern, effect, co
     this.count = count;
 }
 
+function turret(x, y, type, damage, damagePattern, effect)
+{
+	this.x = x;
+	this.y = y;
+	this.type = type;
+	this.damage = damage;
+	this.damagePattern = damagePattern;
+	this.effect = effect;
+}
+
 function mapIndexToXY(index)
 {
     switch(index)
@@ -154,6 +164,7 @@ function init(type)
     var resourcesLayer = new Array();
     var enemySpawns = new Array();
     var zombies = new Array();
+	var turrets = new Array();
     var wave = 1;
 	var step_x = 0;
 	var step_y = 0;
@@ -447,19 +458,96 @@ function init(type)
         wave++;
     }
     
-    function moveEnemy(enemy)
+    function moveEnemy(enemy, enemyId)
     {
+		//console.log(enemy);
         if(enemy.path[0])
         {
-            stage.removeChild(stage.getChildByName('zombieSprite_'+enemy.x+'_'+enemy.y));
-            enemy.x = mapIndexToXY(enemy.path[0].y);
-            enemy.y = mapIndexToXY(enemy.path[0].x);
-            enemy.path.shift();
-            var sprite = new createjs.Bitmap(objectsImagesUrl + 'zombie1.png');
-            sprite.x = enemy.x;
-            sprite.y = enemy.y;
-            sprite.name = 'zombieSprite_'+enemy.x+'_'+enemy.y;
-            stage.addChild(sprite);
+			var log = panel.getChildByName('battleLog').getChildByName('log');
+
+			if(logLimit <= 0)
+			{
+				panel.getChildByName('battleLog').removeChild(log);
+				var log = new createjs.Text("\n", '11px Arial', '#FFF');
+				log.name = 'log';
+				panel.getChildByName('battleLog').addChild(log);
+			}
+			
+			if(turrets.length > 0)
+			{	
+				for(t = 0; t < turrets.length; t++)
+				{
+					if(turrets[t] != undefined)
+					{
+						if(enemy.x >= turrets[t].x - 64 && enemy.x <= turrets[t].x + 64 && enemy.y >= turrets[t].y - 64 && enemy.y <= turrets[t].y + 64)
+						{
+							var dmgp_x = 2;
+							var dmgp_y = 17;//2;
+					
+							if(enemy.y >= turrets[t].y - 64)
+								dmgp_y = 15;//0;
+							else if(enemy.y >= turrets[t].y - 32)
+								dmgp_y = 16;//1;
+							else if(enemy.y <= turrets[t].y + 32)
+								dmgp_y = 18;//3;
+							else if(enemy.y <= turrets[t].y + 64)
+								dmgp_y = 19;//4;
+						
+							if(enemy.x >= turrets[t].x - 64)
+								dmgp_x = 0;
+							else if(enemy.x >= turrets[t].x - 32)
+								dmgp_x = 1;
+							else if(enemy.x <= turrets[t].x + 32)
+								dmgp_x = 3;
+							else if(enemy.x <= turrets[t].x + 64)
+								dmgp_x = 4;
+						
+							var turretDamage = turrets[t].damage * turrets[t].damagePattern[dmgp_y][dmgp_x];
+							enemy.health -= turretDamage;
+							log.text += "Element obronny zadał przeciwnikowi " + turretDamage + " obrażeń\n\n";
+							logLimit--;
+						}
+					}
+				}
+			}
+			
+			if(mapIndexToXY(enemy.path[0].y) == player.x && mapIndexToXY(enemy.path[0].x) == player.y)
+			{
+				//atak na gracza, atak na zombie, logi
+				enemy.health -= player.damage;
+				log.text += "Gracz zadał przeciwnikowi " + player.damage + " obrażeń\n\n";
+				logLimit--;
+				
+				if(enemy.health <= 0)
+				{
+					log.text += "Gracz zabił przeciwnika!\n\n";
+					logLimit--;
+					stage.removeChild(stage.getChildByName('zombieSprite_'+enemy.x+'_'+enemy.y));
+					zombies.splice(enemyId, 1);
+				}
+				
+				player.health -= enemy.damage;
+				log.text += "Przeciwnik zadał graczowi " + enemy.damage + " obrażeń\n\n";
+				logLimit--;
+				stage.removeChild(stage.getChildByName('playerHP'));
+		        var playerHP = new createjs.Text(player.health, '10px Arial', '#FFF');
+				playerHP.x = player.x + 5;
+				playerHP.y = (player.y == 0) ? 40: player.y - 10;
+				playerHP.name = 'playerHP';
+				stage.addChild(playerHP);
+			}
+			else
+			{
+				stage.removeChild(stage.getChildByName('zombieSprite_'+enemy.x+'_'+enemy.y));
+				enemy.x = mapIndexToXY(enemy.path[0].y);
+				enemy.y = mapIndexToXY(enemy.path[0].x);
+				enemy.path.shift();
+				var sprite = new createjs.Bitmap(objectsImagesUrl + 'zombie1.png');
+				sprite.x = enemy.x;
+				sprite.y = enemy.y;
+				sprite.name = 'zombieSprite_'+enemy.x+'_'+enemy.y;
+				stage.addChild(sprite);
+			}
         }
     }
     
@@ -523,6 +611,7 @@ function init(type)
         var playerHP = new createjs.Text(player.health, '10px Arial', '#FFF');
         playerHP.x = player.x + 5;
         playerHP.y = (player.y == 0) ? 40: player.y - 10;
+		playerHP.name = 'playerHP';
         stage.addChild(playerHP);
         
         var battleLogText = new createjs.Text('Przebieg walki:', '18px Arial', '#FFF');
@@ -533,7 +622,9 @@ function init(type)
         var battleLog = new createjs.Container();
         battleLog.x = 10;
         battleLog.y = 50;
-        
+		battleLog.name = 'battleLog';
+        panel.addChild(battleLog);
+		
         /* ticker */
         //createjs.Ticker.setFPS(24);
         createjs.Ticker.setInterval(500);
@@ -541,8 +632,11 @@ function init(type)
         
         /* battle : begin */
         nextWave();
-        
-        panel.addChild(battleLog);
+		
+		var log = new createjs.Text("\n", '11px Arial', '#FFF');
+		log.name = 'log';
+		battleLog.addChild(log);
+		window.logLimit = 30;
     }
     
     /* layer : mouse over, mouse down */
@@ -771,7 +865,8 @@ function init(type)
                         delete resources[i];
                         while(stage.getChildByName('damagePattern_' + currentField.id + '_' + i) != null)
                             stage.removeChild(stage.getChildByName('damagePattern_' + currentField.id + '_' + i));
-                        stage.removeChild(resourcesLayer[i]);
+                        turrets.splice(i, 1);
+						stage.removeChild(resourcesLayer[i]);
                         resourcesCounter[currentField.id]--;
                         continue;
                     }
@@ -791,6 +886,9 @@ function init(type)
                         resourcesLayer[i].x = pieces[i].x;
                         resourcesLayer[i].y = pieces[i].y;
                         resourcesLayer[i].addEventListener(handleMouseDown);
+						
+						turrets[i] = new turret(resourcesLayer[i].x, resourcesLayer[i].y, resources[i].type, resources[i].damage, resources[i].damagePattern, resources[i].effect);
+						
                         stage.addChild(resourcesLayer[i]);
                         
                         resourcesCounter[resources[i].id]++;
@@ -834,8 +932,14 @@ function init(type)
     {
         if(!createjs.Ticker.getPaused())
             if(player.health > 0)
+			{
                 for(z = 0; z < zombies.length; z++)
-                    moveEnemy(zombies[z]);
+                    moveEnemy(zombies[z], z);
+			}
+			else
+			{
+				console.log('Lost!');
+			}
 		stage.update();
 	}
 }	
