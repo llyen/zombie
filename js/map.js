@@ -165,7 +165,7 @@ function init(type)
     var enemySpawns = new Array();
     var zombies = new Array();
 	var turrets = new Array();
-    var wave = 1;
+    window.wave = 1;
 	var step_x = 0;
 	var step_y = 0;
 	var count_x = 0; //liczx
@@ -483,26 +483,26 @@ function init(type)
 						{
 							var dmgp_x = 2;
 							var dmgp_y = 17;//2;
-					
-							if(enemy.y >= turrets[t].y - 64)
+														
+							if(enemy.y >= turrets[t].y - 64 && enemy.y < turrets[t].y - 32)
 								dmgp_y = 15;//0;
-							else if(enemy.y >= turrets[t].y - 32)
+							if(enemy.y >= turrets[t].y - 32 && enemy.y < turrets[t].y)
 								dmgp_y = 16;//1;
-							else if(enemy.y <= turrets[t].y + 32)
+							if(enemy.y > turrets[t].y && enemy.y <= turrets[t].y + 32)
 								dmgp_y = 18;//3;
-							else if(enemy.y <= turrets[t].y + 64)
+							if(enemy.y > turrets[t].y + 32 && enemy.y <= turrets[t].y + 64)
 								dmgp_y = 19;//4;
 						
-							if(enemy.x >= turrets[t].x - 64)
+							if(enemy.x >= turrets[t].x - 64 && enemy.x < turrets[t].x - 32)
 								dmgp_x = 0;
-							else if(enemy.x >= turrets[t].x - 32)
+							if(enemy.x >= turrets[t].x - 32 && enemy.x < turrets[t].x)
 								dmgp_x = 1;
-							else if(enemy.x <= turrets[t].x + 32)
+							if(enemy.x > turrets[t].x && enemy.x <= turrets[t].x + 32)
 								dmgp_x = 3;
-							else if(enemy.x <= turrets[t].x + 64)
+							if(enemy.x > turrets[t].x + 32 && enemy.x <= turrets[t].x + 64)
 								dmgp_x = 4;
-						
-							var turretDamage = turrets[t].damage * turrets[t].damagePattern[dmgp_y][dmgp_x];
+														
+							var turretDamage = turrets[t].damage * turrets[t].damagePattern[dmgp_y][dmgp_x]/100;
 							enemy.health -= turretDamage;
 							log.text += "Element obronny zadał przeciwnikowi " + turretDamage + " obrażeń\n\n";
 							logLimit--;
@@ -547,6 +547,14 @@ function init(type)
 				sprite.y = enemy.y;
 				sprite.name = 'zombieSprite_'+enemy.x+'_'+enemy.y;
 				stage.addChild(sprite);
+			}
+			
+			if(enemy.health <= 0)
+			{
+				log.text += "Element obronny zabił przeciwnika!\n\n";
+				logLimit--;
+				stage.removeChild(stage.getChildByName('zombieSprite_'+enemy.x+'_'+enemy.y));
+				zombies.splice(enemyId, 1);
 			}
         }
     }
@@ -636,9 +644,38 @@ function init(type)
 		var log = new createjs.Text("\n", '11px Arial', '#FFF');
 		log.name = 'log';
 		battleLog.addChild(log);
-		window.logLimit = 30;
+		window.logLimit = 25;
     }
     
+	/* next wave : mouse down */
+    function handleMouseDownNextWaveTextAndButton(event)
+    {
+		panel.removeChild(panel.getChildByName('nextWaveText'), panel.getChildByName('nextWaveButton'));
+        var battleLogText = new createjs.Text('Przebieg walki:', '18px Arial', '#FFF');
+        battleLogText.x = 80;
+        battleLogText.y = 30;
+        panel.addChild(battleLogText);
+        
+        var battleLog = new createjs.Container();
+        battleLog.x = 10;
+        battleLog.y = 50;
+		battleLog.name = 'battleLog';
+        panel.addChild(battleLog);
+		
+        /* ticker */
+        //createjs.Ticker.setFPS(24);
+        //createjs.Ticker.setInterval(500);
+        createjs.Ticker.setPaused(false);
+        
+        /* battle : begin */
+        nextWave();
+		
+		var log = new createjs.Text("\n", '11px Arial', '#FFF');
+		log.name = 'log';
+		battleLog.addChild(log);
+		window.logLimit = 25;
+    }
+	
     /* layer : mouse over, mouse down */
     		
 	function handleMouseOver(event) 
@@ -933,12 +970,52 @@ function init(type)
         if(!createjs.Ticker.getPaused())
             if(player.health > 0)
 			{
-                for(z = 0; z < zombies.length; z++)
-                    moveEnemy(zombies[z], z);
+				if(zombies.length > 0)
+				{
+					for(z = 0; z < zombies.length; z++)
+					    moveEnemy(zombies[z], z);
+				}
+				else
+				{
+					if(wave <= 5)
+					{
+						createjs.Ticker.setPaused(true);
+		
+						/* remove panel elements */
+						panel.removeAllChildren();
+						panel.addChild(panelBackground);
+		
+						/* next wave button */
+						var nextWaveText = new createjs.Text('Następna tura', '28px Arial', '#FFF');
+						var nextWaveButton = new createjs.Shape();
+						nextWaveButton.graphics.beginFill('rgba(255, 255, 255, 0.01)').drawRect(40, 590, 280, 40);
+						nextWaveButton.name = 'nextWaveButton';
+						nextWaveText.x = 40;
+						nextWaveText.y = 600;
+						nextWaveText.name = 'nextWaveText';
+						nextWaveText.addEventListener('mousedown', handleMouseDownNextWaveTextAndButton);
+						nextWaveButton.addEventListener('mousedown', handleMouseDownNextWaveTextAndButton);
+						panel.addChild(nextWaveText, nextWaveButton);	
+					}
+					else
+					{
+						//win
+						createjs.Ticker.setPaused(true);
+						var winText = new createjs.Text("Wygrana!", "72px Arial", "#FFF");
+						winText.x = 150;
+						winText.y = 150;
+						stage.addChild(winText);
+					}
+				}
 			}
 			else
 			{
-				console.log('Lost!');
+				//lost
+				createjs.Ticker.setPaused(true);
+				var lostText = new createjs.Text("Przegrana!", "72px Arial", "#FFF");
+                lostText.x = 150;
+                lostText.y = 150;
+                stage.addChild(lostText);
 			}
 		stage.update();
 	}
