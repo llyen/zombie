@@ -62,6 +62,7 @@ class Settings
             {
                 if($dmgPatternsFile[$j] == $dmgPattern)
                 {
+                    $m = 0;
                     for($k = $j+1; $k < $j+6; $k++)
                     {
                         $line = explode(',', $dmgPatternsFile[$k]);
@@ -70,29 +71,30 @@ class Settings
                             switch((int) $line[$l])
                             {
                                 case 0:
-                                    $pattern[$k][$l] = 0;
+                                    $pattern[$m][$l] = 0;
                                     break;
                                 
                                 case 1:
-                                    $pattern[$k][$l] = 25;
+                                    $pattern[$m][$l] = 25;
                                     break;
                                 
                                 case 2:
-                                    $pattern[$k][$l] = 50;
+                                    $pattern[$m][$l] = 50;
                                     break;
                                 
                                 case 3:
-                                    $pattern[$k][$l] = 75;
+                                    $pattern[$m][$l] = 75;
                                     break;
                                 
                                 case 4:
-                                    $pattern[$k][$l] = 100;
+                                    $pattern[$m][$l] = 100;
                                     break;
                                 
                                 default:
-                                    $pattern[$k][$l] = 0;
+                                    $pattern[$m][$l] = 0;
                             }
                         }
+                        $m++;
                     }
                 }
             }
