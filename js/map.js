@@ -482,16 +482,16 @@ function init(type)
 						if(enemy.x >= turrets[t].x - 64 && enemy.x <= turrets[t].x + 64 && enemy.y >= turrets[t].y - 64 && enemy.y <= turrets[t].y + 64)
 						{
 							var dmgp_x = 2;
-							var dmgp_y = 17;//2;
+							var dmgp_y = 3;//2, 17;
 														
 							if(enemy.y >= turrets[t].y - 64 && enemy.y < turrets[t].y - 32)
-								dmgp_y = 15;//0;
+								dmgp_y = 1;//0, 15;
 							if(enemy.y >= turrets[t].y - 32 && enemy.y < turrets[t].y)
-								dmgp_y = 16;//1;
+								dmgp_y = 2;//1, 16;
 							if(enemy.y > turrets[t].y && enemy.y <= turrets[t].y + 32)
-								dmgp_y = 18;//3;
+								dmgp_y = 4;//3, 18;
 							if(enemy.y > turrets[t].y + 32 && enemy.y <= turrets[t].y + 64)
-								dmgp_y = 19;//4;
+								dmgp_y = 5;//4, 19;
 						
 							if(enemy.x >= turrets[t].x - 64 && enemy.x < turrets[t].x - 32)
 								dmgp_x = 0;
