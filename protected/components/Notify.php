@@ -11,6 +11,8 @@ class Notify
 			foreach($users as $user)
 				if(!is_null($user->email) && $user->email != '') $recipients[] = $user->email; 
 		}
+		elseif(is_string($users))
+			$recipients[] = $users;
 		else
 			$recipients[] = $users->email;
         

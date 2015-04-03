@@ -45,7 +45,7 @@ class BulkRegisterForm extends CFormModel
 					$user->username = $this->generateUsername($user->group_id);
 					$user->password = $this->generatePassword();
                     $this->created[] = array('username' => $user->username, 'password' => $user->password, 'first_name'=>$user->first_name, 'last_name'=>$user->last_name, 'email'=>$user->email);
-                    $user->password = $user->hashPassword($user->password);
+                    //$user->password = $user->hashPassword($user->password);
                     if($user->save())
                     {
                     	$player = new Player;

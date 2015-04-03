@@ -190,8 +190,8 @@ class UserController extends Controller
 			{
 				foreach($model->created as $user)
 				{
-					$message = '<h3>Utworzono konto</h3><p>Zostało założone nowe konto na platformie <a href="http://zombieacademy.pl">'.Yii::app()->name.'</a>. Przy wypełnianiu formularza rejestracyjnego podano Twój adres e-mail.</p><p>Użytkownik: '.$user->username.'<br />Hasło: '.$user->password.'</p>';
-					Notify::send($user->email, Yii::app()->name.' :: nowe konto');
+					$message = '<h3>Utworzono konto</h3><p>Zostało założone nowe konto na platformie <a href="http://zombieacademy.pl">'.Yii::app()->name.'</a>. Przy wypełnianiu formularza rejestracyjnego podano Twój adres e-mail.</p><p>Użytkownik: '.$user['username'].'<br />Hasło: '.$user['password'].'</p>';
+					Notify::send($user['email'], Yii::app()->name.' :: nowe konto', $message);
 				}
 				
 				$this->render('bulkRegisterCompleted', array('users'=>$model->created));
