@@ -187,7 +187,15 @@ class UserController extends Controller
 		{
 			$model->attributes = $_POST['BulkRegisterForm'];
 			if($model->save())
+			{
+				foreach($model->created as $user)
+				{
+					$message = '<h3>Utworzono konto</h3><p>Zostało założone nowe konto na platformie <a href="http://zombieacademy.pl">'.Yii::app()->name.'</a>. Przy wypełnianiu formularza rejestracyjnego podano Twój adres e-mail.</p><p>Użytkownik: '.$user->username.'<br />Hasło: '.$user->password.'</p>';
+					Notify::send($user->email, Yii::app()->name.' :: nowe konto');
+				}
+				
 				$this->render('bulkRegisterCompleted', array('users'=>$model->created));
+			}
 		}
 		
 		$this->render('bulkRegister', array(
